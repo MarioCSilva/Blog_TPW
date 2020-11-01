@@ -13,3 +13,7 @@ def main_page(request):
 
 def entry_page(request):
     return render(request,"entry_page.html")
+
+
+def profile_page(request):
+    return render(request,"profile_page.html")
