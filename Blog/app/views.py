@@ -9,3 +9,7 @@ def index(request):
 
 def main_page(request):
     return render(request, "main_page.html")
+
+
+def entry_page(request):
+    return render(request,"entry_page.html")
