@@ -17,3 +17,7 @@ def entry_page(request):
 
 def profile_page(request):
     return render(request,"profile_page.html")
+
+
+def page(request):
+    return render(request,"page.html")

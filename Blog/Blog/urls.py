@@ -22,5 +22,6 @@ urlpatterns = [
     path('index/', views.index),
     path('main_page/', views.main_page),
     path('',views.entry_page),
-    path('profile/',views.profile_page)
+    path('profile/',views.profile_page),
+    path('page/',views.page),
 ]
