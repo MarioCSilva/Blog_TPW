@@ -40,15 +40,6 @@ def entry_page(request):
 
 
 def profile_page(request):
-<<<<<<< HEAD
     #if not request.user.is_authenticated:
      #   return redirect('/login')
-
     return render(request,"profile_page.html")
-=======
-    return render(request,"profile_page.html")
-
-
-def page(request):
-    return render(request,"page.html")
->>>>>>> 212bf5ca045cd3252043e3d20595aca9ad1ebb36
