@@ -5,7 +5,7 @@ from app.models import *
 
 
 admin.site.register(Page)
-admin.site.register(User)
+admin.site.register(Client)
 admin.site.register(Post)
 admin.site.register(Followers)
 
