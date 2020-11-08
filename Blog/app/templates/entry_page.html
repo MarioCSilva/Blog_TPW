@@ -11,7 +11,8 @@
                     <h4>Register</h4>
                     <p>Join the club.</p>
 
-                    <form class="contactForm" action="" method="POST" name="register">
+                    <form class="contactForm" action="." method="POST">
+                        {% csrf_token %}
                         <div class="form-group">
                             {{ form_register.email }}
                         </div>
@@ -24,7 +25,7 @@
                         <div class="form-group">
                             {{ form_register.password2 }}
                         </div>
-                        <input type="submit" value="Register">
+                        <input type="submit" value="register" name="register" >
                     </form>
                 </div>
             </div>
@@ -35,7 +36,7 @@
                 <div class="form">
                     <h4>Login</h4>
                     <p>Already registered? Login here.</p>
-                    <form class="contactForm" action="." method="POST" name="login">
+                    <form class="contactForm" action="." method="POST" >
                         {% csrf_token %}
                         <div class="form-group">
                             {{ form_login.username }}
@@ -43,7 +44,7 @@
                         <div class="form-group">
                             {{ form_login.password }}
                         </div>
-                        <input type="submit" value="Login">
+                        <input type="submit" name="login" value="login" >
                     </form>
                 </div>
             </div>
