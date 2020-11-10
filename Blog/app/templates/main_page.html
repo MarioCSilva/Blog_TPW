@@ -1,99 +1,222 @@
 {% extends "layout.html" %}
 {% block content %}
 <section id="portfolio" class="section-bg">
-      <div class="container" style="padding-top: 100px">
+  <div class="container" style="padding-top: 100px">
 
-        <header class="section-header">
-          <h3 class="section-title">Main App Page</h3>
-        </header>
+    <header class="section-header">
+      <h3 class="section-title">APP</h3>
+    </header>
 
-        <div class="row">
-          <div class="col-lg-12">
-            <ul id="portfolio-flters">
-              <li id="filter-post" class="filter-active">Posts</li>
-              <li id="filter-page">Pages</li>
-            </ul>
+    <div class="row">
+      <div class="col-lg-12">
+        <ul id="portfolio-flters">
+          <li id="filter-post" class="filter-active">Posts</li>
+          <li id="filter-page">Pages</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4 col-md-4 col-lg-4" id="postBtn">
+          <a href="something" class="button3" data-toggle="modal" data-target="#Post">Create a Post <i
+              class="fa fa-plus-circle" aria-hidden="true"></i></a>
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-8" id="search_post">
+          <form class="form-inline d-flex justify-content-center md-form form-sm searches">
+            <input class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
+            <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
+          </form>
+        </div>
+
+
+        <div class="col-sm-4 col-md-4 col-lg-4" id="blogBtn" style="display: none;">
+          <a href="something" class="button3" data-toggle="modal" data-target="#Blog">Create a Blog <i
+              class="fa fa-plus-circle" aria-hidden="true"></i></a>
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-8" id="search_blog" style="display: none;">
+          <form class="form-inline d-flex justify-content-center md-form form-sm searches">
+            <input class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
+            <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="Post" tabindex="-1" role="dialog" aria-labelledby="Post" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="PostLabel">New message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                <input type="text" class="form-control" id="recipient-name">
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Message:</label>
+                <textarea class="form-control" id="message-text"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
           </div>
         </div>
+      </div>
+    </div>
+
+
+
+    <div class="modal fade" id="Blog" tabindex="-1" role="dialog" aria-labelledby="Blog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="BlogLabel">New message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                <input type="text" class="form-control" id="recipient-name">
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Message:</label>
+                <textarea class="form-control" id="message-text"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
 
 
     <section id="services" class="section-bg" style="width: 100%;">
-        <div class="row">
-          <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s" style="width: 100%">
-                <div class="box">
-                  <div class="icon" style="background: #ecebff;"></div>
-                  <h4 class="title"><a href="">TITLE HEADING</a></h4>
-                  <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-                </div>
+      <div class="row">
+        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+          style="width: 100%">
+          <div class="box">
+            <div class="icon" style="background: #ecebff;"></div>
+            <h4 class="title"><a href="">TITLE HEADING</a></h4>
+            <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum
+              soluta nobis est eligendi</p>
           </div>
-        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s">
-                <div class="box">
-                  <div class="icon" style="background: #ecebff;"></div>
-                  <h4 class="title"><a href="">TITLE HEADING</a></h4>
-                  <p class="description">Et cum soluta nobis est eligendi</p>
-                </div>
-          </div>
-        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s" style="width: 100%">
-                <div class="box">
-                  <div class="icon" style="background: #ecebff;"></div>
-                  <h4 class="title"><a href="">TITLE HEADING</a></h4>
-                  <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-                </div>
-          </div>
-
-
-
-          <div class="filter-page" style="display:none;">
-            <div class="row">
-
-          <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon" style="background: #fceef3;"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
-              <h4 class="title"><a href="">Lorem Ipsum</a></h4>
-              <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon" style="background: #fff0da;"><i class="ion-ios-bookmarks-outline" style="color: #e98e06;"></i></div>
-              <h4 class="title"><a href="">Dolor Sitema</a></h4>
-              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-delay="0.1s" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon" style="background: #e6fdfc;"><i class="ion-ios-paper-outline" style="color: #3fcdc7;"></i></div>
-              <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-              <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
-            </div>
-          </div>
-
         </div>
+        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s">
+          <div class="box">
+            <div class="icon" style="background: #ecebff;"></div>
+            <h4 class="title"><a href="">TITLE HEADING</a></h4>
+            <p class="description">Et cum soluta nobis est eligendi</p>
+          </div>
+        </div>
+        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+          style="width: 100%">
+          <div class="box">
+            <div class="icon" style="background: #ecebff;"></div>
+            <h4 class="title"><a href="">TITLE HEADING</a></h4>
+            <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum
+              soluta nobis est eligendi</p>
+          </div>
+        </div>
+
+
+
+        <div class="filter-page" style="display:none;">
+          <div class="row">
+
+            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
+              <div class="box">
+                <div class="icon" style="background: #fceef3;"><i class="ion-ios-analytics-outline"
+                    style="color: #ff689b;"></i></div>
+                <h4 class="title"><a href="">Lorem Ipsum</a></h4>
+                <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
+                  occaecati cupiditate non provident</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-duration="1.4s">
+              <div class="box">
+                <div class="icon" style="background: #fff0da;"><i class="ion-ios-bookmarks-outline"
+                    style="color: #e98e06;"></i></div>
+                <h4 class="title"><a href="">Dolor Sitema</a></h4>
+                <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                  commodo consequat tarad limino ata</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 wow bounceInUp" data-wow-delay="0.1s" data-wow-duration="1.4s">
+              <div class="box">
+                <div class="icon" style="background: #e6fdfc;"><i class="ion-ios-paper-outline"
+                    style="color: #3fcdc7;"></i></div>
+                <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
+                <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                  fugiat nulla pariatur</p>
+              </div>
+            </div>
+
+          </div>
         </div>
 
     </section>
-    </section><!-- #portfolio -->
-    <script>
-        document.getElementById("filter-page").onclick = function(){
-            var x = document.getElementsByClassName("filter-page");
-            for (var y of x){
-                y.style.display='block';
-            }
-            var x2 = document.getElementsByClassName("filter-post");
-            for (var y2 of x2){
-                y2.style.display='none';
-            }
-        }
-        document.getElementById("filter-post").onclick = function(){
-            var x = document.getElementsByClassName("filter-post");
-            for (var y of x){
-                y.style.display='block';
-            }
-            var x2 = document.getElementsByClassName("filter-page");
-            for (var y2 of x2){
-                y2.style.display='none';
-            }
-        }
-    </script>
+</section><!-- #portfolio -->
+<script>
+  document.getElementById("filter-page").onclick = function () {
+    var x = document.getElementsByClassName("filter-page");
+    for (var y of x) {
+      y.style.display = 'block';
+    }
+    var p = document.getElementById("postBtn");
+    p.style.display = 'none'
+    var p = document.getElementById("search_post");
+    p.style.display = 'none'
+    var x2 = document.getElementsByClassName("filter-post");
+    for (var y2 of x2) {
+      y2.style.display = 'none';
+    }
+    var p = document.getElementById("search_blog");
+    p.style.display = 'block'
+    var blog = document.getElementById("blogBtn");
+    blog.style.display = 'block'
+  }
+  document.getElementById("filter-post").onclick = function () {
+    var x = document.getElementsByClassName("filter-post");
+    for (var y of x) {
+      y.style.display = 'block';
+    }
+    var p = document.getElementById("search_post");
+    p.style.display = 'block'
+    var p = document.getElementById("postBtn");
+    p.style.display = 'block'
+    var x2 = document.getElementsByClassName("filter-page");
+    for (var y2 of x2) {
+      y2.style.display = 'none';
+    }
+    var p = document.getElementById("search_blog");
+    p.style.display = 'none'
+    var blog = document.getElementById("blogBtn");
+    blog.style.display = 'none'
+  }
+</script>
 {% endblock %}

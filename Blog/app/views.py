@@ -3,6 +3,7 @@ from app.forms import *
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
+from app.models import *
 
 # Create your views here.
 
@@ -16,27 +17,36 @@ def main_page(request):
 def entry_page(request):
     if request.method=="POST":
         if "email" in request.POST:
-            print("Inside Register")
             form = RegisterForm(data=request.POST)
             if form.is_valid():
-                return HttpResponse("<h1>register valid</h1>")
+                user=form.save()
+                user.refresh_from_db()                
+                user.save()
+                client = Client(user=user)
+                client.save()
+                login(request, user)
+                return redirect('home')
             else:
-                return HttpResponse("<h1>register invalid</h1>")
+                print(form.errors)
+
         elif "username" in request.POST:
             form = LoginForm(data=request.POST)
-            print("Inside Login")
             if form.is_valid():
                 username = form.cleaned_data.get('username')
                 raw_password = form.cleaned_data.get('password')
                 user = authenticate(username=username, password=raw_password)
-                login(request, user)
-                return HttpResponseRedirect('profile')
-            print(form.errors)
-        else:
+                if user is not None:
+                    login(request, user)
+                    return redirect('profile')
+                #passar os dados do utilizador
+            else:
+                print(form.errors)
+
+        else:        
             print("NOTHING")
             return HttpResponse("<h1>nothing</h1>")
-
-    return render(request,"entry_page.html",{"form_login":LoginForm(),"form_register":RegisterForm()})
+    elif request.method == "GET":
+        return render(request,"entry_page.html",{"form_login":LoginForm(),"form_register":RegisterForm()})
 
 
 def profile_page(request):
