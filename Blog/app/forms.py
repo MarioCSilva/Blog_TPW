@@ -25,3 +25,16 @@ class LoginForm(AuthenticationForm):
         fields = ["username", "password1"]
 
 
+class PostCreationForm(forms.ModelForm):
+
+    title = forms.CharField(max_length=70,widget=forms.TextInput(attrs={"placeholder":"Title"}))
+    # N sei se isto da para meter ficheiros vazios ou se deixa n passar ficheiros
+    image = forms.ImageField(allow_empty_file=True)
+    text = forms.CharField(max_length=500,widget=forms.Textarea(attrs={"placeholder":"Write your message..."}))
+    # Temos de ver isto
+    page = forms.TypedChoiceField()
+
+
+
+
+

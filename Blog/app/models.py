@@ -45,8 +45,8 @@ class Page(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=70)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    image = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    date = models.DateTimeField(auto_now=True)
+    image = models.ImageField(null=True,upload_to="posts/", height_field=None, width_field=None, max_length=None)
     text = models.CharField(max_length=500)
     page = models.ForeignKey(Page, on_delete=models.CASCADE)
 
