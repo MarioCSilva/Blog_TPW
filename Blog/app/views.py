@@ -3,7 +3,7 @@ from app.forms import *
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
-from app.models import *
+from app.models import Client,Followers,Page,Post
 
 # Create your views here.
 
@@ -15,6 +15,10 @@ def main_page(request):
 
 
 def entry_page(request):
+
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method=="POST":
         if "email" in request.POST:
             form = RegisterForm(data=request.POST)
@@ -50,7 +54,9 @@ def entry_page(request):
 
 
 def profile_page(request):
-    #if not request.user.is_authenticated:
-     #   return redirect('/login')
-    print("profile page")
-    return render(request,"profile_page.html")
+
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    user = Client.objects.get(user=request.user.id)
+    return render(request,"profile_page.html",{"user":user})
+
