@@ -25,16 +25,16 @@ class LoginForm(AuthenticationForm):
         fields = ["username", "password1"]
 
 
-class PostCreationForm(forms.ModelForm):
-
+class PostCreationForm(forms.Form):
     title = forms.CharField(max_length=70,widget=forms.TextInput(attrs={"placeholder":"Title"}))
-    # N sei se isto da para meter ficheiros vazios ou se deixa n passar ficheiros
-    image = forms.ImageField(allow_empty_file=True)
+    image = forms.ImageField(allow_empty_file=True,required=False)
     text = forms.CharField(max_length=500,widget=forms.Textarea(attrs={"placeholder":"Write your message..."}))
-    # Temos de ver isto
-    page = forms.TypedChoiceField()
+    #page = forms.TypedChoiceField()
 
 
-
-
-
+class BlogCreationForm(forms.Form):
+    name = forms.CharField(max_length=70,widget=forms.TextInput(attrs={"placeholder":"Name"}))
+    isPublic = forms.ChoiceField(choices=[("1","Public"),("2","Private")])
+    data = tuple([("",x["name"]) for x in Topic.objects.all().values("name")])
+    topic = forms.TypedMultipleChoiceField(choices=data)
+    description = forms.CharField(max_length=500,widget=forms.TextInput(attrs={"placeholder":"Description"}))
