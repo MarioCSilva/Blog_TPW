@@ -3,57 +3,93 @@
 
 
 {% block content %}
-<section style="margin-top:150px">
+    <section style="margin-top:150px">
 
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-sm-10 col-md-10">
+                    <div class="container">
+                        <h2>{{ user.user.username }}</h2>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-12 col-md-4">
+                                <img src="../media/{{ user.profile_pic }}" width="250px" height="250px" style="border-radius: 10px"/>
+                            </div>
+                            <div class="col-lg-8 col-sm-12 col-md-4">
+                                <div class="container" style="margin-bottom: 20px">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <h5>Name</h5>
+                                            <div class="profile-data">{{ user.name }}</div>
+                                            <div class="form-group edit-profile" style="display: none">
+                                                {{ form_edit.name }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <h5>Sex</h5>
+                                            <div class="profile-data">{{ user.sex }}</div>
+                                            <div class="form-group edit-profile" style="display: none">
+                                                {{ form_edit.sex }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </br>
+                                </br>
+                                </br>
 
+                                <div class="container" style="margin-bottom: 20px">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <h5>Description</h5>
+                                            <div class="profile-data">
+                                                {{ user.description }}
+                                            </div>
+                                            <div class="form-group edit-profile" style="display: none">
+                                                {{ form_edit.description }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <h5>BirthDate</h5>
+                                            <div class="profile-data">
+                                                {{ user.birthdate }}
+                                            </div>
+                                            <div class="form-group edit-profile" style="display: none">
+                                                {{ form_edit.description }}
+                                            </div>
+                                        </div>
 
-    <div class="container">
-        <h2>Profile</h2>
-        <div class="row">
-            <div class="col-lg-4 col-sm-12 col-md-4">
-                <img src="../media/{{ user.profile_pic }}" width="250px" height="250px" />
-            </div>
-            <div class="col-lg-8 col-sm-12 col-md-4">
-                <div class="container" style="margin-bottom: 20px">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <h5>Name</h5>
-                            {{ user.name }}
-                        </div>
-                        <div class="col-lg-4">
-                            <h5>Description</h5>
-                            {{ user.description }}
-                        </div>
-                        <div class="col-lg-4">
+                                    </div>
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>
                 </div>
-                <div class="container" style="margin-bottom: 20px">
+                <div class="col-lg-1 col-sm-0 col-md-0" >
+                    <div class="d-sm-none d-md-none d-lg-block"style="border-left:2px solid aliceblue;height: 300px"></div>
+                </div>
+
+                <div class="col-lg-2 col-sm-2 col-md-2">
                     <div class="row">
-                        <div class="col-lg-4">
-                            randomtext
+                        <div class="col-lg-12">
+                            <h5>Settings</h5>
                         </div>
-                        <div class="col-lg-4">
-                            randomtext
-                        </div>
-                        <div class="col-lg-4">
-                            randomtext
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button id="edit_button" type="button" class="btn btn-success">Edit Profile</button>
+                            <button id="save_profile_button" type="button" class="btn btn-danger" style="display: none">Save Profile</button>
                         </div>
                     </div>
                 </div>
+
+
             </div>
-
-
         </div>
-
-
-
-
-    </div>
-</section>
-
-
+    </section>
+{% load static %}
+<script src="{% static  "/js/profile_page.js" %}"></script>
 
 {% endblock %}
 
