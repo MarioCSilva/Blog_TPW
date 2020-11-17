@@ -38,3 +38,4 @@ class BlogCreationForm(forms.Form):
     data = tuple([("",x["name"]) for x in Topic.objects.all().values("name")])
     topic = forms.TypedMultipleChoiceField(choices=data)
     description = forms.CharField(max_length=500,widget=forms.TextInput(attrs={"placeholder":"Description"}))
+    image = forms.ImageField(allow_empty_file=True,required=False)
