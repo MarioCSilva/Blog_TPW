@@ -7,5 +7,4 @@ from app.models import *
 admin.site.register(Blog)
 admin.site.register(Client)
 admin.site.register(Post)
-admin.site.register(Followers)
 admin.site.register(Topic)

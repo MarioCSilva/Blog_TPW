@@ -3,7 +3,7 @@ from app.forms import *
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
-from app.models import Client,Followers,Post,Blog, Topic
+from app.models import Client,Post,Blog, Topic
 
 # Create your views here.
 
