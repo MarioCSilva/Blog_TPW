@@ -1,0 +1,324 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section style="margin-top: 180px;">
+    <div class="row">
+      <div class="w3-card col-sm-2 " style="text-align: center; height: 100%; background-color: grey;">
+        <div class="row">
+          <a class="w3-bar-item" style="background-color: lightgrey;color: black; font-weight: bold; font-size: 20px; width: 100%; height: 50px; padding-top: 10px">
+            SETTINGS</a></div>
+        <div class="row">
+          <a href="" data-toggle="modal" data-target="#Blog" class="w3-bar-item w3-button" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Edit Blog</a></div>
+        <div class="row">
+          <a href="" data-toggle="modal" data-target="#Owners"  class="w3-bar-item w3-button" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Owners</a></div>
+        <div class="row">
+          <a href="" data-toggle="modal" data-target="#Subscribers"  class="w3-bar-item w3-button" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Subscribers</a></div>
+        <div class="row">
+          <a href="" data-toggle="modal" data-target="#Topic"  class="w3-bar-item w3-button" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Topic</a></div>
+        <div class="row">
+          <a href="" data-toggle="modal" data-target="#Invites"  class="w3-bar-item w3-button" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Invites</a></div>
+          <div class="row">
+          <a href="" data-toggle="modal" data-target="#Visibility"  class="w3-bar-item w3-button" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Visibility</a></div>
+        <div class="row">
+          <a href="" data-toggle="modal" data-target="#Del"  class="w3-bar-item w3-button" style="color: red; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Delete Blog</a></div>
+      </div>
+      
+      <div class="modal fade" id="Blog" tabindex="-1" role="dialog" aria-labelledby="Blog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="Owners" tabindex="-1" role="dialog" aria-labelledby="Owners" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="Subscribers" tabindex="-1" role="dialog" aria-labelledby="Subscribers" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="modal fade" id="Topic" tabindex="-1" role="dialog" aria-labelledby="Topic" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="Visibility" tabindex="-1" role="dialog" aria-labelledby="Visibility" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="Del" tabindex="-1" role="dialog" aria-labelledby="Del" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="Invites" tabindex="-1" role="dialog" aria-labelledby="Invites" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Title:</label>
+                  {{ form_post.title }}
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  {{ form_post.text}}
+                </div>
+                <div class="form-group">
+                  {{ form_post.image}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="col-sm-10" style="padding-left: 200px; padding-right: 200px;">
+        <div style="text-align: center; color: black;">
+            <h1>My Page</h1>
+          </div>
+          <div style="text-align: center;"> Descricao....</div>
+
+          <section id="services" style="width: 100%;">
+              <div class="row">
+                <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+                  style="width: 100%">
+                  <div class="box">
+                    <div class="icon" style="background: #ecebff;"></div>
+                    <p> OLA </p>
+                    <h4 class="title"><a href="">TESTE</a></h4>
+                    <p class="description">DESCRICAO </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+                  style="width: 100%">
+                  <div class="box">
+                    <div class="icon" style="background: #ecebff;"></div>
+                    <p> OLA </p>
+                    <h4 class="title"><a href="">T</a></h4>
+                    <p class="description">DESCRICAO </p>
+                  </div>
+                </div>
+              </div>
+
+
+                <div class="row">
+                  <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+                    style="width: 100%">
+                    <div class="box">
+                      <div class="icon" style="background: #ecebff;"></div>
+                      <p> OLA </p>
+                      <h4 class="title"><a href="">TESTE</a></h4>
+                      <p class="description">DESCRICAO </p>
+                    </div>
+                  </div>
+                </div>
+          </section>
+
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
