@@ -39,3 +39,13 @@ class BlogCreationForm(forms.Form):
     topic = forms.TypedMultipleChoiceField(choices=data)
     description = forms.CharField(max_length=500,widget=forms.TextInput(attrs={"placeholder":"Description"}))
     image = forms.ImageField(allow_empty_file=True,required=False)
+
+
+class EditProfileForm(forms.Form):
+    name = forms.CharField(max_length=70,required=False)
+    description = forms.CharField(max_length=300,required=False)
+    profile_pic = forms.ImageField(allow_empty_file=True,required=False)
+    birthdate = forms.DateField(required=False)
+    sex = forms.ChoiceField(choices=[("1","Male"),("2","Female"),("3","Other")],required=False)
+
+

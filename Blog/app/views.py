@@ -73,9 +73,10 @@ def entry_page(request):
                 isPublic = True
                 blog = Blog(name=name, isPublic=isPublic)
                 blog.save()
-                blog.owner.set([client])
-                blog.subs.set([client])
-                blog.topic.set([topic])
+                blog.owner.add(client.id)
+                blog.subs.add(client.id)
+                blog.topic.add(topic.id)
+                blog.save()
                 login(request, user)
                 return redirect('home')
             else:
@@ -105,28 +106,26 @@ def profile_page(request):
     if not request.user.is_authenticated:
         return redirect('/login')
     user = Client.objects.get(user=request.user.id)
-    return render(request,"profile_page.html",{"client":user})
+    return render(request,"profile_page.html",{"client":user,"form_edit":EditProfileForm()})
 
 
 def blog_page(request,num):
     if not request.user.is_authenticated:
         return redirect('/login')
-    
     blog = Blog.objects.get(id=num)
     client = Client.objects.get(user=request.user.id)
-    if not blog.isPublic and client not in blog.subs:
+    if not blog.isPublic or not client in blog.subs.all():
         return redirect("home")
-
     permission = False
-    if client in blog.owner:
+    if client in blog.owner.all():
         permission = True
 
     return render(request,"blog_page.html",{"blog":blog,"permission":permission})
 
 
 def my_blog(request):
-    
     client = Client.objects.get(user=request.user.id)
     topic = Topic.objects.get(name="Personal")
     blog = Blog.objects.get(owner__in=[client],topic=topic.id)
+    print(blog.id)
     return redirect("/blog/"+str(blog.id))

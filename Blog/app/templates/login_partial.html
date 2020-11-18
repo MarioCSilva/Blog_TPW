@@ -3,7 +3,8 @@
     {% csrf_token %}
         <li><a href="javascript:document.getElementById('myBlogForm').submit()">My Blog</a></li>
     </form>
-
+    </li>
+    <li>
     <form id="logoutForm" action="/logout" method="get" class="form-inline my-2 my-lg-0">
     {% csrf_token %}
         <li class="drop-down"><a href="">{{ user.username }}</a>
