@@ -20,15 +20,14 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.main_page,name="home"),
     path('profile/',views.profile_page,name="profile"),
     path('login/', views.entry_page, name='login'),
-    path('blog/', views.blog_page, name='blog'),
+    path('blog/<int:num>', views.blog_page, name='blog'),
     path('logout', auth_views.LogoutView.as_view(next_page='login/'), name='logout'),
+    path('my_blog/',views.my_blog),
 ]
 
 

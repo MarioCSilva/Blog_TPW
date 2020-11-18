@@ -108,5 +108,25 @@ def profile_page(request):
     return render(request,"profile_page.html",{"client":user})
 
 
-def blog_page(request):
-    return render(request,"blog_page.html")
+def blog_page(request,num):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    
+    blog = Blog.objects.get(id=num)
+    client = Client.objects.get(user=request.user.id)
+    if not blog.isPublic and client not in blog.subs:
+        return redirect("home")
+
+    permission = False
+    if client in blog.owner:
+        permission = True
+
+    return render(request,"blog_page.html",{"blog":blog,"permission":permission})
+
+
+def my_blog(request):
+    
+    client = Client.objects.get(user=request.user.id)
+    topic = Topic.objects.get(name="Personal")
+    blog = Blog.objects.get(owner__in=[client],topic=topic.id)
+    return redirect("/blog/"+str(blog.id))
