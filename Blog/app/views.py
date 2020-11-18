@@ -50,7 +50,7 @@ def main_page(request):
         posts = Post.objects.filter(blog__in = post_blogs)
         
         blogs = Blog.objects.all()
- 
+        
         return render(request, "main_page.html",{"form_post":PostCreationForm(),"form_blog":BlogCreationForm(),"posts":posts, "blogs":blogs})
 
 
@@ -102,9 +102,11 @@ def entry_page(request):
 
 
 def profile_page(request):
-
     if not request.user.is_authenticated:
         return redirect('/login')
     user = Client.objects.get(user=request.user.id)
-    return render(request,"profile_page.html",{"user":user})
+    return render(request,"profile_page.html",{"client":user})
 
+
+def blog_page(request):
+    return render(request,"blog_page.html")
