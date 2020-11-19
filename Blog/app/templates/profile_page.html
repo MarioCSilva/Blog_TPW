@@ -4,7 +4,7 @@
 
 {% block content %}
     <section>
-        <form action="." method="POST" name="edit_profile">
+        <form action="." method="POST" name="edit_profile" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
 

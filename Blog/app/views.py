@@ -114,7 +114,7 @@ def profile_page(request):
         user = Client.objects.get(user=request.user.id)
         return render(request,"profile_page.html",{"client":user,"form_edit":EditProfileForm()})
     elif request.method == "POST":
-        form = EditProfileForm(data=request.POST)
+        form = EditProfileForm(data=request.POST,files=request.FILES)
         if form.is_valid():
             client = Client.objects.get(user=request.user.id)
             name = form.cleaned_data["name"]
@@ -124,6 +124,7 @@ def profile_page(request):
             if birthdate:
                 client.birthdate = birthdate
             profile_pic = form.cleaned_data["profile_pic"]
+            print(profile_pic)
             if profile_pic:
                 client.profile_pic = profile_pic
             description = form.cleaned_data["description"]
