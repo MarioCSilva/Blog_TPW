@@ -3,81 +3,85 @@
 
 
 {% block content %}
-    <section style="margin-top:150px">
+    <section>
+        <form action="." method="POST" name="edit_profile">
+            {% csrf_token %}
+            <div class="container">
 
+                <div class="row">
 
-        <div class="container" style="margin-bottom: 150px">
-            <h2>{{ client.user.username }}</h2>
-            <div class="row">
-                <div class="col-lg-4 col-sm-12 col-md-4">
-                    <img src="../media/{{ client.profile_pic }}" width="250px" height="250px"
-                         style="border-radius: 10px" />
-                </div>
-                <div class="col-lg-8 col-sm-12 col-md-4">
-                    <div class="container" style="margin-bottom: 20px">
+                    <div class="col-lg-3">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div>
-                                    <h5 >Name</h5>
-                                    <button id="edit-name-btn"><i class="fa fa-edit"></i></button>
-                                </div>
-                                <div id="display-name" class="profile-data">
-                                    {{ client.name }}
-                                </div>
-                                <div id="edit-name" class="form-group edit-profile" style="display: none">
-                                    {{ form_edit.name }}
-                                </div>
+                            <div class="col-lg-12">
+                            <img id="profile_pic" src="../media/{{ client.profile_pic }}" />
                             </div>
-                            <div class="col-lg-2">
-                                <h5>Sex</h5>
-                                <button id="edit-sex-btn"><i class="fa fa-edit"></i></button>
+                        </div>
+                        <div class="row edit_input" style="display: none">
+                            <div class="col-lg-12">{{ form_edit.profile_pic }}</div>
+                        </div>
 
-                                <div id="display-sex" class="profile-data">
-                                    {{ client.sex }}
-                                </div>
-                                <div id="edit-sex" class="form-group edit-profile" style="display: none">
-                                    {{ form_edit.sex }}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="jumbotron">
+                            <div id="profile_header" class="row">
+                                <div class="col-lg-12">
+                                    <div  class="row">
+                                        <div  class="col-lg-12">
+                                            <div id="display_name">{{ client.name }}</div>
+                                            <div class="edit_input" style="display: none">
+                                                {{ form_edit.name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row sub_head">
+                                        <div class="col-lg-11">@{{ client.user.username }}</div>
+                                        <div class="col-lg-1">
+                                            <button type="button" id="edit_button" class="btn btn-primary"><i class="fa fa-edit"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="row sub_head">
+                                        <div class="col-lg-2">
+                                            <div id="display_sex">
+                                                <i class="fa fa-venus-mars"></i> {{ client.sex }}
+                                            </div>
+                                            <div class="edit_input" style="display: none">
+                                                <i class="fa fa-venus-mars"></i>{{ form_edit.sex }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div id="display_birthdate" ><i class="fa fa-birthday-cake"></i> {{ client.birthdate }}</div>
+                                            <div class="edit_input" style="display: none">
+                                                <i class="fa fa-birthday-cake"></i>{{ form_edit.birthdate }}
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div>
-                                    <h5>BirthDate</h5>
-                                    <button id="edit-birthdate-btn"><i class="fa fa-edit"></i></button>
+                            <hr>
+                            <div id="profile_body" class="row">
+                                <div class="col-lg-12">
+                                    <div id="display_description">{{ client.description }}</div>
+                                    <div class="edit_input" style="display: none">
+                                        {{ form_edit.description }}
+                                    </div>
                                 </div>
-                                <div id="display-birthdate" class="profile-data">
-                                    {{ client.birthdate }}
-                                </div>
-                                <div id="edit-birthdate" class="form-group edit-profile" style="display: none">
-                                    {{ form_edit.birthdate }}
-                                </div>
+                            </div>
+                            <div id="profile_footer" class="row">
+                                <div class="col-lg-12"><input type="submit" class="btn btn-success" value="Save" name="Save" /></div>
+
                             </div>
                         </div>
                     </div>
 
-
-                    <div class="container" style="margin-top: 80px">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div>
-                                    <h5>Description</h5>
-                                    <button id="edit-description-btn"><i class="fa fa-edit"></i></button>
-                                </div>
-                                <div id="display-description" class="profile-data">
-                                    {{ client.description }}
-                                </div>
-                                <div id="edit-description" class="form-group edit-profile" style="display: none">
-                                    {{ form_edit.description }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
 
             </div>
-        </div>
+        </form>
     </section>
     {% load static %}
+    <link href="{% static "css/profile.css" %}" rel="stylesheet">
     <script src="{% static  "/js/profile_page.js" %}"></script>
 
 {% endblock %}
