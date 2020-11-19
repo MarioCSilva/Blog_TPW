@@ -3,110 +3,81 @@
 
 
 {% block content %}
-<section style="margin-top:150px">
+    <section style="margin-top:150px">
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-9 col-sm-10 col-md-10">
-                <div class="container">
-                    <h2>{{ client.user.username }}</h2>
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-12 col-md-4">
-                            <img src="../media/{{ client.profile_pic }}" width="250px" height="250px"
-                                style="border-radius: 10px" />
-                        </div>
-                        <div class="col-lg-8 col-sm-12 col-md-4">
-                            <div class="container" style="margin-bottom: 20px">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div>
-                                            <h5>Name</h5>
-                                            <button id="edit-name-btn"><i class="fa fa-edit"></i></button>
-                                        </div>
-                                        <div id="display-name" class="profile-data">
-                                            {{ client.name }}
 
-                                        </div>
-                                        <div id="edit-name" class="form-group edit-profile" style="display: none">
-                                            {{ form_edit.name }}
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <h5>Sex</h5>
-                                        <button id="edit-sex-btn"><i class="fa fa-edit"></i></button>
-
-                                        <div id="display-sex" class="profile-data">
-                                            {{ client.sex }}
-                                        </div>
-                                        <div id="edit-sex" class="form-group edit-profile" style="display: none">
-                                            {{ form_edit.sex }}
-                                        </div>
-                                    </div>
+        <div class="container" style="margin-bottom: 150px">
+            <h2>{{ client.user.username }}</h2>
+            <div class="row">
+                <div class="col-lg-4 col-sm-12 col-md-4">
+                    <img src="../media/{{ client.profile_pic }}" width="250px" height="250px"
+                         style="border-radius: 10px" />
+                </div>
+                <div class="col-lg-8 col-sm-12 col-md-4">
+                    <div class="container" style="margin-bottom: 20px">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div>
+                                    <h5 >Name</h5>
+                                    <button id="edit-name-btn"><i class="fa fa-edit"></i></button>
+                                </div>
+                                <div id="display-name" class="profile-data">
+                                    {{ client.name }}
+                                </div>
+                                <div id="edit-name" class="form-group edit-profile" style="display: none">
+                                    {{ form_edit.name }}
                                 </div>
                             </div>
-                            </br>
-                            </br>
-                            </br>
+                            <div class="col-lg-2">
+                                <h5>Sex</h5>
+                                <button id="edit-sex-btn"><i class="fa fa-edit"></i></button>
 
-                            <div class="container" style="margin-bottom: 20px">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div>
-                                            <h5>Description</h5>
-                                            <button id="edit-description-btn"><i class="fa fa-edit"></i></button>
-                                        </div>
-                                        <div id="display-description" class="profile-data">
-                                            {{ client.description }}
-                                        </div>
-                                        <div id="edit-description" class="form-group edit-profile" style="display: none">
-                                            {{ form_edit.description }}
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div>
-                                            <h5>BirthDate</h5>
-                                            <button id="edit-birthdate-btn"><i class="fa fa-edit"></i></button>
-                                        </div>
-                                        <div class="profile-data">
-                                            {{ client.birthdate }}
-                                        </div>
-                                        <div class="form-group edit-profile" style="display: none">
-                                            {{ form_edit.description }}
-                                        </div>
-                                    </div>
-
+                                <div id="display-sex" class="profile-data">
+                                    {{ client.sex }}
+                                </div>
+                                <div id="edit-sex" class="form-group edit-profile" style="display: none">
+                                    {{ form_edit.sex }}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div>
+                                    <h5>BirthDate</h5>
+                                    <button id="edit-birthdate-btn"><i class="fa fa-edit"></i></button>
+                                </div>
+                                <div id="display-birthdate" class="profile-data">
+                                    {{ client.birthdate }}
+                                </div>
+                                <div id="edit-birthdate" class="form-group edit-profile" style="display: none">
+                                    {{ form_edit.birthdate }}
                                 </div>
                             </div>
                         </div>
+                    </div>
 
 
+                    <div class="container" style="margin-top: 80px">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div>
+                                    <h5>Description</h5>
+                                    <button id="edit-description-btn"><i class="fa fa-edit"></i></button>
+                                </div>
+                                <div id="display-description" class="profile-data">
+                                    {{ client.description }}
+                                </div>
+                                <div id="edit-description" class="form-group edit-profile" style="display: none">
+                                    {{ form_edit.description }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-1 col-sm-0 col-md-0">
-                <div class="d-sm-none d-md-none d-lg-block" style="border-left:2px solid aliceblue;height: 300px"></div>
-            </div>
-
-            <div class="col-lg-2 col-sm-2 col-md-2">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h5>Settings</h5>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <button id="edit_button" type="button" class="btn btn-success">Edit Profile</button>
-                        <button id="save_profile_button" type="button" class="btn btn-danger" style="display: none">Save
-                            Profile</button>
-                    </div>
-                </div>
-            </div>
 
 
+            </div>
         </div>
-    </div>
-</section>
-{% load static %}
-<script src="{% static  "/js/profile_page.js" %}"></script>
+    </section>
+    {% load static %}
+    <script src="{% static  "/js/profile_page.js" %}"></script>
 
 {% endblock %}
