@@ -25,7 +25,7 @@ class Client(models.Model):
     name = models.CharField(max_length=50, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=300, blank=True)
-    profile_pic = models.ImageField(null=True,upload_to=profile_pic_path, height_field=None, width_field=None, max_length=None)
+    profile_pic = models.ImageField(null=True,upload_to=profile_pic_path,default="default/default_profile.jpg", height_field=None, width_field=None, max_length=None)
     birthdate = models.DateField(null=True,auto_now=False, auto_now_add=False)
     sex = models.CharField(null=True, max_length=40)
 

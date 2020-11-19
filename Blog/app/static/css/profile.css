@@ -5,8 +5,8 @@ section{
 }
 
 
-#profile_pic{
-    width:  100%;
+.profile_img{
+    width:  250px;
     height: 250px;
 }
 
