@@ -105,8 +105,32 @@ def entry_page(request):
 def profile_page(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    user = Client.objects.get(user=request.user.id)
-    return render(request,"profile_page.html",{"client":user,"form_edit":EditProfileForm()})
+
+    if request.method == "GET":
+        user = Client.objects.get(user=request.user.id)
+        return render(request,"profile_page.html",{"client":user,"form_edit":EditProfileForm()})
+    elif request.method == "POST":
+        form = EditProfileForm(data=request.POST)
+        if form.is_valid():
+            client = Client.objects.get(user=request.user.id)
+            name = form.cleaned_data["name"]
+            if name:
+                client.name = name
+            birthdate = form.cleaned_data["birthdate"]
+            if birthdate:
+                client.birthdate = birthdate
+            profile_pic = form.cleaned_data["profile_pic"]
+            if profile_pic:
+                client.profile_pic = profile_pic
+            description = form.cleaned_data["description"]
+            if description:
+                client.description = description
+            sex = form.cleaned_data["sex"]
+            if sex:
+                client.sex = sex
+            client.save()
+            return redirect("profile")
+
 
 
 def blog_page(request,num):

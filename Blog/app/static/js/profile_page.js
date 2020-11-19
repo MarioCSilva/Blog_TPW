@@ -7,10 +7,10 @@ $("#edit_button").click(function(){
 
     $("#display_birthdate").hide();
 
-    let sex = $("#display_sex").val();
-    let num = 1;
-    if(sex=="Female"){num=2;}else if(sex=="Other"){num=3;};
-    $("#id_sex").val(num);
+    let sex = $("#display_sex").html().trim().split(" ");
+    sex = sex[sex.length-1];
+    console.log(sex);
+    $("#id_sex").val(sex);
     $("#display_sex").hide();
 
     let name = $("#display_name").html().trim();
