@@ -1,0 +1,34 @@
+
+section{
+    margin-bottom: 150px;
+    margin-top:150px;
+}
+
+
+#profile_pic{
+    width:  100%;
+    height: 250px;
+}
+
+
+#profile_header{
+    padding: 0px 10px;
+    font-family: "Bitstream Vera Sans Mono";
+}
+
+#profile_body{
+    padding: 15px;
+    font-size: medium;
+    font-family: "Bitstream Vera Sans Mono";
+}
+
+#profile_footer{
+    padding:15px;
+}
+#display_name{
+    font-size: xx-large;
+}
+
+.sub_head{
+    margin-bottom: 15px;
+}

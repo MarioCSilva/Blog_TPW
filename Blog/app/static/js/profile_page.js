@@ -1,23 +1,30 @@
 
-var hide = function(){
-    // esconder os botoes todos quando clica num botao
-    $("#edit-name-btn").hide();
-    $("#edit-sex-btn").hide();
-}
+$("#edit_button").click(function(){
 
-$("#edit-submit").click(function(){
-    // mostrar todos os botoes
+    let description = $("#display_description").html().trim();
+    $("#id_description").val(description);
+    $("#display_description").hide();
+
+    $("#display_birthdate").hide();
+
+    let sex = $("#display_sex").html().trim().split(" ");
+    sex = sex[sex.length-1];
+    console.log(sex);
+    $("#id_sex").val(sex);
+    $("#display_sex").hide();
+
+    let name = $("#display_name").html().trim();
+    $("#id_name").val(name);
+    $("#display_name").hide();
+
+
+    $(".edit_input").show();
+    $("#profile_footer").show();
+    $("#edit_button").hide();
+
+
+
+
 })
 
 
-$("#edit-name-btn").click(function(){
-    $("#display-name").hide();
-    $("#edit-name").show();
-    hide();
-})
-
-$("#edit-sex-btn").click(function(){
-    $("#display-sex").hide();
-    $("#edit-sex").show();
-    hide();
-})

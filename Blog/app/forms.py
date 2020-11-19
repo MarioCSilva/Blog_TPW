@@ -43,10 +43,10 @@ class BlogCreationForm(forms.Form):
 
 class EditProfileForm(forms.Form):
     name = forms.CharField(max_length=70,required=False)
-    description = forms.CharField(max_length=300,required=False)
+    description = forms.CharField(widget=forms.Textarea,max_length=300,required=False)
     profile_pic = forms.ImageField(allow_empty_file=True,required=False)
     birthdate = forms.DateField(required=False)
-    sex = forms.ChoiceField(choices=[("1","Male"),("2","Female"),("3","Other")],required=False)
+    sex = forms.ChoiceField(choices=[("Male","Male"),("Female","Female"),("Other","Other")],required=False)
 
 
 class EditBlogOwners(forms.Form):
