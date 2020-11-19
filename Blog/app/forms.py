@@ -35,8 +35,8 @@ class PostCreationForm(forms.Form):
 class BlogCreationForm(forms.Form):
     name = forms.CharField(max_length=70,widget=forms.TextInput(attrs={"placeholder":"Name"}))
     isPublic = forms.ChoiceField(choices=[("1","Public"),("2","Private")])
-    data = tuple([("",x["name"]) for x in Topic.objects.all().values("name")])
-    topic = forms.TypedMultipleChoiceField(choices=data)
+    data = tuple([(x.id,x.name) for x in Topic.objects.all() if x.name != "Personal"])
+    topic = forms.TypedMultipleChoiceField(choices=data, required=True)
     description = forms.CharField(max_length=500,widget=forms.TextInput(attrs={"placeholder":"Description"}))
     image = forms.ImageField(allow_empty_file=True,required=False)
 
@@ -48,4 +48,12 @@ class EditProfileForm(forms.Form):
     birthdate = forms.DateField(required=False)
     sex = forms.ChoiceField(choices=[("1","Male"),("2","Female"),("3","Other")],required=False)
 
+
+class EditBlogOwners(forms.Form):
+    username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+
+
+class EditBlogTopics(forms.Form):
+    data = tuple([(x.id, x.name) for x in Topic.objects.all() if x.name != "Personal"])
+    topics = forms.TypedMultipleChoiceField(choices=data, required=True)
 

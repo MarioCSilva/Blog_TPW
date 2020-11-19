@@ -2,38 +2,88 @@
 
 {% block content %}
 {% load static %}
-<script src={% static "js/blog_page.js" %}></script>
+<script>    $(document).ready(function () {
+    $("#follow-button").click(function () {
+      if ($("#follow-button").text() == "+ Follow") {
+        // *** State Change: To Following ***
+        // We want the button to squish (or shrink) by 10px as a reaction to the click and for it to last 100ms
+        $("#follow-button").animate(
+          { width: "-=10px" },
+          100,
+          "easeInCubic",
+          function () {}
+        );
+
+        // then now we want the button to expand out to it's full state
+        // The left translation is to keep the button centred with it's longer width
+        $("#follow-button").animate(
+          { width: "+=45px", left: "-=15px" },
+          600,
+          "easeInOutBack",
+          function () {
+            $("#follow-button").css("color", "#3399FF");
+            $("#follow-button").text("Following");
+
+            // Animate the background transition from white to green. Using JQuery Color
+            $("#follow-button").animate(
+              {
+                backgroundColor: "#2EB82E",
+                borderColor: "#2EB82E"
+              },
+              1000
+            );
+          }
+        );
+      } else {
+        // *** State Change: Unfollow ***
+        // Change the button back to it's original state
+        $("#follow-button").animate(
+          { width: "-=25px", left: "+=15px" },
+          600,
+          "easeInOutBack",
+          function () {
+            $("#follow-button").text("+ Follow");
+            $("#follow-button").css("color", "#3399FF");
+            $("#follow-button").css("background-color", "white");
+            $("#follow-button").css("border-color", "#3399FF");
+          }
+        );
+      }
+    });
+  });
+</script>
 <section style="margin-top: 180px;">
     <div class="row">
+    {% if permission %}
       <div class="w3-card col-sm-2" style="text-align: center; height: 100%; background-color: grey;">
         <div class="row">
           <a class="w3-bar-item" style="background-color: lightgrey;color: black; font-weight: bold; font-size: 20px; width: 100%; height: 50px; padding-top: 10px">
-            SETTINGS</a></div>
+            SETTINGS </a></div>
         <div class="row">
           <a href="" data-toggle="modal" data-target="#Blog" class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Edit Blog</a></div>
-        {% if blog.topic.name == "Personal" %}
-        <div class="row">
-          <a href="" data-toggle="modal" data-target="#Owners"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Owners</a></div>
-        <div class="row">
-          <a href="" data-toggle="modal" data-target="#Invites"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Invites</a></div>
+            Edit Blog </a></div>
+        {% if blog.topic.all.0.name != 'Personal' %}
+                <div class="row">
+                  <a href="" data-toggle="modal" data-target="#Owners"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+                    Owners</a></div>
+                <div class="row">
+              <a href="" data-toggle="modal" data-target="#Invites"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+                Invites</a></div>
+            <div class="row">
+          <a href="" data-toggle="modal" data-target="#Topic"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Topic</a></div>
+            <div class="row">
+          <a href="" data-toggle="modal" data-target="#Visibility"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Visibility</a></div>
         {% endif %}
         <div class="row">
           <a href="" data-toggle="modal" data-target="#Subscribers"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
             Subscribers</a></div>
         <div class="row">
-          <a href="" data-toggle="modal" data-target="#Topic"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Topic</a></div>
-          <div class="row">
-          <a href="" data-toggle="modal" data-target="#Visibility"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Visibility</a></div>
-        <div class="row">
           <a href="" data-toggle="modal" data-target="#Del"  class="w3-bar-item w3-btn w3-red w3-border w3-border-white w3-text-white w3-round-large" style="color: white; font-weight: bold; width: 100%; height: 40px;">
             Delete Blog</a></div>
       </div>
-      
+
       <div class="modal fade" id="Blog" tabindex="-1" role="dialog" aria-labelledby="Blog" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -77,28 +127,25 @@
               </button>
             </div>
             <div class="modal-body">
-              <form action="." method="POST">
+              <form action="/blog_owners" method="GET">
+              {% for owner in blog.owner.all %}
+                  <li>{{ owner.user.username }}</li>
+                {% endfor %}
                 {% csrf_token %}
                 <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Title:</label>
-                  {{ form_post.title }}
-                </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  {{ form_post.text}}
-                </div>
-                <div class="form-group">
-                  {{ form_post.image}}
+                    <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                  <label for="recipient-name" class="col-form-label">Add an Owner:</label>
+                  {{ blog_owners.username }}
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-primary">
                 </div>
               </form>
             </div>
           </div>
         </div>
-      </div>
+        </div>
 
 
       <div class="modal fade" id="Subscribers" tabindex="-1" role="dialog" aria-labelledby="Subscribers" aria-hidden="true">
@@ -151,24 +198,20 @@
             </div>
             <div class="modal-body">
               {% for topic in blog.topic.all %}
+                  {%  if topic.name != "Personal" %}
                   <li>{{ topic.name }}</li>
+                  {% endif %}
                 {% endfor %}
-              <form action="." method="POST">
+              <form action="/blog_topics" method="GET">
                 {% csrf_token %}
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Title:</label>
-                  {{ form_post.title }}
-                </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  {{ form_post.text}}
-                </div>
-                <div class="form-group">
-                  {{ form_post.image}}
-                </div>
+              <div class="form-group">
+                <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                  <label for="recipient-name" class="col-form-label">Add an Owner:</label>
+                  {{ blog_topics.topics }}
+              </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-primary" name="Add Topic" value="Add Topic">
                 </div>
               </form>
             </div>
@@ -284,17 +327,6 @@
         </div>
       </div>
 
-      
-      <div class="col-sm-10" style="padding-left: 200px; padding-right: 200px;">
-        <div style="text-align: center; color: black;">
-            <h1>{{ blog.name }}</h1>
-          </div>
-          <div style="text-align: center;"> {{ blog.description }}</div>
-
-          <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
-            <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
-                class="fa fa-plus-circle" aria-hidden="true"></i></a>
-          </div>
 
           <div class="modal fade" id="Post" tabindex="-1" role="dialog" aria-labelledby="Post" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -328,10 +360,24 @@
               </div>
             </div>
           </div>
+           <div class="col-sm-10" style="padding-left: 200px; padding-right: 200px;">
+        {% else %}
+            <div class="container">
+        {% endif %}
+            <div style="text-align: center; color: black;">
+                <div class="row col-sm-12">
+                <div class="col-sm-8" style="padding-left:36%"><h1>{{ blog.name }}</h1></div>
+                <div class="col-sm-4" style="text-align:right;margin-right: 0px"><button id="follow-button">+ Follow</button></div>
+                </div>
+              </div>
+              <div style="text-align: center;"> {{ blog.description }}</div>
+
+              <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
+                <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
+                    class="fa fa-plus-circle" aria-hidden="true"></i></a>
+              </div>
 
 
-          <button id="follow-button">+ Follow</button>	
-          
           <section id="services" style="width: 100%;">
               <div class="row">
                 <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"

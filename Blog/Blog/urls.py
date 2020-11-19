@@ -28,6 +28,8 @@ urlpatterns = [
     path('blog/<int:num>', views.blog_page, name='blog'),
     path('logout', auth_views.LogoutView.as_view(next_page='login/'), name='logout'),
     path('my_blog/',views.my_blog),
+    path('blog_owners/', views.blog_owners),
+    path('blog_topics/', views.blog_topics),
 ]
 
 

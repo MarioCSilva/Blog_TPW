@@ -1,4 +1,4 @@
-$(document).ready(function () {
+    $(document).ready(function () {
     $("#follow-button").click(function () {
       if ($("#follow-button").text() == "+ Follow") {
         // *** State Change: To Following ***
@@ -9,7 +9,7 @@ $(document).ready(function () {
           "easeInCubic",
           function () {}
         );
-  
+
         // then now we want the button to expand out to it's full state
         // The left translation is to keep the button centred with it's longer width
         $("#follow-button").animate(
@@ -17,9 +17,9 @@ $(document).ready(function () {
           600,
           "easeInOutBack",
           function () {
-            $("#follow-button").css("color", "#fff");
+            $("#follow-button").css("color", "#3399FF");
             $("#follow-button").text("Following");
-  
+
             // Animate the background transition from white to green. Using JQuery Color
             $("#follow-button").animate(
               {
@@ -40,11 +40,10 @@ $(document).ready(function () {
           function () {
             $("#follow-button").text("+ Follow");
             $("#follow-button").css("color", "#3399FF");
-            $("#follow-button").css("background-color", "#ffffff");
+            $("#follow-button").css("background-color", "white");
             $("#follow-button").css("border-color", "#3399FF");
           }
         );
       }
     });
   });
-  
