@@ -155,7 +155,8 @@ def blog_page(request, num):
         "permission": permission,
         "blog_owners": EditBlogOwners(),
         "blog_topics": EditBlogTopics(),
-        "blog_subs":   EditBlogSubs(blog_id=blog.id),
+        "blog_subs":   EditBlogSubs(blog_id=blog.id, blog_user=request.user.username),
+        "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description)
         })
 
 
@@ -195,7 +196,7 @@ def blog_topics(request):
         blog_id = request.GET.get('blog_id')
         client = Client.objects.get(user=request.user)
         blog = Blog.objects.get(id=blog_id)
-        topics = request.GET.get('topics')
+        topics = form.cleaned_data.get('topics')
         blog.topic.set(topics)
         blog.save()
         return redirect('/blog/' + blog_id)
@@ -206,14 +207,36 @@ def blog_topics(request):
 def blog_subs(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    form = EditBlogSubs(data=request.GET)
+    blog_id = request.GET.get('blog_id')
+    form = EditBlogSubs(data=request.GET, blog_id=blog_id, blog_user=request.user.username)
     if form.is_valid():
-        blog_id = request.GET.get('blog_id')
-        client = Client.objects.get(user=request.user)
         blog = Blog.objects.get(id=blog_id)
-        subs = request.GET.get('subs')
+        subs = form.cleaned_data.get('subs')
+        subs = [ Client.objects.get(user=int(x)) for x in subs]
+        print(subs)
         blog.subs.set(subs)
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
         print(form.errors)
+
+
+def blog_edit(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+    form = EditBlog(data=request.GET, blog_name=blog.name, blog_description=blog.description)
+    if form.is_valid():
+        name = form.cleaned_data.get('name')
+        description = form.cleaned_data.get('description')
+        blog.name = name
+        blog.description = description
+        blog.save()
+        return redirect('/blog/' + blog_id)
+    else:
+        print(form.errors)
+
+
+
+
