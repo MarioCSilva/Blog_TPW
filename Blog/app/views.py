@@ -149,10 +149,13 @@ def blog_page(request, num):
     if client in blog.owner.all():
         permission = True
 
-    return render(request, "blog_page.html", {"blog": blog,
-                                              "permission": permission,
-                                              "blog_owners": EditBlogOwners(),
-                                              "blog_topics": EditBlogTopics()})
+    return render(request, "blog_page.html", {
+        "blog": blog,
+        "permission": permission,
+        "blog_owners": EditBlogOwners(),
+        "blog_topics": EditBlogTopics(),
+        "blog_subs":   EditBlogSubs(blog_id=blog.id),
+        })
 
 
 def my_blog(request):
@@ -187,13 +190,28 @@ def blog_topics(request):
     if not request.user.is_authenticated:
         return redirect('/login')
     form = EditBlogTopics(data=request.GET)
-    print("ww")
     if form.is_valid():
         blog_id = request.GET.get('blog_id')
         client = Client.objects.get(user=request.user)
         blog = Blog.objects.get(id=blog_id)
         topics = request.GET.get('topics')
         blog.topic.set(topics)
+        blog.save()
+        return redirect('/blog/' + blog_id)
+    else:
+        print(form.errors)
+
+
+def blog_subs(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    form = EditBlogSubs(data=request.GET)
+    if form.is_valid():
+        blog_id = request.GET.get('blog_id')
+        client = Client.objects.get(user=request.user)
+        blog = Blog.objects.get(id=blog_id)
+        subs = request.GET.get('subs')
+        blog.subs.set(subs)
         blog.save()
         return redirect('/blog/' + blog_id)
     else:

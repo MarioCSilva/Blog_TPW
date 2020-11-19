@@ -57,3 +57,13 @@ class EditBlogTopics(forms.Form):
     data = tuple([(x.id, x.name) for x in Topic.objects.all() if x.name != "Personal"])
     topics = forms.TypedMultipleChoiceField(choices=data, required=True)
 
+
+class EditBlogSubs(forms.Form):
+    def __init__(self, *args, **kwargs):
+        blog_id = kwargs.pop('blog_id')
+        blog = Blog.objects.get(id=blog_id)
+        super(EditBlogSubs, self).__init__(*args, **kwargs)
+        data = ""
+        data = tuple([(x.user.id, x.user.username) for x in Blog.objects.get(id=blog_id).subs.all()])
+        self.fields['subs'] = forms.TypedMultipleChoiceField(choices=data, required=True)
+
