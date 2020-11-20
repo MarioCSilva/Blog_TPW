@@ -80,3 +80,13 @@ class EditBlog(forms.Form):
         super(EditBlog, self).__init__(*args, **kwargs)
         self.fields['name'] = forms.CharField(required=True, max_length=100, initial=blog_name)
         self.fields['description'] = forms.CharField(required=False, max_length=500, initial=blog_description)
+
+
+class EditBlogInvites(forms.Form):
+    def __init__(self, *args, **kwargs):
+        blog_id = kwargs.pop('blog_id')
+        blog = Blog.objects.get(id=blog_id)
+        super(EditBlogInvites, self).__init__(*args, **kwargs)
+        data = tuple([(x.id, x.user.username) for x in blog.invites.all()])
+        self.fields['invites'] = forms.TypedMultipleChoiceField(choices=data, required=False, widget=forms.CheckboxSelectMultiple)
+
