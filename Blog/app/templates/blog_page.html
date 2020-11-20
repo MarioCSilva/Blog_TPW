@@ -2,114 +2,82 @@
 
 {% block content %}
 {% load static %}
-<script>    $(document).ready(function () {
-    $("#follow-button").click(function () {
-      if ($("#follow-button").text() == "+ Follow") {
-        // *** State Change: To Following ***
-        // We want the button to squish (or shrink) by 10px as a reaction to the click and for it to last 100ms
-        $("#follow-button").animate(
-          { width: "-=10px" },
-          100,
-          "easeInCubic",
-          function () {}
-        );
-
-        // then now we want the button to expand out to it's full state
-        // The left translation is to keep the button centred with it's longer width
-        $("#follow-button").animate(
-          { width: "+=45px", left: "-=15px" },
-          600,
-          "easeInOutBack",
-          function () {
-            $("#follow-button").css("color", "#3399FF");
-            $("#follow-button").text("Following");
-
-            // Animate the background transition from white to green. Using JQuery Color
-            $("#follow-button").animate(
-              {
-                backgroundColor: "#2EB82E",
-                borderColor: "#2EB82E"
-              },
-              1000
-            );
-          }
-        );
-      } else {
-        // *** State Change: Unfollow ***
-        // Change the button back to it's original state
-        $("#follow-button").animate(
-          { width: "-=25px", left: "+=15px" },
-          600,
-          "easeInOutBack",
-          function () {
-            $("#follow-button").text("+ Follow");
-            $("#follow-button").css("color", "#3399FF");
-            $("#follow-button").css("background-color", "white");
-            $("#follow-button").css("border-color", "#3399FF");
-          }
-        );
-      }
+<script>
+    $(document).ready(function () {
+        for (i = 0; i < {{ blog.subs.all.count }}; i++) {
+            $("#id_subs_" + i).attr('checked', true);
+        }
+        for (i = 0; i < {{ blog_topics.topics_select|length }}; i++) {
+            $("#id_topics_select_" + i).attr('checked', true);
+        }
     });
-  });
 </script>
 <section style="margin-top: 180px;">
     <div class="row">
     {% if permission %}
       <div class="w3-card col-sm-2" style="text-align: center; height: 100%; background-color: grey;">
         <div class="row">
-          <a class="w3-bar-item" style="background-color: lightgrey;color: black; font-weight: bold; font-size: 20px; width: 100%; height: 50px; padding-top: 10px">
+          <a class="w3-bar-item" style="background-color: #4eb5f1;color: white; font-weight: bold; font-size: 20px; width: 100%; height: 50px; padding-top: 10px">
             SETTINGS </a></div>
         <div class="row">
-          <a href="" data-toggle="modal" data-target="#Blog" class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Edit Blog </a></div>
+          <a href="" data-toggle="modal" data-target="#BlogEdit" class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+            Name / Description </a></div>
         {% if blog.topic.all.0.name != 'Personal' %}
                 <div class="row">
-                  <a href="" data-toggle="modal" data-target="#Owners"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+                  <a href="" data-toggle="modal" data-target="#Owners"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
                     Owners</a></div>
                 <div class="row">
-              <a href="" data-toggle="modal" data-target="#Invites"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+              <a href="" data-toggle="modal" data-target="#Invites"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
                 Invites</a></div>
+            {% endif %}
             <div class="row">
-          <a href="" data-toggle="modal" data-target="#Topic"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+          <a href="" data-toggle="modal" data-target="#Topic"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
             Topic</a></div>
             <div class="row">
-          <a href="" data-toggle="modal" data-target="#Visibility"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+          <a href="" data-toggle="modal" data-target="#Visibility"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
             Visibility</a></div>
-        {% endif %}
+
         <div class="row">
-          <a href="" data-toggle="modal" data-target="#Subscribers"  class="w3-bar-item w3-button w3-border w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
-            Subscribers</a></div>
+            {% if blog.subs.all.values.count == 1 %}
+             <a class="w3-bar-item w3-border w3-border w3-text-white" style="background-color: lightgrey;color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px" disabled>
+                        No Subscribers</a></div>
+
+                {% else %}
+          <a href="" data-toggle="modal" data-target="#Subscribers"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
+                            Subscribers</a></div>
+
+          {% endif %}
+        {% if blog.topic.all.0.name != 'Personal' %}
         <div class="row">
-          <a href="" data-toggle="modal" data-target="#Del"  class="w3-bar-item w3-btn w3-red w3-border w3-border-white w3-text-white w3-round-large" style="color: white; font-weight: bold; width: 100%; height: 40px;">
+          <a href="" data-toggle="modal" data-target="#Delete"  class="w3-bar-item w3-btn w3-grey w3-border w3-border-red w3-text-white w3-round-large" style="color: white; font-weight: bold; width: 100%; height: 40px;">
             Delete Blog</a></div>
+            {% endif %}
       </div>
 
-      <div class="modal fade" id="Blog" tabindex="-1" role="dialog" aria-labelledby="Blog" aria-hidden="true">
+      <div class="modal fade" id="BlogEdit" tabindex="-1" role="dialog" aria-labelledby="BlogEdit" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <h5 class="modal-title" id="PostLabel">Edit Name/Description</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form action="." method="POST">
+              <form action="/blog_edit" method="GET">
                 {% csrf_token %}
+              <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Name:</label>
-                  {{ form_post.title }}
+                  {{ blog_edit.name }}
                 </div>
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">Description:</label>
-                  {{ form_post.text}}
-                </div>
-                <div class="form-group">
-                  {{ form_post.image}}
+                  {{ blog_edit.description }}
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-primary" name="Edit Blog value="Edit Blog">
                 </div>
               </form>
             </div>
@@ -152,31 +120,22 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <h5 class="modal-title" id="PostLabel">Subscribers:</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form action="." method="POST">
-                {% for sub in blog.subs.all %}
-                  <li>{{ sub.user.username }}</li>
-                {% endfor %}
+              <form action="/blog_subs" method="GET">
                   {% csrf_token %}
                   <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Title:</label>
-                    {{ form_post.title }}
-                  </div>
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">Message:</label>
-                    {{ form_post.text}}
-                  </div>
-                  <div class="form-group">
-                    {{ form_post.image}}
+                  <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                    <label for="recipient-name" class="col-form-label">Subscribers:</label>
+                    {{ blog_subs.subs }}
                   </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-primary" name="Submit Changes" value="Submit Changes">
                 </div>
               </form>
             </div>
@@ -191,23 +150,19 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <h5 class="modal-title" id="PostLabel">Topics</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              {% for topic in blog.topic.all %}
-                  {%  if topic.name != "Personal" %}
-                  <li>{{ topic.name }}</li>
-                  {% endif %}
-                {% endfor %}
               <form action="/blog_topics" method="GET">
                 {% csrf_token %}
               <div class="form-group">
                 <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
-                  <label for="recipient-name" class="col-form-label">Add an Owner:</label>
-                  {{ blog_topics.topics }}
+                  <label for="recipient-name" class="col-form-label">Select Topic's:</label>
+                  {{ blog_topics.topics_select }}
+                    {{ blog_topics.topics_unselect }}
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -218,8 +173,6 @@
           </div>
         </div>
       </div>
-
-
 
       <div class="modal fade" id="Visibility" tabindex="-1" role="dialog" aria-labelledby="Visibility" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -257,32 +210,25 @@
 
 
 
-      <div class="modal fade" id="Del" tabindex="-1" role="dialog" aria-labelledby="Del" aria-hidden="true">
+      <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <h5 class="modal-title" id="PostLabel">Delete Blog</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form action="." method="POST">
+              <form action="/blog_delete" method="GET">
                 {% csrf_token %}
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Title:</label>
-                  {{ form_post.title }}
-                </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  {{ form_post.text}}
-                </div>
-                <div class="form-group">
-                  {{ form_post.image}}
-                </div>
+                <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                <div class="alert alert-danger">
+                    <strong>Warning!</strong> This will permanently delete your Blog.</a>.
+                  </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-danger" name="Delete Blog" value="Delete Blog">
                 </div>
               </form>
             </div>
@@ -367,7 +313,19 @@
             <div style="text-align: center; color: black;">
                 <div class="row col-sm-12">
                 <div class="col-sm-8" style="padding-left:36%"><h1>{{ blog.name }}</h1></div>
-                <div class="col-sm-4" style="text-align:right;margin-right: 0px"><button id="follow-button">+ Follow</button></div>
+                <div class="col-sm-4" style="text-align:right;margin-right: 0px">
+                    {% if not permission %}
+                       <form action="/blog_follow" method="GET">
+                        <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                        {% if not subbed %}
+                            {% csrf_token %}
+                                <button id="follow-button" type="submit" name="Option" value="Follow">+ Follow</button>
+                            </form>
+                        {% else %}
+                                <button id="following" type="submit" name="Option" value="Unfollow">Following</button>
+                        {% endif %}
+                    {% endif %}
+                </div>
                 </div>
               </div>
               <div style="text-align: center;"> {{ blog.description }}</div>
