@@ -53,6 +53,11 @@ def main_page(request):
         posts = Post.objects.filter(blog__in=post_blogs)
 
         blogs = Blog.objects.all()
+        if "search" in request.GET:
+            search = request.GET["search"]
+            posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)
+
+
 
         return render(request, "main_page.html",
                       {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(), "posts": posts,
