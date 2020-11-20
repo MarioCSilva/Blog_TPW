@@ -50,13 +50,16 @@ def main_page(request):
         client = Client.objects.get(user=request.user)
 
         post_blogs = Blog.objects.filter(isPublic=True) | Blog.objects.filter(subs__in=[client])
-        posts = Post.objects.filter(blog__in=post_blogs)
 
+        posts = Post.objects.filter(blog__in=post_blogs).order_by("-date")
+
+        print(post_blogs)
         blogs = Blog.objects.all()
-        #if "search" in request.GET:
-        #    search = request.GET["search"]
-        #    posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)
-        #    blogs = Blog.objects.filter(name__contains=search)
+        if "search" in request.GET:
+            search = request.GET["search"]
+            print("search")
+            posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)
+            blogs = Blog.objects.filter(name__contains=search)
 
 
 
@@ -88,9 +91,10 @@ def entry_page(request):
                 blog.topic.add(topic.id)
                 blog.save()
                 login(request, user)
-                return redirect('home')
+                return redirect('profile')
             else:
                 print(form.errors)
+                return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm(),"form_errors":form.errors})
 
         elif "username" in request.POST:
             form = LoginForm(data=request.POST)
@@ -100,24 +104,26 @@ def entry_page(request):
                 user = authenticate(username=username, password=raw_password)
                 if user is not None:
                     login(request, user)
-                    return redirect('profile')
+                    return redirect('home')
                 # passar os dados do utilizador
             else:
                 print(form.errors)
+                return render(request, "entry_page.html",
+                              {"form_login": LoginForm(), "form_register": RegisterForm(), "form_errors2": form.errors})
 
         else:
-            return HttpResponse("<h1>nothing</h1>")
+            return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm()})
 
     elif request.method == "GET":
         return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm()})
 
 
 def profile_page(request):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated or request.method not in ["GET","POST"]:
         return redirect('/login')
+    user = Client.objects.get(user=request.user.id)
 
     if request.method == "GET":
-        user = Client.objects.get(user=request.user.id)
         return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm()})
     elif request.method == "POST":
         form = EditProfileForm(data=request.POST, files=request.FILES)
@@ -141,7 +147,7 @@ def profile_page(request):
                 client.sex = sex
             client.save()
             return redirect("profile")
-
+        return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm(),"form_errors":form.errors})
 
 def blog_page(request, num):
     if not request.user.is_authenticated:

@@ -8,8 +8,8 @@ from django.contrib.auth.models import User
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=50, required=True,widget=forms.TextInput(attrs={'placeholder':'Email'}))
     username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username'}))
-    password1 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Password'}))
-    password2 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Confirm Password'}))
+    password1 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
+    password2 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
 
     class Meta:
         model = User
@@ -18,7 +18,7 @@ class RegisterForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username'}))
-    password =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Password'}))
+    password =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
 
     class Meta:
         model = User

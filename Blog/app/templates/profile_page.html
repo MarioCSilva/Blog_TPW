@@ -7,7 +7,11 @@
         <form action="." method="POST" name="edit_profile" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
-
+                {% if form_errors %}
+                <div class="row alert alert-danger">
+                    {{ form_errors }}
+                </div>
+                {% endif %}
                 <div class="row">
 
                     <div class="col-lg-3">

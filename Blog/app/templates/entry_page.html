@@ -1,84 +1,114 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<style>
-    a.button2{
-    display:inline-block;
-    padding:0.5em 3em;
-    border:0.16em solid #FFFFFF;
-    margin:0 0.3em 0.3em 0;
-    box-sizing: border-box;
-    text-decoration:none;
-    text-transform:uppercase;
-    font-family:'Roboto',sans-serif;
-    font-weight:400;
-    color:#FFFFFF;
-    text-align:center;
-    transition: all 0.15s;
-  }
-  a.button2:hover{
-  color:#DDDDDD;
-  border-color:#DDDDDD;
-  }
-  a.button2:active{
-    color:#BBBBBB;
-    border-color:#BBBBBB;
-  }
-  @media all and (max-width:30em){
-     a.button2{
-    display:block;
-    margin:0.4em auto;
-    }
-  }
-</style>
-<section style="margin-top:150px">
+    <style>
+        a.button2{
+            display:inline-block;
+            padding:0.5em 3em;
+            border:0.16em solid #FFFFFF;
+            margin:0 0.3em 0.3em 0;
+            box-sizing: border-box;
+            text-decoration:none;
+            text-transform:uppercase;
+            font-family:'Roboto',sans-serif;
+            font-weight:400;
+            color:#FFFFFF;
+            text-align:center;
+            transition: all 0.15s;
+        }
+        a.button2:hover{
+            color:#DDDDDD;
+            border-color:#DDDDDD;
+        }
+        a.button2:active{
+            color:#BBBBBB;
+            border-color:#BBBBBB;
+        }
+        @media all and (max-width:30em){
+             a.button2{
+                display:block;
+                margin:0.4em auto;
+            }
+        }
+        .show_error{
+            color:red;
+            font-family: "Fira Code";
+        }
+    </style>
+    <section style="margin-top:150px">
 
-    <div class="container" style="padding:15px;background-color: #abdde5">
-        <div class="row">
-            <div class="col-lg-5 col-sm-6 col-md-5">
-                <div class="form">
-                    <h4>Register</h4>
-                    <p>Join the club.</p>
+        <div class="container" style="padding:15px;background-color: #abdde5">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6 col-md-5">
+                    <div class="form">
+                        <h4>Register</h4>
+                        <p>Join the club.</p>
 
-                    <form action="." method="POST">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            {{ form_register.email }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_register.username }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_register.password1 }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_register.password2 }}
-                        </div>
-                        <input type="submit" value="register" name="register" >
-                    </form>
+                        <form action="." method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form_register.email }}
+                            </div>
+                            {% if form_erros.email %}
+                                <div class="form-group show_error">
+                                    {{ form_errors.email }}
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                {{ form_register.username }}
+                            </div>
+                            {%  if form_errors.username %}
+                                <div class="form-group show_error">
+                                {{ form_errors.username }}
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                {{ form_register.password1 }}
+                            </div>
+                            {%  if form_errors.password1 %}
+                                <div class="form-group show_error">
+                                {{ form_errors.password1 }}
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                {{ form_register.password2 }}
+                            </div>
+                            {%  if form_errors.password2 %}
+                                <div class="form-group show_error">
+                                {{ form_errors.password2 }}
+                                </div>
+                            {% endif %}
+                            <input type="submit" value="Register" name="register" >
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-1 col-sm-6 col-md-1">
+                <div class="col-lg-1 col-sm-6 col-md-1">
 
-            </div>
-            <div class="col-lg-5 col-sm-6 col-md-5">
-                <div class="form">
-                    <h4>Login</h4>
-                    <p>Already registered? Login here.</p>
-                    <form action="." method="POST" >
-                        {% csrf_token %}
-                        <div class="form-group">
-                            {{ form_login.username }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_login.password }}
-                        </div>
-                        <input type="submit" name="login" value="login" >
-                    </form>
+                </div>
+                <div class="col-lg-5 col-sm-6 col-md-5">
+                    <div class="form">
+                        <h4>Login</h4>
+                        <p>Already registered? Login here.</p>
+                        <form action="." method="POST" >
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form_login.username }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form_login.password }}
+                            </div>
+                            {% if form_errors2 %}
+                                <div class="form-group show_error">
+                                    <p>Username and password do not match.</p>
+                                </div>
+                            {% endif %}
+                            <input type="submit" name="login" value="Login" >
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
+    </section>
 {% endblock %}
