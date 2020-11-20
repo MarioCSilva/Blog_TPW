@@ -1,7 +1,10 @@
 {% if user.is_authenticated %}
+    <li id="nav_home"><a href="{% url 'home' %}">Home</a></li>
+    <li id="nav_profile"><a href="{% url 'profile' %}" id="nav_bar_profile">Profile</a></li>
+    <li>
     <form id="myBlogForm" action="/my_blog" method="get" class="form-inline my-2 my-lg-0">
     {% csrf_token %}
-        <li><a href="javascript:document.getElementById('myBlogForm').submit()">My Blog</a></li>
+        <li id="nav_blog"><a href="javascript:document.getElementById('myBlogForm').submit()">My Blog</a></li>
     </form>
     </li>
     <li>
@@ -14,11 +17,10 @@
             </ul>
         </li>
     </form>
-
 {% else %}
 
 <ul class="navbar-nav navbar-right">
-    <li><a href="{% url 'login' %}">Log in</a></li>
+    <li id="nav_login"><a href="{% url 'login' %}">Log in</a></li>
 </ul>
 
 {% endif %}

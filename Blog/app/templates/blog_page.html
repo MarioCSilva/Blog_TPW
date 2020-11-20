@@ -2,6 +2,11 @@
 
 {% block content %}
 {% load static %}
+    {% if personal %}
+        <script>
+        $('#nav_blog').addClass("active");
+    </script>
+    {% endif %}
 <script>
     $(document).ready(function () {
         for (i = 0; i < {{ blog.subs.all.count }}; i++) {

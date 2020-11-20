@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-
-
-
 {% block content %}
+    <script>
+        $('#nav_profile').addClass("active");
+    </script>
     <section>
         <form action="." method="POST" name="edit_profile" enctype="multipart/form-data">
             {% csrf_token %}
@@ -103,6 +103,7 @@
             </div>
         </form>
     </section>
+
     {% load static %}
     <link href="{% static "css/profile.css" %}" rel="stylesheet">
     <script src="{% static  "/js/profile_page.js" %}"></script>

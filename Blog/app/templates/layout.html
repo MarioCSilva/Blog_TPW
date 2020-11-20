@@ -132,8 +132,6 @@ Header
 
         <nav class="main-nav float-right d-none d-lg-block">
             <ul>
-                <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}" id="nav_bar_profile">Profile</a></li>
                 <li>
                     {% include "login_partial.html" %}
                 </li>
@@ -183,7 +181,6 @@ Footer
 <script src={% static "lib/lightbox/js/lightbox.min.js" %}></script>
 <!-- Contact Form JavaScript File -->
 <script src={% static "contactform/contactform.js" %}></script>
-
 <!-- Template Main Javascript File -->
 <script src={% static "js/main.js" %}></script>
 </body>
