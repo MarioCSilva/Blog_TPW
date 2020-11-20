@@ -7,6 +7,9 @@
         for (i = 0; i < {{ blog.subs.all.count }}; i++) {
             $("#id_subs_" + i).attr('checked', true);
         }
+        for (i = 0; i < {{ blog_topics.topics_select|length }}; i++) {
+            $("#id_topics_select_" + i).attr('checked', true);
+        }
     });
 </script>
 <section style="margin-top: 180px;">
@@ -147,7 +150,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <h5 class="modal-title" id="PostLabel">Topics</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -157,8 +160,9 @@
                 {% csrf_token %}
               <div class="form-group">
                 <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
-                  <label for="recipient-name" class="col-form-label">Add a Topic:</label>
-                  {{ blog_topics.topics }}
+                  <label for="recipient-name" class="col-form-label">Select Topic's:</label>
+                  {{ blog_topics.topics_select }}
+                    {{ blog_topics.topics_unselect }}
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

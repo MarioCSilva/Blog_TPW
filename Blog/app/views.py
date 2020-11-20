@@ -156,7 +156,7 @@ def blog_page(request, num):
         "permission": permission,
         "subbed": subbed,
         "blog_owners": EditBlogOwners(),
-        "blog_topics": EditBlogTopics(),
+        "blog_topics": EditBlogTopics(blog_topics=blog.topic),
         "blog_subs":   EditBlogSubs(blog_id=blog.id, blog_user=request.user.username),
         "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description)
         })
@@ -193,11 +193,18 @@ def blog_owners(request):
 def blog_topics(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    form = EditBlogTopics(data=request.GET)
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+    form = EditBlogTopics(data=request.GET, blog_topics= blog.topic)
     if form.is_valid():
-        blog_id = request.GET.get('blog_id')
-        blog = Blog.objects.get(id=blog_id)
-        topics = form.cleaned_data.get('topics')
+        topics_select = form.cleaned_data.get('topics_select')
+        topics_unselect = form.cleaned_data.get('topics_unselect')
+        topics = topics_select + topics_unselect
+        personal = Topic.objects.get(name="Personal")
+        if personal in blog.topic.all() :
+            topics += [str(personal.id)]
+        topics = Topic.objects.filter(id__in=[int(x) for x in topics])
+        print(topics)
         blog.topic.set(topics)
         blog.save()
         return redirect('/blog/' + blog_id)

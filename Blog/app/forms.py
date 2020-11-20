@@ -54,8 +54,13 @@ class EditBlogOwners(forms.Form):
 
 
 class EditBlogTopics(forms.Form):
-    data = tuple([(x.id, x.name) for x in Topic.objects.all() if x.name != "Personal"])
-    topics = forms.TypedMultipleChoiceField(choices=data, required=False, widget=forms.CheckboxSelectMultiple)
+    def __init__(self, *args, **kwargs):
+        blog_topics = kwargs.pop('blog_topics')
+        super(EditBlogTopics, self).__init__(*args, **kwargs)
+        topics_unselect = tuple([(x.id, x.name) for x in Topic.objects.all() if x.name != "Personal" and x not in blog_topics.all()])
+        topics_select = tuple([(x.id, x.name) for x in blog_topics.all() if x.name != "Personal"])
+        self.fields['topics_unselect'] = forms.TypedMultipleChoiceField(choices=topics_unselect, required=False, widget=forms.CheckboxSelectMultiple)
+        self.fields['topics_select'] = forms.TypedMultipleChoiceField(choices=topics_select, required=False, widget=forms.CheckboxSelectMultiple)
 
 
 class EditBlogSubs(forms.Form):
