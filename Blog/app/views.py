@@ -43,7 +43,7 @@ def main_page(request):
                 blog.topic.set(topics)
                 print(topics)
                 blog.save()
-                return redirect('home')
+                return redirect('/blog/'+str(blog.id))
         else:
             return HttpResponse("<h1>nothing</h1>")
     else:
