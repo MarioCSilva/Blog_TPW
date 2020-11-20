@@ -53,9 +53,10 @@ def main_page(request):
         posts = Post.objects.filter(blog__in=post_blogs)
 
         blogs = Blog.objects.all()
-        if "search" in request.GET:
-            search = request.GET["search"]
-            posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)
+        #if "search" in request.GET:
+        #    search = request.GET["search"]
+        #    posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)
+        #    blogs = Blog.objects.filter(name__contains=search)
 
 
 
