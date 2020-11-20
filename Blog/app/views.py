@@ -144,15 +144,17 @@ def blog_page(request, num):
     blog = Blog.objects.get(id=num)
     client = Client.objects.get(user=request.user.id)
     if client not in blog.owner.all() and not blog.isPublic and client not in blog.subs.all():
-        print(blog.isPublic)
         return redirect("home")
     permission = False
     if client in blog.owner.all():
         permission = True
-
+    subbed = False
+    if client in blog.subs.all():
+        subbed = True
     return render(request, "blog_page.html", {
         "blog": blog,
         "permission": permission,
+        "subbed": subbed,
         "blog_owners": EditBlogOwners(),
         "blog_topics": EditBlogTopics(),
         "blog_subs":   EditBlogSubs(blog_id=blog.id, blog_user=request.user.username),
@@ -194,7 +196,6 @@ def blog_topics(request):
     form = EditBlogTopics(data=request.GET)
     if form.is_valid():
         blog_id = request.GET.get('blog_id')
-        client = Client.objects.get(user=request.user)
         blog = Blog.objects.get(id=blog_id)
         topics = form.cleaned_data.get('topics')
         blog.topic.set(topics)
@@ -236,6 +237,33 @@ def blog_edit(request):
         return redirect('/blog/' + blog_id)
     else:
         print(form.errors)
+
+
+def blog_follow(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+    option = request.GET.get('Option')
+    client = Client.objects.get(user=request.user)
+
+    if option == "Follow":
+        blog.subs.add(client)
+    elif option == "Unfollow":
+        blog.subs.remove(client)
+
+    blog.save()
+    return redirect('/blog/' + blog_id)
+
+
+def blog_delete(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+
+    blog.delete()
+    return redirect('/')
 
 
 
