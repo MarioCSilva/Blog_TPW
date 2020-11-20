@@ -241,6 +241,8 @@ def blog_subs(request):
         subs = [Client.objects.get(user=int(x)) for x in subs]
         print(subs)
         blog.subs.set(subs)
+        client = Client.objects.get(user=request.user)
+        blog.subs.add(client)
         blog.save()
         return redirect('/blog/' + blog_id)
     else:

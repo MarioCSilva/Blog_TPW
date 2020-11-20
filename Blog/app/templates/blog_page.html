@@ -38,14 +38,13 @@
               <a class="w3-bar-item w3-border w3-border w3-text-white" style="background-color: lightgrey;color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px" disabled>
                         No Invites</a></div>
           {% else %}
-          <a class="w3-bar-item w3-border w3-border w3-text-white" style="background-color: lightgrey;color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px" disabled>
+          <a class="w3-bar-item w3-button w3-white w3-border" data-toggle="modal" data-target="#Invites" style="color: white;font-weight: bold; width: 100%; height: 50px; padding-top: 13px" disabled>
                         Invites</a></div>
     {% endif %}
                 <div class="row">
             {% if blog.subs.all.values.count == 1 %}
              <a class="w3-bar-item w3-border w3-border w3-text-white" style="background-color: lightgrey;color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px" disabled>
                         No Subscribers</a></div>
-
                 {% else %}
           <a href="" data-toggle="modal" data-target="#Subscribers"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
                             Subscribers</a></div>
@@ -332,8 +331,7 @@
                     <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
                         class="fa fa-plus-circle" aria-hidden="true"></i></a>
                   </div>
-
-
+                
               <section id="services" style="width: 100%;">
                  {% for post in posts %}
                     <div class="row">
