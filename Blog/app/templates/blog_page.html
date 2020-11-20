@@ -327,7 +327,7 @@
               </div>
               <div style="text-align: center;"> {{ blog.description }}</div>
 
-            {% if not blog.isPublic and subbed or blog.isPublic %}
+            {% if not blog.isPublic and subbed or blog.isPublic or permission %}
                   <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
                     <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
                         class="fa fa-plus-circle" aria-hidden="true"></i></a>
