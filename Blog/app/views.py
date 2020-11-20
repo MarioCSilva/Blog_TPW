@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from app.models import Client, Post, Blog, Topic
-
+from django.db.models.functions import Length
 
 # Create your views here.
 
@@ -51,15 +51,25 @@ def main_page(request):
 
         post_blogs = Blog.objects.filter(isPublic=True) | Blog.objects.filter(subs__in=[client])
 
+        # recent ones first
         posts = Post.objects.filter(blog__in=post_blogs).order_by("-date")
 
-        print(post_blogs)
-        blogs = Blog.objects.all()
-        if "search" in request.GET:
-            search = request.GET["search"]
-            print("search")
-            posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)
-            blogs = Blog.objects.filter(name__contains=search)
+        # orders posts with more subs first
+        blogs = Blog.objects.all().order_by(Length("subs").desc())
+
+        if "search_post" in request.GET:
+            search = request.GET["search_post"]
+            # searchs for posts by name or by client name
+            posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)\
+                     | Post.objects.filter(client__user__username__contains=search,blog__in=post_blogs)
+            # recent ones first
+            posts = posts.order_by("-date")
+
+        if "search_blog" in request.GET:
+            search = request.GET["search_blog"]
+            # searches for pages with that name or owner name
+            blogs = Blog.objects.filter(name__contains=search) | Blog.objects.filter(owner__user__name__in=search)
+            blogs = blogs.order_by(Length("subs").desc())
 
 
 
