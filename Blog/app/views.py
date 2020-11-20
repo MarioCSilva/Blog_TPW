@@ -74,7 +74,7 @@ def entry_page(request):
                 client.save()
                 name = user.username
                 topic = Topic.objects.get(name="Personal")
-                is_public = False
+                is_public = True
                 blog = Blog(name=name, isPublic=is_public)
                 blog.save()
                 blog.owner.add(client.id)
@@ -112,9 +112,9 @@ def profile_page(request):
 
     if request.method == "GET":
         user = Client.objects.get(user=request.user.id)
-        return render(request,"profile_page.html",{"client":user,"form_edit":EditProfileForm()})
+        return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm()})
     elif request.method == "POST":
-        form = EditProfileForm(data=request.POST,files=request.FILES)
+        form = EditProfileForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             client = Client.objects.get(user=request.user.id)
             name = form.cleaned_data["name"]
@@ -137,29 +137,35 @@ def profile_page(request):
             return redirect("profile")
 
 
-
 def blog_page(request, num):
     if not request.user.is_authenticated:
         return redirect('/login')
     blog = Blog.objects.get(id=num)
     client = Client.objects.get(user=request.user.id)
-    if client not in blog.owner.all() and not blog.isPublic and client not in blog.subs.all():
-        return redirect("home")
+    personal = False
+    for topic in blog.topic.all():
+        if topic.name == "Personal":
+            personal = True
     permission = False
     if client in blog.owner.all():
         permission = True
     subbed = False
+    posts = Post.objects.filter(blog=blog.id)
     if client in blog.subs.all():
         subbed = True
     return render(request, "blog_page.html", {
         "blog": blog,
         "permission": permission,
+        "personal": personal,
         "subbed": subbed,
+        "posts": posts,
         "blog_owners": EditBlogOwners(),
         "blog_topics": EditBlogTopics(blog_topics=blog.topic),
-        "blog_subs":   EditBlogSubs(blog_id=blog.id, blog_user=request.user.username),
-        "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description)
-        })
+        "blog_subs": EditBlogSubs(blog_id=blog.id, blog_user=request.user.username),
+        "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description),
+        "blog_invites": EditBlogInvites(blog_id=blog.id),
+        "blog_post": PostCreationForm(),
+    })
 
 
 def my_blog(request):
@@ -195,13 +201,13 @@ def blog_topics(request):
         return redirect('/login')
     blog_id = request.GET.get('blog_id')
     blog = Blog.objects.get(id=blog_id)
-    form = EditBlogTopics(data=request.GET, blog_topics= blog.topic)
+    form = EditBlogTopics(data=request.GET, blog_topics=blog.topic)
     if form.is_valid():
         topics_select = form.cleaned_data.get('topics_select')
         topics_unselect = form.cleaned_data.get('topics_unselect')
         topics = topics_select + topics_unselect
         personal = Topic.objects.get(name="Personal")
-        if personal in blog.topic.all() :
+        if personal in blog.topic.all():
             topics += [str(personal.id)]
         topics = Topic.objects.filter(id__in=[int(x) for x in topics])
         print(topics)
@@ -220,7 +226,7 @@ def blog_subs(request):
     if form.is_valid():
         blog = Blog.objects.get(id=blog_id)
         subs = form.cleaned_data.get('subs')
-        subs = [ Client.objects.get(user=int(x)) for x in subs]
+        subs = [Client.objects.get(user=int(x)) for x in subs]
         print(subs)
         blog.subs.set(subs)
         blog.save()
@@ -255,7 +261,10 @@ def blog_follow(request):
     client = Client.objects.get(user=request.user)
 
     if option == "Follow":
-        blog.subs.add(client)
+        if blog.isPublic:
+            blog.subs.add(client)
+        else:
+            blog.invites.add(client)
     elif option == "Unfollow":
         blog.subs.remove(client)
 
@@ -273,5 +282,50 @@ def blog_delete(request):
     return redirect('/')
 
 
+def blog_visibility(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+
+    is_public = request.GET.get('visibility')
+    blog.isPublic = is_public
+    blog.save()
+    return redirect('/blog/' + blog_id)
 
 
+def blog_invites(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+    form = EditBlogInvites(data=request.GET, blog_id=blog_id)
+    if form.is_valid():
+        accepted_invites = form.cleaned_data.get('invites')
+        unaccepted_invites = [x.id for x in blog.invites.all() if x.id not in [int(y) for y in accepted_invites]]
+        blog.invites.set(unaccepted_invites)
+        for x in accepted_invites:
+            blog.subs.add(int(x))
+        blog.save()
+        return redirect('/blog/' + blog_id)
+    else:
+        print(form.errors)
+
+
+def blog_post(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.GET.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+    form = PostCreationForm(data=request.GET)
+    if form.is_valid():
+        title = form.cleaned_data.get('title')
+        text = form.cleaned_data.get('text')
+        user = request.user
+        image = form.cleaned_data.get("image")
+        client = Client.objects.get(user=user)
+        post = Post(title=title, text=text, client=client, blog=blog, image=image)
+        post.save()
+        return redirect('/blog/' + blog_id)
+    else:
+        print(form.errors)

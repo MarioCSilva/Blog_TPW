@@ -22,7 +22,7 @@
         <div class="row">
           <a href="" data-toggle="modal" data-target="#BlogEdit" class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
             Name / Description </a></div>
-        {% if blog.topic.all.0.name != 'Personal' %}
+        {% if not personal %}
                 <div class="row">
                   <a href="" data-toggle="modal" data-target="#Owners"  class="w3-bar-item w3-button w3-white w3-border" style="color: white; font-weight: bold; width: 100%; height: 50px; padding-top: 13px">
                     Owners</a></div>
@@ -47,7 +47,7 @@
                             Subscribers</a></div>
 
           {% endif %}
-        {% if blog.topic.all.0.name != 'Personal' %}
+        {% if not personal %}
         <div class="row">
           <a href="" data-toggle="modal" data-target="#Delete"  class="w3-bar-item w3-btn w3-grey w3-border w3-border-red w3-text-white w3-round-large" style="color: white; font-weight: bold; width: 100%; height: 40px;">
             Delete Blog</a></div>
@@ -178,29 +178,32 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="PostLabel">Post Blog</h5>
+              <h5 class="modal-title" id="PostLabel">Visibility</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              
-              <form action="." method="POST">
+              <form action="/blog_visibility" method="GET">
                 {% csrf_token %}
                 <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Title:</label>
-                  {{ form_post.title }}
+                <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+
+                  <select id="visibility" name="visibility">
+
+                    {% if blog.isPublic %}
+                        <option  value="True" selected="selected">Public</option>
+                        <option  value="False">Private</option>
+                      {% else %}
+                          <option  value="True">Public</option>
+                          <option  value="False" selected="selected">Private</option>
+                        {% endif %}
+                  </select>
                 </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  {{ form_post.text}}
-                </div>
-                <div class="form-group">
-                  {{ form_post.image}}
-                </div>
+
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-primary" name="Submit" value="Submit">
                 </div>
               </form>
             </div>
@@ -247,25 +250,15 @@
               </button>
             </div>
             <div class="modal-body">
-              {% for inv in blog.invites.all %}
-                  <li>{{ inv.user.username }}</li>
-                {% endfor %}
-              <form action="." method="POST">
+              <form action="/blog_invites" method="GET">
                 {% csrf_token %}
+              <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
                 <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Title:</label>
-                  {{ form_post.title }}
-                </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  {{ form_post.text}}
-                </div>
-                <div class="form-group">
-                  {{ form_post.image}}
+                {{ blog_invites.invites }}
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
+                  <input type="submit" class="btn btn-primary" name="Submit" value="Submit">
                 </div>
               </form>
             </div>
@@ -273,8 +266,11 @@
         </div>
       </div>
 
-
-          <div class="modal fade" id="Post" tabindex="-1" role="dialog" aria-labelledby="Post" aria-hidden="true">
+           <div class="col-sm-10" style="padding-left: 200px; padding-right: 200px;">
+        {% else %}
+            <div class="container">
+        {% endif %}
+    <div class="modal fade" id="Post" tabindex="-1" role="dialog" aria-labelledby="Post" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -284,18 +280,19 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="." method="POST">
+                  <form action="/blog_post" method="GET">
                     {% csrf_token %}
+                    <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
                     <div class="form-group">
                       <label for="recipient-name" class="col-form-label">Title:</label>
-                      {{ form_post.title }}
+                      {{ blog_post.title }}
                     </div>
                     <div class="form-group">
                       <label for="message-text" class="col-form-label">Message:</label>
-                      {{ form_post.text}}
+                      {{ blog_post.text}}
                     </div>
                     <div class="form-group">
-                      {{ form_post.image}}
+                      {{ blog_post.image}}
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -306,10 +303,6 @@
               </div>
             </div>
           </div>
-           <div class="col-sm-10" style="padding-left: 200px; padding-right: 200px;">
-        {% else %}
-            <div class="container">
-        {% endif %}
             <div style="text-align: center; color: black;">
                 <div class="row col-sm-12">
                 <div class="col-sm-8" style="padding-left:36%"><h1>{{ blog.name }}</h1></div>
@@ -320,61 +313,43 @@
                         {% if not subbed %}
                             {% csrf_token %}
                                 <button id="follow-button" type="submit" name="Option" value="Follow">+ Follow</button>
-                            </form>
                         {% else %}
                                 <button id="following" type="submit" name="Option" value="Unfollow">Following</button>
                         {% endif %}
+                        </form>
                     {% endif %}
                 </div>
                 </div>
               </div>
               <div style="text-align: center;"> {{ blog.description }}</div>
 
-              <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
-                <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
-                    class="fa fa-plus-circle" aria-hidden="true"></i></a>
-              </div>
-
-
-          <section id="services" style="width: 100%;">
-              <div class="row">
-                <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
-                  style="width: 100%">
-                  <div class="box">
-                    <div class="icon" style="background: #ecebff;"></div>
-                    <p> OLA </p>
-                    <h4 class="title"><a href="">TESTE</a></h4>
-                    <p class="description">DESCRICAO </p>
+            {% if not blog.isPublic and subbed or blog.isPublic %}
+                  <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
+                    <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a>
                   </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
-                  style="width: 100%">
-                  <div class="box">
-                    <div class="icon" style="background: #ecebff;"></div>
-                    <p> OLA </p>
-                    <h4 class="title"><a href="">T</a></h4>
-                    <p class="description">DESCRICAO </p>
-                  </div>
-                </div>
-              </div>
 
 
-                <div class="row">
-                  <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
-                    style="width: 100%">
-                    <div class="box">
-                      <div class="icon" style="background: #ecebff;"></div>
-                      <p> OLA </p>
-                      <h4 class="title"><a href="">TESTE</a></h4>
-                      <p class="description">DESCRICAO </p>
+              <section id="services" style="width: 100%;">
+                 {% for post in posts %}
+                    <div class="row">
+                        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+                          style="width: 100%">
+                          <div class="box">
+                            <div class="icon" style="background: #ecebff;"></div>
+                            <p> {{ post.client }} </p>
+                            <h4 class="title"><a href="">{{ post.title }}</a></h4>
+                            <p class="description">{{ post.description }} </p>
+                          </div>
+                        </div>
                     </div>
-                  </div>
+                  {% endfor %}
+              </section>
+            {% else %}
+                <div class="alert alert-warning" style="padding-top: 63px;margin-top: 70px;text-align: center">
+                    <h4><strong>Warning!</strong><p>Must follow the Blog to access and post content</p></h4>.
                 </div>
-          </section>
-
+            {% endif %}
         </div>
     </div>
 </section>
