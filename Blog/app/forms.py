@@ -29,7 +29,6 @@ class PostCreationForm(forms.Form):
     title = forms.CharField(max_length=70,widget=forms.TextInput(attrs={"placeholder":"Title"}))
     image = forms.ImageField(allow_empty_file=True,required=False)
     text = forms.CharField(max_length=500,widget=forms.Textarea(attrs={"placeholder":"Write your message..."}))
-    #page = forms.TypedChoiceField()
 
 
 class BlogCreationForm(forms.Form):

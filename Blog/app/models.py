@@ -12,13 +12,16 @@ def profile_pic_path(instance, filename):
     path = "profile/"
     return os.path.join(path+instance.user.username+"."+filename.split(".")[-1])
 
+
 def post_pic_path(instance, filename):
     path = "post/"
-    return os.path.join(path+instance._id+"."+filename.split(".")[-1])
+    print("dsa", instance.id)
+    return os.path.join(path+instance.id+"."+filename.split(".")[-1])
+
 
 def blog_pic_path(instance, filename):
     path = "blog/"
-    return os.path.join(path+instance._id+"."+filename.split(".")[-1])
+    return os.path.join(path+instance.id+"."+filename.split(".")[-1])
 
 class Client(models.Model):
     name = models.CharField(max_length=50, blank=True)
@@ -79,7 +82,6 @@ class Comment(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    likes = models.ManyToManyField(Client, related_name='com_likes')
 
     def __str__(self):
-        return self.title
+        return self.text
