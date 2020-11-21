@@ -57,7 +57,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="." method="POST">
+            <form action="." method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Title:</label>
@@ -65,10 +65,11 @@
               </div>
               <div class="form-group">
                 <label for="message-text" class="col-form-label">Message:</label>
-                {{ form_post.text}}
+                {{ form_post.text }}
               </div>
               <div class="form-group">
-                {{ form_post.image}}
+              <label for="message-text" class="col-form-label">Upload Image:</label>
+                {{ form_post.image }}
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -132,37 +133,132 @@
 
     <section id="services" class="section-bg" style="width: 100%;">
 
-      {% for post in posts %}
+      {% for post_det in posts_more_det %}
+       <div class="modal fade bd-example-modal-lg" id="Post_Details{{ post_det.post.id }}" tabindex="-1" role="dialog" aria-labelledby="Post_Details{{ post_det.post.id }}" aria-hidden="true" >
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="CommentLabel{{ post_det.post.id }}">Comments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="/post_comment" method="GET">
+                  {% csrf_token %}
+                    {% for comment in post_det.comments %}
+                      <div class="form-group">
+                        <div class="row col-sm-12">
+                        <div class="col-sm-3">
+                        <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: left">{{ comment.client }}:</h5>
+                        </div>
+                          <div class="col-sm-9">
+                            <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: right">({{ comment.date|date:"SHORT_DATETIME_FORMAT" }}):</h5>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <p>{{ comment.text }}</p>
+                        </div>
+                      </div>
+                        <hr>
+                {% endfor %}
+                  <div class="form-group">
+                    <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                    <label for="message-text" class="col-form-label">Add a Comment:</label>
+                    <input type="text" name="com_text" required style="width: 100%">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Comment" name="Comment">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
         <div class="row">
         <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
           style="width: 100%">
-          <div class="box">
-          {% if post.client.profile_pic %}
-            <img id="profile_pic" class="profile_img" src="../media/{{ post.client.profile_pic }}" style="width: 60px;height: 60px" />
-            {% else %}
+          <div class="box" style="padding-bottom: 0px">
+          <div style="height: 10px;" class="row">
+              <div style="text-align: left;" class="col-sm-6 row">
+              <span style="padding-right: 3px">Blog Posted:</span><a href="/blog/{{ post_det.post.blog.id }}"><h5> {{ post_det.post.blog }}</h5></a>
+              </div>
+              <div  class="col-sm-6" style="text-align: right">
+                   <h5>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h5>
+              </div>
+          </div>
+
+          <a href="/blog/{{ post_det.personal }}">
+          {% if post_det.post.client.profile_pic %}
+            <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px" />
+        {% else %}
             <img class="profile_img" style="width: 60px;height: 60px" src="../media/default/default_profile.jpg" />
             {% endif %}
-            <p> {{ post.client }} </p>
-            <h4 class="title"><a href="">{{ post.title }}</a></h4>
-            <p class="description">{{ post.description }} </p>
-          <hr>
-          <div class="row">
-              <div class="col-sm-4">
-                  <button type="button" class="myButton" style="width: 100%;height: 60px">
+            <p> {{ post_det.post.client }} </p>
+            </a>
+            <h4 class="title">{{ post_det.post.title }}</h4>
+            <p class="description">{{ post_det.post.description }} {{ post_det.post.image }} </p>
+
+            {% if post_det.post.image %}
+               <img id="profile_pic" class="profile_img" src="../media/{{ client.profile_pic }}" />
+            {% endif %}
+          <br><br>
+        <hr>
+            <div class="row col-sm-12" style="padding-top: -2px">
+                <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
+                <form action="/post_like" method="GET">
+                  {% csrf_token %}
+                    <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                    <button style="background: transparent; border: 0px" type="submit">
+                        {% if post_det.post.likes.count == 0 %}
+                            <input name="like" type="text" value="like" style="display: none" required>
+                            <i class="fa fa-thumbs-up" style="color:grey"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
+                        {% else %}
+                            {% if post_det.like %}
+                                <input name="like" type="text" value="dislike" style="display: none" required>
+
+                                <i class="fa fa-thumbs-up" style="color:blue"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
+                            {% else %}
+                                <input name="like" type="text" value="like" style="display: none" required>
+                                <i class="fa fa-thumbs-up" style="color:grey"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </button>
+                </form>
+
+                </div>
+
+                 <div class="col-sm-6" style="text-align: right; padding-right: 30px; font-size: 20px;">
+                     <span style="padding-right: 3px">{{ post_det.comments|length  }} Comments</span>
+                 </div>
+            </div>
+
+          <hr style="padding-bottom: 0px">
+
+          <div class="row" style="padding-top: 0px; padding-bottom: 10px">
+              <div class="col-sm-4" style="height: 40px;">
+                  <button type="button" class="myButton" style="width: 100%;height: 40px;">
                   <h6><i class="fa fa-thumbs-up"></i> Like</h6>
               </button>
               </div>
-              <div class="col-sm-4" style="border-left: 1px solid black;">
-                  <button type="button" class="myButton" style="width: 100%;height: 60px">
+              <div class="col-sm-4" style="border-left: 1px solid black;height: 40px;">
+                  <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}"><button type="button" class="myButton" style="width: 100%; height: 40px;">
                   <h6><i class="fa fa-comment"></i> Comment</h6>
-                  </button>
+                  </button></a>
               </div>
-              <div class="col-sm-4" style="border-left: 1px solid black;">
-                  <button type="button" class="myButton" style="width: 100%;height: 60px">
+              <div class="col-sm-4" style="border-left: 1px solid black;height: 40px;">
+                  <a href="/blog/{{ post_det.post.blog.id }}"><button type="button" class="myButton" style="width: 100%;height: 40px;">
                     <h6><i class="fa fa-share"></i> Go to Blog</h6>
-                  </button>
+                  </button></a>
               </div>
-
           </div>
 
           </div>

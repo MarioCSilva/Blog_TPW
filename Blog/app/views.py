@@ -19,11 +19,14 @@ def main_page(request):
                 title = form.cleaned_data.get('title')
                 text = form.cleaned_data.get('text')
                 user = request.user
-                image = form.cleaned_data.get("image")
                 client = Client.objects.get(user=user)
                 topic = Topic.objects.get(name="Personal")
                 blog = Blog.objects.get(topic=topic, owner__in=[client])
-                post = Post(title=title, text=text, client=client, blog=blog, image=image)
+                post = Post(title=title, text=text, client=client, blog=blog)
+                image = form.cleaned_data.get("image")
+                if image:
+                    post.image = image
+                print(form.cleaned_data)
                 post.save()
 
                 return redirect('home')
@@ -47,6 +50,13 @@ def main_page(request):
         else:
             return HttpResponse("<h1>nothing</h1>")
     else:
+        comments = Comment.objects.all()
+        post_com = {}
+        for comment in comments:
+            com_list = post_com.get(comment.post.id,[])
+            com_list.append(comment)
+            post_com[comment.post.id] = com_list
+
         client = Client.objects.get(user=request.user)
         post_blogs = Blog.objects.filter(isPublic=True) | Blog.objects.filter(subs__in=[client])
         # recent ones first
@@ -68,11 +78,29 @@ def main_page(request):
             blogs = Blog.objects.filter(name__contains=search) | Blog.objects.filter(owner__user__name__in=search)
             blogs = blogs.order_by(Length("subs").desc())
 
+        posts_more_det = []
+        for post in posts:
+            posts_detail = {}
+            posts_detail["comments"] = post_com.get(post.id, [])
+            posts_detail["post"] = post
+            if post.likes.count() > 0:
+                if client in post.likes.all():
+                    posts_detail["like"] = True
+                else:
+                    posts_detail["like"] = False
+            else:
+                posts_detail["like"] = False
 
+            topic = Topic.objects.get(name="Personal")
+            blog = Blog.objects.get(owner__in=[client], topic=topic.id)
+            posts_detail["personal"] = blog.id
+
+            posts_more_det.append(posts_detail)
 
         return render(request, "main_page.html",
-                      {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(), "posts": posts,
-                       "blogs": blogs})
+                      {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(),
+                       "blogs": blogs,
+                       "posts_more_det":posts_more_det})
 
 
 def entry_page(request):
@@ -143,7 +171,6 @@ def profile_page(request):
             if birthdate:
                 client.birthdate = birthdate
             profile_pic = form.cleaned_data["profile_pic"]
-            print(profile_pic)
             if profile_pic:
                 client.profile_pic = profile_pic
             description = form.cleaned_data["description"]
@@ -343,9 +370,11 @@ def blog_post(request):
         title = form.cleaned_data.get('title')
         text = form.cleaned_data.get('text')
         user = request.user
-        image = form.cleaned_data.get("image")
         client = Client.objects.get(user=user)
-        post = Post(title=title, text=text, client=client, blog=blog, image=image)
+        post = Post(title=title, text=text, client=client, blog=blog)
+        image = form.cleaned_data.get("image")
+        if image:
+            post.image = image
         post.save()
         return redirect('/blog/' + blog_id)
     else:
@@ -382,3 +411,34 @@ def settings(request):
 
 
 
+
+def post_comment(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+
+    post_id = request.GET.get('post_id')
+    post = Post.objects.get(id=post_id)
+    text = request.GET.get('com_text')
+    client = Client.objects.get(user=request.user)
+
+    comment = Comment(text=text,client=client, post=post)
+    comment.save()
+
+    return redirect('/')
+
+
+def post_like(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+
+    post_id = request.GET.get('post_id')
+    post = Post.objects.get(id=post_id)
+    like = request.GET.get('like')
+    client = Client.objects.get(user=request.user)
+    if like == "like":
+        post.likes.add(client)
+    else:
+        post.likes.remove(client)
+
+    post.save()
+    return redirect('/')

@@ -1,0 +1,17 @@
+.myButton {
+	background-color:#ffffff;
+	cursor:pointer;
+	color:black;
+	font-family:Verdana;
+	font-weight:bold;
+	text-decoration:none;
+    border:0px;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+	background-color:#f6f6f6;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
