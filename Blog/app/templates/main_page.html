@@ -137,10 +137,34 @@
         <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
           style="width: 100%">
           <div class="box">
-            <div class="icon" style="background: #ecebff;"></div>
+          {% if post.client.profile_pic %}
+            <img id="profile_pic" class="profile_img" src="../media/{{ post.client.profile_pic }}" style="width: 60px;height: 60px" />
+            {% else %}
+            <img class="profile_img" style="width: 60px;height: 60px" src="../media/default/default_profile.jpg" />
+            {% endif %}
             <p> {{ post.client }} </p>
             <h4 class="title"><a href="">{{ post.title }}</a></h4>
             <p class="description">{{ post.description }} </p>
+          <hr>
+          <div class="row">
+              <div class="col-sm-4">
+                  <button type="button" class="myButton" style="width: 100%;height: 60px">
+                  <h6><i class="fa fa-thumbs-up"></i> Like</h6>
+              </button>
+              </div>
+              <div class="col-sm-4" style="border-left: 1px solid black;">
+                  <button type="button" class="myButton" style="width: 100%;height: 60px">
+                  <h6><i class="fa fa-comment"></i> Comment</h6>
+                  </button>
+              </div>
+              <div class="col-sm-4" style="border-left: 1px solid black;">
+                  <button type="button" class="myButton" style="width: 100%;height: 60px">
+                    <h6><i class="fa fa-share"></i> Go to Blog</h6>
+                  </button>
+              </div>
+
+          </div>
+
           </div>
         </div>
       </div>

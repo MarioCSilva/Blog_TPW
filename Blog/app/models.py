@@ -20,7 +20,6 @@ def blog_pic_path(instance, filename):
     path = "blog/"
     return os.path.join(path+instance._id+"."+filename.split(".")[-1])
 
-
 class Client(models.Model):
     name = models.CharField(max_length=50, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -53,7 +52,6 @@ class Blog(models.Model):
     owner = models.ManyToManyField(Client, related_name='owner')
     subs = models.ManyToManyField(Client, related_name='subs')
     blog_pic = models.ImageField(null=True,upload_to=blog_pic_path, height_field=None, width_field=None, max_length=None)
-    #visibility = models.ManyToManyField(Client, related_name='visibility')
     isPublic = models.BooleanField()
     invites = models.ManyToManyField(Client, related_name='invites', default = [])
     description = models.CharField(max_length=500, default = "")
@@ -70,7 +68,18 @@ class Post(models.Model):
     image = models.ImageField(null=True,upload_to=post_pic_path, height_field=None, width_field=None, max_length=None)
     text = models.CharField(max_length=500)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(Client, related_name='post_likes')
 
     def __str__(self):
         return self.title
 
+
+class Comment(models.Model):
+    text = models.CharField(max_length=500)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(Client, related_name='com_likes')
+
+    def __str__(self):
+        return self.title
