@@ -90,3 +90,15 @@ class EditBlogInvites(forms.Form):
         data = tuple([(x.id, x.user.username) for x in blog.invites.all()])
         self.fields['invites'] = forms.TypedMultipleChoiceField(choices=data, required=False, widget=forms.CheckboxSelectMultiple)
 
+
+class AccountSecurity(forms.Form):
+
+    username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={"placeholder":"Username","class":"form-control"}))
+    email = forms.EmailField(max_length=50,required=True,widget=forms.EmailInput(attrs={"placeholder":"Email","class":"form-control"}))
+    password1 = forms.CharField(min_length=5, max_length=50, required=True,
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Password',"class":"form-control"}))
+    password2 = forms.CharField(min_length=5, max_length=50, required=True,
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Password',"class":"form-control"}))
+
+
+

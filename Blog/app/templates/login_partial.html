@@ -12,7 +12,7 @@
     {% csrf_token %}
         <li class="drop-down"><a href="">{{ user.username }}</a>
             <ul>
-                <li><a href="{ url 'settings' }">Settings</a></li>
+                <li><a href="{% url 'settings' %}">Settings</a></li>
                 <li><a href="javascript:document.getElementById('logoutForm').submit()">Log out</a></li>
             </ul>
         </li>

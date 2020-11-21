@@ -48,12 +48,9 @@ def main_page(request):
             return HttpResponse("<h1>nothing</h1>")
     else:
         client = Client.objects.get(user=request.user)
-
         post_blogs = Blog.objects.filter(isPublic=True) | Blog.objects.filter(subs__in=[client])
-
         # recent ones first
         posts = Post.objects.filter(blog__in=post_blogs).order_by("-date")
-
         # orders posts with more subs first
         blogs = Blog.objects.all().order_by(Length("subs").desc())
 
@@ -353,3 +350,35 @@ def blog_post(request):
         return redirect('/blog/' + blog_id)
     else:
         print(form.errors)
+
+def settings(request):
+
+    if not request.user.is_authenticated:
+        return redirect("/login")
+
+    if request.method == "GET":
+        security = AccountSecurity()
+        return render(request,"settings.html",{"form_security":security})
+    elif request.method == "POST":
+        if "security" in request.POST:
+            form = AccountSecurity(request.POST)
+            if form.is_valid():
+                user = request.user
+                user.username = form.cleaned_data["username"]
+                user.email = form.cleaned_data["email"]
+                user.password = form.cleaned_data["password1"]
+
+                return redirect("settings")
+
+            return render(request,"settings.html",{"form_security":security,"form_security_errors":form.errors})
+
+
+
+
+
+
+
+
+
+
+

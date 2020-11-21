@@ -37,6 +37,7 @@ urlpatterns = [
     path('blog_visibility/', views.blog_visibility),
     path('blog_invites/', views.blog_invites),
     path('blog_post/', views.blog_post),
+    path('settings/',views.settings,name="settings"),
 ]
 
 
