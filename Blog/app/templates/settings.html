@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% load static %}
+    <link href="{% static "css/settings.css" %}" rel="stylesheet">
+    <section style="margin-top: 200px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card text-center card-fluid">
+                        <h6 class="card-header"><strong>Settings</strong> </h6>
+                        <nav class="nav nav-tabs flex-column" >
+                            <a class="nav-link">Security</a>
+                            <a class="nav-link">adeus</a>
+                            <a class="nav-link">Delete Account</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+
+                    <div id="security_div" class="card card-fluid">
+
+                        <h6 class="card-header">Account</h6>
+                        <div class="card-body">
+                            <form method="POST" action=".">
+                                {% csrf_token %}
+                                <div class="row mb-3">
+                                    <div class="col-lg-12">
+                                        <label for="id_username">Username</label>
+                                        {{ form_security.username }}
+                                    </div>
+                                </div>
+                                {% if form_security.errors.username %}
+
+                                {% endif %}
+                                <div class="row mb-3">
+                                    <div class="col-lg-12">
+                                        <label for="id_email">Email</label>
+                                        {{ form_security.email }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-lg-12">
+                                        <label for="id_password1">New Password</label>
+                                        {{ form_security.password1 }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-lg-12">
+                                        <label for="id_password2">Confirm Password</label>
+                                        {{ form_security.password2 }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input type="submit" class="btn btn-success" name="security" value="Update Account">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </section>
+{% endblock %}

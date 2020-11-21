@@ -205,10 +205,10 @@
             <p> {{ post_det.post.client }} </p>
             </a>
             <h4 class="title">{{ post_det.post.title }}</h4>
-            <p class="description">{{ post_det.post.description }} {{ post_det.post.image }} </p>
+            <p class="description">{{ post_det.post.description }}  </p>
 
             {% if post_det.post.image %}
-               <img id="profile_pic" class="profile_img" src="../media/{{ client.profile_pic }}" />
+               <img id="post_pic" class="profile_img" src="../media/{{ post_det.post.image }}" />
             {% endif %}
           <br><br>
         <hr>

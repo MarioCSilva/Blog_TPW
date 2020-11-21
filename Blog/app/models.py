@@ -7,16 +7,18 @@ import os
 
 ########### METER PASSES OCULTAS, E MOSTRAR MENSAGENS DE ERROS DEPOIS e sessions
 
+def post_pic_path(instance, filename):
+    path = "post/"
+    ext = filename.split('.')[-1]
+    filename = "%s%s.%s" % ('img', instance.pk, ext)
+    return os.path.join(path+filename)
 
 def profile_pic_path(instance, filename):
     path = "profile/"
     return os.path.join(path+instance.user.username+"."+filename.split(".")[-1])
 
 
-def post_pic_path(instance, filename):
-    path = "post/"
-    print("dsa", instance.id)
-    return os.path.join(path+instance.id+"."+filename.split(".")[-1])
+
 
 
 def blog_pic_path(instance, filename):

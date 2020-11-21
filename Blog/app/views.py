@@ -14,7 +14,7 @@ def main_page(request):
 
     if request.method == "POST":
         if "Create Post" in request.POST:
-            form = PostCreationForm(data=request.POST)
+            form = PostCreationForm(data=request.POST,files=request.FILES)
             if form.is_valid():
                 title = form.cleaned_data.get('title')
                 text = form.cleaned_data.get('text')
@@ -396,20 +396,12 @@ def settings(request):
                 user.username = form.cleaned_data["username"]
                 user.email = form.cleaned_data["email"]
                 user.password = form.cleaned_data["password1"]
+                user.save()
+                login(request,user)
 
                 return redirect("settings")
 
             return render(request,"settings.html",{"form_security":security,"form_security_errors":form.errors})
-
-
-
-
-
-
-
-
-
-
 
 
 def post_comment(request):
