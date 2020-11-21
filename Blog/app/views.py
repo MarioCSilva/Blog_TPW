@@ -159,11 +159,13 @@ def profile_page(request):
     user = Client.objects.get(user=request.user.id)
 
     if request.method == "GET":
-        return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm()})
+        return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm(instance=user)})
     elif request.method == "POST":
-        form = EditProfileForm(data=request.POST, files=request.FILES)
+
+        form = EditProfileForm(data=request.POST, files=request.FILES,instance=user)
         if form.is_valid():
-            client = Client.objects.get(user=request.user.id)
+            client = form.save(commit=False)
+            '''
             name = form.cleaned_data["name"]
             if name:
                 client.name = name
@@ -179,9 +181,10 @@ def profile_page(request):
             sex = form.cleaned_data["sex"]
             if sex:
                 client.sex = sex
+            '''
             client.save()
             return redirect("profile")
-        return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm(),"form_errors":form.errors})
+        return render(request, "profile_page.html", {"client": user, "form_edit": form,"form_errors":form.errors})
 
 def blog_page(request, num):
     if not request.user.is_authenticated:
@@ -386,22 +389,18 @@ def settings(request):
         return redirect("/login")
 
     if request.method == "GET":
-        security = AccountSecurity()
-        return render(request,"settings.html",{"form_security":security})
+        security = RegisterForm()
+        return render(request,"settings.html",{"form_security":RegisterForm(instance=request.user)})
     elif request.method == "POST":
         if "security" in request.POST:
-            form = AccountSecurity(request.POST)
+            form = RegisterForm(request.POST,instance=request.user)
             if form.is_valid():
-                user = request.user
-                user.username = form.cleaned_data["username"]
-                user.email = form.cleaned_data["email"]
-                user.password = form.cleaned_data["password1"]
+                user = form.save(commit=False)
                 user.save()
                 login(request,user)
+                return render(request,"settings.html",{"form_security":form,"valid":True})
 
-                return redirect("settings")
-
-            return render(request,"settings.html",{"form_security":security,"form_security_errors":form.errors})
+            return render(request,"settings.html",{"form_security":form,"form_security_errors":form.errors})
 
 
 def post_comment(request):

@@ -6,10 +6,10 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(max_length=50, required=True,widget=forms.TextInput(attrs={'placeholder':'Email'}))
-    username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username'}))
-    password1 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
-    password2 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
+    email = forms.EmailField(max_length=50, required=True,widget=forms.TextInput(attrs={'placeholder':'Email',"class":"form-control"}))
+    username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username',"class":"form-control"}))
+    password1 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password',"class":"form-control"}))
+    password2 =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password',"class":"form-control"}))
 
     class Meta:
         model = User
@@ -17,8 +17,8 @@ class RegisterForm(UserCreationForm):
     
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username'}))
-    password =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
+    username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username',"class":"form-control"}))
+    password =  forms.CharField(min_length=5,max_length=50,required=True,widget=forms.PasswordInput(attrs={'placeholder':'Password',"class":"form-control"}))
 
     class Meta:
         model = User
@@ -40,12 +40,16 @@ class BlogCreationForm(forms.Form):
     image = forms.ImageField(allow_empty_file=True,required=False)
 
 
-class EditProfileForm(forms.Form):
+class EditProfileForm(forms.ModelForm):
     name = forms.CharField(max_length=70,required=False)
     description = forms.CharField(widget=forms.Textarea,max_length=300,required=False)
     profile_pic = forms.ImageField(allow_empty_file=True,required=False)
     birthdate = forms.DateField(required=False, widget = forms.SelectDateWidget)
     sex = forms.ChoiceField(choices=[("Male","Male"),("Female","Female"),("Other","Other")],required=False)
+
+    class Meta:
+        model = Client
+        fields = ["name", "description", "birthdate", "profile_pic","sex"]
 
 
 class EditBlogOwners(forms.Form):
@@ -89,15 +93,6 @@ class EditBlogInvites(forms.Form):
         data = tuple([(x.id, x.user.username) for x in blog.invites.all()])
         self.fields['invites'] = forms.TypedMultipleChoiceField(choices=data, required=False, widget=forms.CheckboxSelectMultiple)
 
-
-class AccountSecurity(forms.Form):
-
-    username = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={"placeholder":"Username","class":"form-control"}))
-    email = forms.EmailField(max_length=50,required=True,widget=forms.EmailInput(attrs={"placeholder":"Email","class":"form-control"}))
-    password1 = forms.CharField(min_length=5, max_length=50, required=True,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Password',"class":"form-control"}))
-    password2 = forms.CharField(min_length=5, max_length=50, required=True,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Password',"class":"form-control"}))
 
 
 
