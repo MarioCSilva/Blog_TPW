@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
 from app.forms import *
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from app.models import Client, Post, Blog, Topic
@@ -390,17 +390,33 @@ def settings(request):
 
     if request.method == "GET":
         security = RegisterForm()
+
         return render(request,"settings.html",{"form_security":RegisterForm(instance=request.user)})
     elif request.method == "POST":
+        print(request.POST)
         if "security" in request.POST:
-            form = RegisterForm(request.POST,instance=request.user)
+            user = User.objects.get(id=request.user.id)
+            form = RegisterForm(request.POST,instance=user)
             if form.is_valid():
-                user = form.save(commit=False)
-                user.save()
+                user = form.save()
                 login(request,user)
-                return render(request,"settings.html",{"form_security":form,"valid":True})
+                return render(request,"settings.html",{"form_security":RegisterForm(instance=user),"valid":True})
+            print(form.errors)
+            return render(request,"settings.html",{"form_security":RegisterForm(data=request.POST),"form_security_errors":form.errors})
 
-            return render(request,"settings.html",{"form_security":form,"form_security_errors":form.errors})
+        if "delete" in request.POST:
+            try:
+                user = User.objects.get(id=request.user.id)
+                #logout(request.user)
+                user.delete()
+            except User.DoesNotExist:
+                return render(request,"settings.html",{"errors":"User does not exist"})
+            except Exception as e:
+                return render(request,"settings.html",{"errors":e.message})
+            return redirect("/login")
+
+
+
 
 
 def post_comment(request):
