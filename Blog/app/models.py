@@ -13,17 +13,18 @@ def post_pic_path(instance, filename):
     filename = "%s%s.%s" % ('img', instance.pk, ext)
     return os.path.join(path+filename)
 
+
 def profile_pic_path(instance, filename):
     path = "profile/"
     return os.path.join(path+instance.user.username+"."+filename.split(".")[-1])
 
 
-
-
-
 def blog_pic_path(instance, filename):
     path = "blog/"
-    return os.path.join(path+instance.id+"."+filename.split(".")[-1])
+    ext = filename.split('.')[-1]
+    filename = "%s%s.%s" % ('img', instance.pk, ext)
+    return os.path.join(path+filename)
+
 
 class Client(models.Model):
     name = models.CharField(max_length=50, blank=True)
@@ -35,14 +36,6 @@ class Client(models.Model):
 
     def __str__(self):
         return self.user.username
-
-
-# class Followers(models.Model):
-#     follower = models.OneToOneField(Client, on_delete=models.CASCADE, related_name='follower')
-#     following = models.OneToOneField(Client, on_delete=models.CASCADE, related_name='following')
-
-#     def __str__(self):
-#         return self.follower + "," + self.following
 
 
 class Topic(models.Model):

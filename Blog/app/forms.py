@@ -94,5 +94,7 @@ class EditBlogInvites(forms.Form):
         self.fields['invites'] = forms.TypedMultipleChoiceField(choices=data, required=False, widget=forms.CheckboxSelectMultiple)
 
 
+class EditBlogPic(forms.Form):
+    blog_pic = forms.ImageField(allow_empty_file=True, required=True)
 
 

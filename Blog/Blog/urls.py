@@ -39,7 +39,8 @@ urlpatterns = [
     path('blog_post/', views.blog_post),
     path('settings/',views.settings,name="settings"),
     path('post_comment/', views.post_comment),
-    path('post_like/', views.post_like)
+    path('post_like/', views.post_like),
+    path('blog_pic/', views.blog_pic),
 ]
 
 

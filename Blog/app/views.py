@@ -26,7 +26,6 @@ def main_page(request):
                 image = form.cleaned_data.get("image")
                 if image:
                     post.image = image
-                print(form.cleaned_data)
                 post.save()
 
                 return redirect('home')
@@ -44,7 +43,6 @@ def main_page(request):
                 blog.subs.set([client])
                 topics = Topic.objects.filter(id__in=topic)
                 blog.topic.set(topics)
-                print(topics)
                 blog.save()
                 return redirect('/blog/'+str(blog.id))
         else:
@@ -186,6 +184,7 @@ def profile_page(request):
             return redirect("profile")
         return render(request, "profile_page.html", {"client": user, "form_edit": form,"form_errors":form.errors})
 
+
 def blog_page(request, num):
     if not request.user.is_authenticated:
         return redirect('/login')
@@ -202,18 +201,46 @@ def blog_page(request, num):
     posts = Post.objects.filter(blog=blog.id)
     if client in blog.subs.all():
         subbed = True
+
+    comments = Comment.objects.all()
+    post_com = {}
+    for comment in comments:
+        com_list = post_com.get(comment.post.id,[])
+        com_list.append(comment)
+        post_com[comment.post.id] = com_list
+
+    posts_more_det = []
+    for post in posts:
+        posts_detail = {}
+        posts_detail["comments"] = post_com.get(post.id, [])
+        posts_detail["post"] = post
+        if post.likes.count() > 0:
+            if client in post.likes.all():
+                posts_detail["like"] = True
+            else:
+                posts_detail["like"] = False
+        else:
+            posts_detail["like"] = False
+
+        topic = Topic.objects.get(name="Personal")
+        blog = Blog.objects.get(owner__in=[client], topic=topic.id)
+        posts_detail["personal"] = blog.id
+
+        posts_more_det.append(posts_detail)
+
     return render(request, "blog_page.html", {
         "blog": blog,
         "permission": permission,
         "personal": personal,
         "subbed": subbed,
-        "posts": posts,
+        "posts_more_det": posts_more_det,
         "blog_owners": EditBlogOwners(),
         "blog_topics": EditBlogTopics(blog_topics=blog.topic),
         "blog_subs": EditBlogSubs(blog_id=blog.id, blog_user=request.user.username),
         "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description),
         "blog_invites": EditBlogInvites(blog_id=blog.id),
         "blog_post": PostCreationForm(),
+        "blog_pic_form" : EditBlogPic()
     })
 
 
@@ -383,8 +410,8 @@ def blog_post(request):
     else:
         print(form.errors)
 
-def settings(request):
 
+def settings(request):
     if not request.user.is_authenticated:
         return redirect("/login")
 
@@ -416,9 +443,6 @@ def settings(request):
             return redirect("/login")
 
 
-
-
-
 def post_comment(request):
     if not request.user.is_authenticated:
         return redirect('/login')
@@ -431,7 +455,8 @@ def post_comment(request):
     comment = Comment(text=text,client=client, post=post)
     comment.save()
 
-    return redirect('/')
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 
 def post_like(request):
@@ -448,4 +473,20 @@ def post_like(request):
         post.likes.remove(client)
 
     post.save()
-    return redirect('/')
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def blog_pic(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    blog_id = request.POST.get('blog_id')
+    blog = Blog.objects.get(id=blog_id)
+    form = EditBlogPic(data=request.POST, files=request.FILES)
+    if form.is_valid():
+        print(form.cleaned_data["blog_pic"])
+        blog.blog_pic = form.cleaned_data["blog_pic"]
+        blog.save()
+        return redirect('/blog/' + blog_id)
+    else:
+        print(form.errors)

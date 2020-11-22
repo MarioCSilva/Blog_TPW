@@ -2,6 +2,7 @@
 {% block content %}
         <script>
         $('#nav_home').addClass("active");
+
     </script>
 <section id="portfolio" class="section-bg">
   <div class="container" style="padding-top: 100px">
@@ -27,7 +28,7 @@
         <div class="col-sm-8 col-md-8 col-lg-8" id="search_post">
           <form action="." method="GET" class="form-inline d-flex justify-content-center md-form form-sm searches">
             <input name="search_post" class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
-            <button type="submit" >
+            <button type="submit" class="btn bg-blue">
                 <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i></button>
           </form>
         </div>
@@ -129,8 +130,6 @@
 
 
 
-
-
     <section id="services" class="section-bg" style="width: 100%;">
 
       {% for post_det in posts_more_det %}
@@ -179,10 +178,6 @@
 
 
 
-
-
-
-
         <div class="row">
         <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
           style="width: 100%">
@@ -208,7 +203,7 @@
             <p class="description">{{ post_det.post.description }}  </p>
 
             {% if post_det.post.image %}
-               <img id="post_pic" class="profile_img" src="../media/{{ post_det.post.image }}" />
+               <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
             {% endif %}
           <br><br>
         <hr>
@@ -245,12 +240,21 @@
 
           <div class="row" style="padding-top: 0px; padding-bottom: 10px">
               <div class="col-sm-4" style="height: 40px;">
-                  <button type="button" class="myButton" style="width: 100%;height: 40px;">
-                  <h6><i class="fa fa-thumbs-up"></i> Like</h6>
-              </button>
+                  <form action="/post_like" method="GET">
+                  {% csrf_token %}
+                  <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                  <button type="submit" class="myButton" style="width: 100%;height: 40px;">
+                    <h6><i class="fa fa-thumbs-up"></i> Like</h6>
+                      {% if post_det.like %}
+                        <input name="like" type="text" value="dislike" style="display: none" required>
+                       {% else %}
+                        <input name="like" type="text" value="like" style="display: none" required>
+                      {% endif %}
+                  </button>
+                  </form>
               </div>
               <div class="col-sm-4" style="border-left: 1px solid black;height: 40px;">
-                  <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}"><button type="button" class="myButton" style="width: 100%; height: 40px;">
+                  <a href="" data-toggle="modal" data-backdrop="false"  data-target="#Post_Details{{ post_det.post.id }}"><button type="button" class="myButton" style="width: 100%; height: 40px;">
                   <h6><i class="fa fa-comment"></i> Comment</h6>
                   </button></a>
               </div>
@@ -269,11 +273,17 @@
       <div class="row">
       {% for blog in blogs %}
         <div class="col-md-6 filter-page col-lg-4 wow bounceInUp" data-wow-duration="1.4s" style="display:none;">
-          <div class="box">
-            <div class="icon" style="background: #fceef3;"><i class="ion-ios-analytics-outline"
-                style="color: #ff689b;"></i></div>
-            <h4 class="title"><a href="blog/{{ blog.id }}">{{ blog.name }}</a></h4>
-            <p class="description">{{ post.description }}</p>
+          <div class="box" style="width: 100%; display: table;">
+        <div style="text-align: center; display: table-cell; vertical-align: middle;height: 220px;">
+            <h4 class="title" style="padding-top: 30px"><a href="blog/{{ blog.id }}">{{ blog.name }}</a></h4>
+            {% if blog.blog_pic %}
+               <div class="icon" style="background-image: url('../media/{{ blog.blog_pic }}');background-blend-mode: lighten;background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.2);"></div>
+            {% else %}
+               <div class="icon" style="background-image: url('../media/default/default_blog.png');background-blend-mode: lighten;background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.2);"></div>
+            {% endif %}
+                <p>{{ blog.description }}</p>
+                <p class="description" style="margin-top: 80px;">Subs: {{ blog.subs.count }}</p>
+              </div>
           </div>
         </div>
       {% endfor %}
