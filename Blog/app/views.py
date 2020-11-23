@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from app.models import Client, Post, Blog, Topic
 from django.db.models.functions import Length
+from django.db.models import Count
 
 # Create your views here.
 
@@ -61,20 +62,50 @@ def main_page(request):
         posts = Post.objects.filter(blog__in=post_blogs).order_by("-date")
         # orders posts with more subs first
         blogs = Blog.objects.all().order_by(Length("subs").desc())
-
+        print(request.GET)
         if "search_post" in request.GET:
-            search = request.GET["search_post"]
+            search = request.GET.get("search")
+            choice = request.GET.get("order_choice")
+            order = request.GET.get("order_by")
             # searchs for posts by name or by client name
-            posts =  Post.objects.filter(title__contains=search,blog__in=post_blogs)\
-                     | Post.objects.filter(client__user__username__contains=search,blog__in=post_blogs)
-            # recent ones first
-            posts = posts.order_by("-date")
+            posts =  (Post.objects.filter(title__contains=search,blog__in=post_blogs)\
+                     | Post.objects.filter(client__user__username__contains=search,blog__in=post_blogs))
+
+            if order == "asc":
+                order = ""
+            elif order == "desc":
+                order = "-"
+
+            if choice == "recent":
+                posts = posts.order_by(order+"date")
+            elif choice == "likes":
+                posts = posts.order_by(order+"likes","-date")
+            elif choice == "comments":
+                posts = posts.annotate(count=Count("comment")).order_by(order+"count")
+
 
         if "search_blog" in request.GET:
-            search = request.GET["search_blog"]
+            search = request.GET.get("search")
+            topics = request.GET.get("topic_choice")
+            choice = request.GET.get("order_choice")
+            order = request.GET.get("order_by")
+
             # searches for pages with that name or owner name
-            blogs = Blog.objects.filter(name__contains=search) | Blog.objects.filter(owner__user__name__in=search)
-            blogs = blogs.order_by(Length("subs").desc())
+            blogs = (Blog.objects.filter(name__contains=search))# | Blog.objects.filter(owner__user__name__in=search))
+            if topics:
+                blogs = blogs & (Blog.objects.filter(topic__name__in = topics))
+
+            if order == "asc":
+                order = ""
+            elif order == "desc":
+                order = "-"
+
+            if choice == "subs":
+                blogs = blogs.annotate(count=Count("subs")).order_by(order+"count")
+            elif choice == "posts":
+                blogs = blogs.annotate(count=Count("post")).order_by(order+"count")
+
+            #blogs = blogs.order_by(Length("subs").desc())
 
         posts_more_det = []
         for post in posts:
@@ -98,7 +129,9 @@ def main_page(request):
         return render(request, "main_page.html",
                       {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(),
                        "blogs": blogs,
-                       "posts_more_det":posts_more_det})
+                       "posts_more_det":posts_more_det,
+                       "search_post_form":FilterPostForm(),
+                       "search_blog_form":FilterBlogForm()})
 
 
 def entry_page(request):

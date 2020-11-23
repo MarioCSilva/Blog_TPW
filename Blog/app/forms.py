@@ -98,17 +98,17 @@ class EditBlogPic(forms.Form):
     blog_pic = forms.ImageField(allow_empty_file=True, required=True)
 
 class FilterPostForm(forms.Form):
-    search = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
-    order_choice = forms.ChoiceField(choices=[("Recent","Recent"),("Likes","Likes"),("Comments","Comments")])
-    order_by  = forms.ChoiceField(choices=[("Descending","Descending"),("Ascending","Ascending")])
+    search = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
+    order_choice = forms.ChoiceField(choices=[("recent","Recent"),("likes","Likes"),("comments","Comments")])
+    order_by  = forms.ChoiceField(choices=[("desc","Descending"),("asc","Ascending")])
 
 
 
 class FilterBlogForm(forms.Form):
-    search = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username',"class":"form-control"}))
-    order_choice = forms.ChoiceField(choices=[("Recent", "Recent"), ("Subs", "Subs"), ("Nºof Posts", "Nº of Posts")])
-    data = tuple([x for x in Topic.objects.all() if x!="Personal"])
-    topic_choice = forms.MultipleChoiceField(choices=data)
-    order_by = forms.ChoiceField(choices=[("Descending","Descending"),("Ascending","Ascending")])
+    search = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
+    order_choice = forms.ChoiceField(required=False,choices=[("",""),("subs", "Subs"), ("posts", "Nº of Posts")])
+    data = tuple([(x.id,x.name) for x in Topic.objects.all() if x.name!="Personal"])
+    topic_choice = forms.MultipleChoiceField(required=False,choices=data)
+    order_by = forms.ChoiceField(choices=[("desc","Descending"),("asc","Ascending")])
 
 
