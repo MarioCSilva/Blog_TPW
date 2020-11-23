@@ -94,6 +94,8 @@ class EditBlogInvites(forms.Form):
         self.fields['invites'] = forms.TypedMultipleChoiceField(choices=data, required=False, widget=forms.CheckboxSelectMultiple)
 
 
+class EditBlogPic(forms.Form):
+    blog_pic = forms.ImageField(allow_empty_file=True, required=True)
 
 class FilterPostForm(forms.Form):
     search = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
