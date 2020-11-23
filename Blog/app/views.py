@@ -6,6 +6,7 @@ from django import forms
 from app.models import Client, Post, Blog, Topic
 from django.db.models.functions import Length
 from django.db.models import Count
+from django.contrib import messages
 
 # Create your views here.
 
@@ -15,7 +16,7 @@ def main_page(request):
 
     if request.method == "POST":
         if "Create Post" in request.POST:
-            form = PostCreationForm(data=request.POST,files=request.FILES)
+            form = PostCreationForm(data=request.POST, files=request.FILES)
             if form.is_valid():
                 title = form.cleaned_data.get('title')
                 text = form.cleaned_data.get('text')
@@ -30,6 +31,8 @@ def main_page(request):
                 post.save()
 
                 return redirect('home')
+            request.session['message'] = form.errors
+            return redirect('home')
         elif "Create Blog" in request.POST:
             form = BlogCreationForm(data=request.POST)
             if form.is_valid():
@@ -45,14 +48,16 @@ def main_page(request):
                 topics = Topic.objects.filter(id__in=topic)
                 blog.topic.set(topics)
                 blog.save()
-                return redirect('/blog/'+str(blog.id))
+                return redirect('/blog/' + str(blog.id))
+            request.session['message'] = form.errors
+            return redirect('home')
         else:
             return HttpResponse("<h1>nothing</h1>")
     else:
         comments = Comment.objects.all()
         post_com = {}
         for comment in comments:
-            com_list = post_com.get(comment.post.id,[])
+            com_list = post_com.get(comment.post.id, [])
             com_list.append(comment)
             post_com[comment.post.id] = com_list
 
@@ -68,8 +73,8 @@ def main_page(request):
             choice = request.GET.get("order_choice")
             order = request.GET.get("order_by")
             # searchs for posts by name or by client name
-            posts =  (Post.objects.filter(title__contains=search,blog__in=post_blogs)\
-                     | Post.objects.filter(client__user__username__contains=search,blog__in=post_blogs))
+            posts = (Post.objects.filter(title__contains=search, blog__in=post_blogs) \
+                     | Post.objects.filter(client__user__username__contains=search, blog__in=post_blogs))
 
             if order == "asc":
                 order = ""
@@ -77,12 +82,11 @@ def main_page(request):
                 order = "-"
 
             if choice == "recent":
-                posts = posts.order_by(order+"date")
+                posts = posts.order_by(order + "date")
             elif choice == "likes":
-                posts = posts.order_by(order+"likes","-date")
+                posts = posts.order_by(order + "likes", "-date")
             elif choice == "comments":
-                posts = posts.annotate(count=Count("comment")).order_by(order+"count")
-
+                posts = posts.annotate(count=Count("comment")).order_by(order + "count")
 
         if "search_blog" in request.GET:
             search = request.GET.get("search")
@@ -91,9 +95,9 @@ def main_page(request):
             order = request.GET.get("order_by")
 
             # searches for pages with that name or owner name
-            blogs = (Blog.objects.filter(name__contains=search))# | Blog.objects.filter(owner__user__name__in=search))
+            blogs = (Blog.objects.filter(name__contains=search))  # | Blog.objects.filter(owner__user__name__in=search))
             if topics:
-                blogs = blogs & (Blog.objects.filter(topic__name__in = topics))
+                blogs = blogs & (Blog.objects.filter(topic__name__in=topics))
 
             if order == "asc":
                 order = ""
@@ -101,11 +105,11 @@ def main_page(request):
                 order = "-"
 
             if choice == "subs":
-                blogs = blogs.annotate(count=Count("subs")).order_by(order+"count")
+                blogs = blogs.annotate(count=Count("subs")).order_by(order + "count")
             elif choice == "posts":
-                blogs = blogs.annotate(count=Count("post")).order_by(order+"count")
+                blogs = blogs.annotate(count=Count("post")).order_by(order + "count")
 
-            #blogs = blogs.order_by(Length("subs").desc())
+            # blogs = blogs.order_by(Length("subs").desc())
 
         posts_more_det = []
         for post in posts:
@@ -129,9 +133,9 @@ def main_page(request):
         return render(request, "main_page.html",
                       {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(),
                        "blogs": blogs,
-                       "posts_more_det":posts_more_det,
-                       "search_post_form":FilterPostForm(),
-                       "search_blog_form":FilterBlogForm()})
+                       "posts_more_det": posts_more_det,
+                       "search_post_form": FilterPostForm(),
+                       "search_blog_form": FilterBlogForm()})
 
 
 def entry_page(request):
@@ -160,7 +164,8 @@ def entry_page(request):
                 return redirect('profile')
             else:
                 print(form.errors)
-                return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm(),"form_errors":form.errors})
+                return render(request, "entry_page.html",
+                              {"form_login": LoginForm(), "form_register": RegisterForm(), "form_errors": form.errors})
 
         elif "username" in request.POST:
             form = LoginForm(data=request.POST)
@@ -185,7 +190,7 @@ def entry_page(request):
 
 
 def profile_page(request):
-    if not request.user.is_authenticated or request.method not in ["GET","POST"]:
+    if not request.user.is_authenticated or request.method not in ["GET", "POST"]:
         return redirect('/login')
     user = Client.objects.get(user=request.user.id)
 
@@ -193,7 +198,7 @@ def profile_page(request):
         return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm(instance=user)})
     elif request.method == "POST":
 
-        form = EditProfileForm(data=request.POST, files=request.FILES,instance=user)
+        form = EditProfileForm(data=request.POST, files=request.FILES, instance=user)
         if form.is_valid():
             client = form.save(commit=False)
             '''
@@ -215,7 +220,7 @@ def profile_page(request):
             '''
             client.save()
             return redirect("profile")
-        return render(request, "profile_page.html", {"client": user, "form_edit": form,"form_errors":form.errors})
+        return render(request, "profile_page.html", {"client": user, "form_edit": form, "form_errors": form.errors})
 
 
 def blog_page(request, num):
@@ -238,7 +243,7 @@ def blog_page(request, num):
     comments = Comment.objects.all()
     post_com = {}
     for comment in comments:
-        com_list = post_com.get(comment.post.id,[])
+        com_list = post_com.get(comment.post.id, [])
         com_list.append(comment)
         post_com[comment.post.id] = com_list
 
@@ -256,8 +261,8 @@ def blog_page(request, num):
             posts_detail["like"] = False
 
         topic = Topic.objects.get(name="Personal")
-        blog = Blog.objects.get(owner__in=[client], topic=topic.id)
-        posts_detail["personal"] = blog.id
+        blog_personal = Blog.objects.get(owner__in=[client], topic=topic.id)
+        posts_detail["personal"] = blog_personal.id
 
         posts_more_det.append(posts_detail)
 
@@ -273,7 +278,7 @@ def blog_page(request, num):
         "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description),
         "blog_invites": EditBlogInvites(blog_id=blog.id),
         "blog_post": PostCreationForm(),
-        "blog_pic_form" : EditBlogPic()
+        "blog_pic_form": EditBlogPic()
     })
 
 
@@ -290,19 +295,21 @@ def blog_owners(request):
     if not request.user.is_authenticated:
         return redirect('/login')
     form = EditBlogOwners(data=request.GET)
+    blog_id = request.GET.get('blog_id')
     if form.is_valid():
         username = form.cleaned_data.get('username')
-        cli_user = User.objects.get(username=username)
-        blog_id = request.GET.get('blog_id')
-        if cli_user is None or username == request.user.username:
+        if len(User.objects.filter(username=username))==0 or username == request.user.username:
+            messages.error(request, "User does not exist.")
             return redirect('/blog/' + blog_id)
+        cli_user = User.objects.get(username=username)
         client = Client.objects.get(user=cli_user)
         blog = Blog.objects.get(id=blog_id)
         blog.owner.add(client)
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
 
 
 def blog_topics(request):
@@ -324,7 +331,8 @@ def blog_topics(request):
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
 
 
 def blog_subs(request):
@@ -343,7 +351,8 @@ def blog_subs(request):
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
 
 
 def blog_edit(request):
@@ -360,7 +369,8 @@ def blog_edit(request):
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
 
 
 def blog_follow(request):
@@ -373,10 +383,13 @@ def blog_follow(request):
 
     if option == "Follow":
         if blog.isPublic:
+            messages.success(request, 'Successfully followed this blog.')
             blog.subs.add(client)
         else:
+            messages.warning(request, 'Request sent to follow this blog.')
             blog.invites.add(client)
     elif option == "Unfollow":
+        messages.success(request, 'Successfully unfollowed this blog.')
         blog.subs.remove(client)
 
     blog.save()
@@ -420,7 +433,8 @@ def blog_invites(request):
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
 
 
 def blog_post(request):
@@ -439,9 +453,10 @@ def blog_post(request):
         if image:
             post.image = image
         post.save()
-        return redirect('/blog/' + blog_id)
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
 
 
 def settings(request):
@@ -451,28 +466,29 @@ def settings(request):
     if request.method == "GET":
         security = RegisterForm()
 
-        return render(request,"settings.html",{"form_security":RegisterForm(instance=request.user)})
+        return render(request, "settings.html", {"form_security": RegisterForm(instance=request.user)})
     elif request.method == "POST":
         print(request.POST)
         if "security" in request.POST:
             user = User.objects.get(id=request.user.id)
-            form = RegisterForm(request.POST,instance=user)
+            form = RegisterForm(request.POST, instance=user)
             if form.is_valid():
                 user = form.save()
-                login(request,user)
-                return render(request,"settings.html",{"form_security":RegisterForm(instance=user),"valid":True})
+                login(request, user)
+                return render(request, "settings.html", {"form_security": RegisterForm(instance=user), "valid": True})
             print(form.errors)
-            return render(request,"settings.html",{"form_security":RegisterForm(data=request.POST),"form_security_errors":form.errors})
+            return render(request, "settings.html",
+                          {"form_security": RegisterForm(data=request.POST), "form_security_errors": form.errors})
 
         if "delete" in request.POST:
             try:
                 user = User.objects.get(id=request.user.id)
-                #logout(request.user)
+                # logout(request.user)
                 user.delete()
             except User.DoesNotExist:
-                return render(request,"settings.html",{"errors":"User does not exist"})
+                return render(request, "settings.html", {"errors": "User does not exist"})
             except Exception as e:
-                return render(request,"settings.html",{"errors":e.message})
+                return render(request, "settings.html", {"errors": e.message})
             return redirect("/login")
 
 
@@ -485,11 +501,10 @@ def post_comment(request):
     text = request.GET.get('com_text')
     client = Client.objects.get(user=request.user)
 
-    comment = Comment(text=text,client=client, post=post)
+    comment = Comment(text=text, client=client, post=post)
     comment.save()
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
-
 
 
 def post_like(request):
@@ -522,4 +537,6 @@ def blog_pic(request):
         blog.save()
         return redirect('/blog/' + blog_id)
     else:
-        print(form.errors)
+        messages.error(request, form.errors)
+        return redirect('/blog/' + blog_id)
+
