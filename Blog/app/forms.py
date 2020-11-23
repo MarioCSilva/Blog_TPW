@@ -95,4 +95,18 @@ class EditBlogInvites(forms.Form):
 
 
 
+class FilterPostForm(forms.Form):
+    search = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
+    order_choice = forms.ChoiceField(choices=[("Recent","Recent"),("Likes","Likes"),("Comments","Comments")])
+    order_by  = forms.ChoiceField(choices=[("Descending","Descending"),("Ascending","Ascending")])
+
+
+
+class FilterBlogForm(forms.Form):
+    search = forms.CharField(max_length=50,required=True,widget=forms.TextInput(attrs={'placeholder':'Username',"class":"form-control"}))
+    order_choice = forms.ChoiceField(choices=[("Recent", "Recent"), ("Subs", "Subs"), ("Nºof Posts", "Nº of Posts")])
+    data = tuple([x for x in Topic.objects.all() if x!="Personal"])
+    topic_choice = forms.MultipleChoiceField(choices=data)
+    order_by = forms.ChoiceField(choices=[("Descending","Descending"),("Ascending","Ascending")])
+
 
