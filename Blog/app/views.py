@@ -161,7 +161,7 @@ def entry_page(request):
                 blog.topic.add(topic.id)
                 blog.save()
                 login(request, user)
-                return redirect('my_profile')
+                return redirect('/my_profile')
             else:
                 print(form.errors)
                 return render(request, "entry_page.html",
