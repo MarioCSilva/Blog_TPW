@@ -70,9 +70,9 @@ def main_page(request):
         blogs = Blog.objects.all().order_by(Length("subs").desc())
         print(request.GET)
         if "search_post" in request.GET:
-            search = request.GET.get("search")
-            choice = request.GET.get("order_choice")
-            order = request.GET.get("order_by")
+            search = request.GET.get("search_post")
+            choice = request.GET.get("order_choice_post")
+            order = request.GET.get("order_by_post")
             # searchs for posts by name or by client name
             posts = (Post.objects.filter(title__contains=search, blog__in=post_blogs) \
                      | Post.objects.filter(client__user__username__contains=search, blog__in=post_blogs))
@@ -90,10 +90,10 @@ def main_page(request):
                 posts = posts.annotate(count=Count("comment")).order_by(order + "count")
 
         if "search_blog" in request.GET:
-            search = request.GET.get("search")
-            topics = request.GET.get("topic_choice")
-            choice = request.GET.get("order_choice")
-            order = request.GET.get("order_by")
+            search = request.GET.get("search_blog")
+            topics = request.GET.get("topic_choice_blog")
+            choice = request.GET.get("order_choice_blog")
+            order = request.GET.get("order_by_blog")
 
             # searches for pages with that name or owner name
             blogs = (Blog.objects.filter(name__contains=search))  # | Blog.objects.filter(owner__user__name__in=search))
@@ -244,9 +244,9 @@ def blog_page(request, num):
 
     if "search_post" in request.GET:
 
-        search = request.GET.get("search")
-        choice = request.GET.get("order_choice")
-        order = request.GET.get("order_by")
+        search = request.GET.get("search_post")
+        choice = request.GET.get("order_choice_post")
+        order = request.GET.get("order_by_post")
         # searchs for posts by name or by client name
         posts = (Post.objects.filter(title__contains=search, blog=blog.id) \
                  | Post.objects.filter(client__user__username__contains=search, blog=blog.id))
