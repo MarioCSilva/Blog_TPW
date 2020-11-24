@@ -362,7 +362,11 @@
                 </div>
                 {% endif %}
                 <div class="row col-sm-12">
-                    <div class="col-sm-8" style="padding-left:36%"><h1>{{ blog.name }}</h1></div>
+                     {% if personal %}
+                        <div class="col-sm-8" style="padding-left:36%"><a href="/profile/{{ blog.owner.all.0.user.username }}" ><h1>{{ blog.name }}</h1></a></div>
+                    {% else %}
+                        <div class="col-sm-8" style="padding-left:36%"><h1>{{ blog.name }}</h1></div>
+                    {% endif %}
                     <div class="col-sm-4" style="text-align:right;margin-right: 0px">
                         {% if not permission %}
                             <form action="/blog_follow" method="GET">
@@ -376,24 +380,6 @@
                             </form>
                         {% endif %}
                     </div>
-                    <div class="col-sm-12" style="padding-top: 40px">
-                        {% if blog.blog_pic %}
-                            <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/{{ blog.blog_pic }}" alt="Avatar">
-                        {% else %}
-                            <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/default/default_blog.png" alt="Avatar">
-                        {% endif %}
-                        {% if permission %}
-                            <div class="col-sm-12" style="padding-top: 10px">
-                                <form method="POST" action="/blog_pic/" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
-                                    {{ blog_pic_form.blog_pic }}
-                                    <button type="submit">Change Blog Image</button>
-                                </form>
-                            </div>
-                        {% endif %}
-                    </div>
-
                 </div>
                 <div style="text-align: center; text-align: center" class="col-sm-12"><h5>{{ blog.description }}</h5></div>
                 <div class="col-sm-12" style="padding-top: 40px">
@@ -611,6 +597,7 @@
                     <h4><strong>Warning!</strong><p>Must follow the Blog to access and post content</p></h4>.
                 </div>
                 </div>
+              {% endif %}
     </section>
 
 
