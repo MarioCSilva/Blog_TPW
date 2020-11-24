@@ -125,7 +125,7 @@ def main_page(request):
                 posts_detail["like"] = False
 
             topic = Topic.objects.get(name="Personal")
-            blog = Blog.objects.get(owner__in=[client], topic=topic.id)
+            blog = Blog.objects.get(owner__in=[post.client], topic=topic.id)
             posts_detail["personal"] = blog.id
 
             posts_more_det.append(posts_detail)
@@ -508,22 +508,29 @@ def post_comment(request):
 
 
 def post_like(request):
-    if not request.user.is_authenticated:
-        return redirect('/login')
+    if request.is_ajax():
+        if not request.user.is_authenticated:
+            return redirect('/login')
+        try:
+            username = request.GET['username']
+            post_id = request.GET.get('post_id')
+            post = Post.objects.get(id=post_id)
+            like = request.GET.get('like')
+            client = Client.objects.get(user=request.user)
+            if like == "like":
+                post.likes.add(client)
+            else:
+                post.likes.remove(client)
 
-    post_id = request.GET.get('post_id')
-    post = Post.objects.get(id=post_id)
-    like = request.GET.get('like')
-    client = Client.objects.get(user=request.user)
-    if like == "like":
-        post.likes.add(client)
+            post.save()
+
+            return HttpResponse('Liked post!')
+            # perform operations on the user name.
+        except:
+            return HttpResponse('Something went wrong!')
+        return HttpResponse('sucess')
     else:
-        post.likes.remove(client)
-
-    post.save()
-
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
+        return HttpResponse('sucess')
 
 def blog_pic(request):
     if not request.user.is_authenticated:

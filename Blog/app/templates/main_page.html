@@ -2,7 +2,38 @@
 {% block content %}
     <script>
         $('#nav_home').addClass("active");
+        function like_post(username, post_id, id_button, id_like_button, number) {
+             button_like = document.getElementById(id_button);
+             like_icon = document.getElementById(id_like_button);
+             number_text = document.getElementById(number);
+             var val_like = $(button_like).val();
+             number = $(number_text).html()
 
+             if (val_like =='like'){
+                $(like_icon).css("color","blue");
+                console.log($(button_like).val())
+                $(button_like).val('dislike');
+                console.log($(button_like).val());
+                $(number_text).html(parseInt(number) + 1);
+             } else {
+                 $(like_icon).css("color", "grey");
+                 $(button_like).val('like');
+                 $(number_text).html(parseInt(number) - 1);
+             }
+             var data = {};
+             data['username'] = username;
+             data['post_id'] = post_id;
+             data['like'] = val_like;
+             $.ajax({
+                 type: 'GET',
+                 url: 'post_like/',
+                 data: data,
+                 dataType: 'json',
+                 success: function(json) {
+                     alert(json);
+                 }
+             })
+         };
     </script>
     <section id="portfolio" class="section-bg">
         <div class="container" style="padding-top: 100px">
@@ -197,10 +228,10 @@
                             <div class="box" style="padding-bottom: 0px">
                                 <div style="height: 10px;" class="row">
                                     <div style="text-align: left;" class="col-sm-6 row">
-                                        <span style="padding-right: 3px">Blog Posted:</span><a href="/blog/{{ post_det.post.blog.id }}"><h5> {{ post_det.post.blog }}</h5></a>
+                                     <span style="padding-right: 3px"></span><a href="/blog/{{ post_det.post.blog.id }}"><h6><i class="fa fa-share"></i> {{ post_det.post.blog }}</h6></a>
                                     </div>
                                     <div  class="col-sm-6" style="text-align: right">
-                                        <h5>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h5>
+                                        <h6>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h6>
                                     </div>
                                 </div>
 
@@ -222,61 +253,29 @@
                                 <hr>
                                 <div class="row col-sm-12" style="padding-top: -2px">
                                     <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
-                                        <form action="/post_like" method="GET">
-                                            {% csrf_token %}
                                             <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
-                                            <button style="background: transparent; border: 0px" type="submit">
                                                 {% if post_det.post.likes.count == 0 %}
-                                                    <input name="like" type="text" value="like" style="display: none" required>
-                                                    <i class="fa fa-thumbs-up" style="color:grey"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
+                                                    <button id="like{{ post_det.post.id }}" value="like"  style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
                                                 {% else %}
                                                     {% if post_det.like %}
-                                                        <input name="like" type="text" value="dislike" style="display: none" required>
-
-                                                        <i class="fa fa-thumbs-up" style="color:blue"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
+                                                        <button id="like{{ post_det.post.id }}" value="dislike" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:blue"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
                                                     {% else %}
-                                                        <input name="like" type="text" value="like" style="display: none" required>
-                                                        <i class="fa fa-thumbs-up" style="color:grey"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
+                                                        <button id="like{{ post_det.post.id }}" value="like" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
                                                     {% endif %}
                                                 {% endif %}
                                             </button>
-                                        </form>
-
                                     </div>
 
-                                    <div class="col-sm-6" style="text-align: right; padding-right: 30px; font-size: 20px;">
-                                        <span style="padding-right: 3px">{{ post_det.comments|length  }} Comments</span>
-                                    </div>
+                                    <div class="col-sm-6" style="text-align: right; font-size: 20px;">
+                                       <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}">
+                                       <span>{{ post_det.comments|length  }} Comments</span></a>
+                                     </div>
                                 </div>
 
-                                <hr style="padding-bottom: 0px">
 
-                                <div class="row" style="padding-top: 0px; padding-bottom: 10px">
-                                    <div class="col-sm-4" style="height: 40px;">
-                                        <form action="/post_like" method="GET">
-                                            {% csrf_token %}
-                                            <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
-                                            <button type="submit" class="myButton" style="width: 100%;height: 40px;">
-                                                <h6><i class="fa fa-thumbs-up"></i> Like</h6>
-                                                {% if post_det.like %}
-                                                    <input name="like" type="text" value="dislike" style="display: none" required>
-                                                {% else %}
-                                                    <input name="like" type="text" value="like" style="display: none" required>
-                                                {% endif %}
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-sm-4" style="border-left: 1px solid black;height: 40px;">
-                                        <a href="" data-toggle="modal"  data-target="#Post_Details{{ post_det.post.id }}"><button type="button" class="myButton" style="width: 100%; height: 40px;">
-                                            <h6><i class="fa fa-comment"></i> Comment</h6>
-                                        </button></a>
-                                    </div>
-                                    <div class="col-sm-4" style="border-left: 1px solid black;height: 40px;">
-                                        <a href="/blog/{{ post_det.post.blog.id }}"><button type="button" class="myButton" style="width: 100%;height: 40px;">
-                                            <h6><i class="fa fa-share"></i> Go to Blog</h6>
-                                        </button></a>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
