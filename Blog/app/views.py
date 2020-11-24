@@ -85,6 +85,10 @@ def main_page(request):
 
 
         if "search_blog" in request.GET:
+            # TODO: mudar para blog
+            # flag = True
+            # passar isto para a pagina
+
             search = request.GET.get("search")
             topics = request.GET.get("topic_choice")
             choice = request.GET.get("order_choice")
@@ -196,23 +200,6 @@ def profile_page(request):
         form = EditProfileForm(data=request.POST, files=request.FILES,instance=user)
         if form.is_valid():
             client = form.save(commit=False)
-            '''
-            name = form.cleaned_data["name"]
-            if name:
-                client.name = name
-            birthdate = form.cleaned_data["birthdate"]
-            if birthdate:
-                client.birthdate = birthdate
-            profile_pic = form.cleaned_data["profile_pic"]
-            if profile_pic:
-                client.profile_pic = profile_pic
-            description = form.cleaned_data["description"]
-            if description:
-                client.description = description
-            sex = form.cleaned_data["sex"]
-            if sex:
-                client.sex = sex
-            '''
             client.save()
             return redirect("profile")
         return render(request, "profile_page.html", {"client": user, "form_edit": form,"form_errors":form.errors})
@@ -256,8 +243,8 @@ def blog_page(request, num):
             posts_detail["like"] = False
 
         topic = Topic.objects.get(name="Personal")
-        blog = Blog.objects.get(owner__in=[client], topic=topic.id)
-        posts_detail["personal"] = blog.id
+        blog1 = Blog.objects.get(owner__in=[client], topic=topic.id)
+        posts_detail["personal"] = blog1.id
 
         posts_more_det.append(posts_detail)
 
