@@ -57,7 +57,7 @@
                         <a href="something" class="button3" data-toggle="modal" data-target="#Post">Create a Post <i
                                 class="fa fa-plus-circle" aria-hidden="true"></i></a>
                     </div>
-                    <div class="col-sm-8 col-md-8 col-lg-8" id="search_post" style="display: none">
+                    <div class="col-sm-8 col-md-8 col-lg-8" id="search_post" style="display: none; font-size: 13px">
                         <form action="." method="GET" class="form-inline d-flex justify-content-center md-form form-sm searches">
                             <!-- <input name="search_post" class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
                             -->
@@ -72,22 +72,23 @@
                     </div>
 
 
-                    <div class="col-sm-4 col-md-4 col-lg-4" id="blogBtn" style="display: none;">
+                    <div class="col-sm-3 col-md-3 col-lg-3" id="blogBtn" style="display: none;">
                         <a href="something" class="button3" data-toggle="modal" data-target="#Blog">Create a Blog <i
                                 class="fa fa-plus-circle" aria-hidden="true"></i></a>
                     </div>
-                    <div class="col-sm-8 col-md-8 col-lg-8" id="search_blog" style="display: none;">
+                    <div class="col-sm-9 col-md-9 col-lg-9" id="search_blog" style="display: none; font-size: 13px">
                         <form class="form-inline d-flex justify-content-center md-form form-sm searches">
                             <!--<input class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
                             -->
                             {{ search_blog_form.search }}
                             {{ search_blog_form.order_choice }}
-                            {{ search_blog_form.topic_choice }}
                             {{ search_blog_form.order_by }}
+                            {{ search_blog_form.topic_choice }}
                             <input type="hidden" name="search_blog" value="blog" style="display:none">
                             <input type="hidden" name="search_query" value="blog" style="display:none">
-                            <button type="submit" class="btn bg-blue">
-                            <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i></button>
+                            <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search" aria-hidden="true" style="text-align: right;"> Search</i>
+                            </button>
                         </form>
                     </div>
                 </div>
