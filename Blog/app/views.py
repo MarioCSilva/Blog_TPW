@@ -189,12 +189,12 @@ def entry_page(request):
         return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm()})
 
 
-def profile_page(request,num):
+def profile_page(request,name):
     if not request.user.is_authenticated or request.method not in ["GET", "POST"]:
         return redirect('/login')
 
-    user = Client.objects.get(user__id=num)
-    owner = request.user.id == num
+    user = Client.objects.get(user__username=name)
+    owner = request.user.username == name
 
     if request.method == "GET":
         return render(request, "profile_page.html", {"client":user, "form_edit": EditProfileForm(instance=user),"owner":owner})
@@ -205,14 +205,14 @@ def profile_page(request,num):
             print("valid")
             client = form.save(commit=False)
             client.save()
-            return redirect("/profile/"+str(num))
+            return redirect("/profile/"+name)
         print("not valid")
         return render(request, "profile_page.html", {"client": user, "form_edit": form, "form_errors": form.errors})
 
 def my_profile(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    return redirect("/profile/" + str(request.user.id))
+    return redirect("/profile/" + str(request.user.username))
 
 def blog_page(request, num):
     if not request.user.is_authenticated:
