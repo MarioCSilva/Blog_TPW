@@ -8,6 +8,7 @@ from django.db.models.functions import Length
 from django.db.models import Count
 from django.contrib import messages
 
+
 # Create your views here.
 
 def main_page(request):
@@ -129,13 +130,18 @@ def main_page(request):
             posts_detail["personal"] = blog.id
 
             posts_more_det.append(posts_detail)
-
+        if "search_query" in request.GET:
+            search_query = "blog"
+            print("pls")
+        else:
+            search_query = "post"
         return render(request, "main_page.html",
                       {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(),
                        "blogs": blogs,
                        "posts_more_det": posts_more_det,
                        "search_post_form": FilterPostForm(),
-                       "search_blog_form": FilterBlogForm()})
+                       "search_blog_form": FilterBlogForm(),
+                       "search_query": search_query})
 
 
 def entry_page(request):
@@ -161,7 +167,7 @@ def entry_page(request):
                 blog.topic.add(topic.id)
                 blog.save()
                 login(request, user)
-                return redirect('my_profile')
+                return redirect('/my_profile')
             else:
                 print(form.errors)
                 return render(request, "entry_page.html",
@@ -189,7 +195,7 @@ def entry_page(request):
         return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm()})
 
 
-def profile_page(request,name):
+def profile_page(request, name):
     if not request.user.is_authenticated or request.method not in ["GET", "POST"]:
         return redirect('/login')
 
@@ -197,7 +203,8 @@ def profile_page(request,name):
     owner = request.user.username == name
 
     if request.method == "GET":
-        return render(request, "profile_page.html", {"client":user, "form_edit": EditProfileForm(instance=user),"owner":owner})
+        return render(request, "profile_page.html",
+                      {"client": user, "form_edit": EditProfileForm(instance=user), "owner": owner})
     elif request.method == "POST":
 
         form = EditProfileForm(data=request.POST, files=request.FILES, instance=user)
@@ -205,20 +212,23 @@ def profile_page(request,name):
             print("valid")
             client = form.save(commit=False)
             client.save()
-            return redirect("/profile/"+name)
+            return redirect("/profile/" + name)
         print("not valid")
         return render(request, "profile_page.html", {"client": user, "form_edit": form, "form_errors": form.errors})
+
 
 def my_profile(request):
     if not request.user.is_authenticated:
         return redirect('/login')
     return redirect("/profile/" + str(request.user.username))
 
+
 def blog_page(request, num):
     if not request.user.is_authenticated:
         return redirect('/login')
 
     blog = Blog.objects.get(id=num)
+
     client = Client.objects.get(user=request.user.id)
     personal = False
     for topic in blog.topic.all():
@@ -253,8 +263,6 @@ def blog_page(request, num):
         elif choice == "comments":
             posts = posts.annotate(count=Count("comment")).order_by(order + "count")
 
-
-
     comments = Comment.objects.all()
     post_com = {}
     for comment in comments:
@@ -278,7 +286,6 @@ def blog_page(request, num):
         topic = Topic.objects.get(name="Personal")
         blog_personal = Blog.objects.get(owner__in=[client], topic=topic.id)
         posts_detail["personal"] = blog_personal.id
-
         posts_more_det.append(posts_detail)
 
     return render(request, "blog_page.html", {
@@ -294,7 +301,7 @@ def blog_page(request, num):
         "blog_invites": EditBlogInvites(blog_id=blog.id),
         "blog_post": PostCreationForm(),
         "blog_pic_form": EditBlogPic(),
-        "search_post_form":FilterPostForm()
+        "search_post_form": FilterPostForm()
     })
 
 
@@ -314,7 +321,7 @@ def blog_owners(request):
     blog_id = request.GET.get('blog_id')
     if form.is_valid():
         username = form.cleaned_data.get('username')
-        if len(User.objects.filter(username=username))==0 or username == request.user.username:
+        if len(User.objects.filter(username=username)) == 0 or username == request.user.username:
             messages.error(request, "User does not exist.")
             return redirect('/blog/' + blog_id)
         cli_user = User.objects.get(username=username)
@@ -547,6 +554,7 @@ def post_like(request):
         return HttpResponse('sucess')
     else:
         return HttpResponse('sucess')
+
 
 def blog_pic(request):
     if not request.user.is_authenticated:
