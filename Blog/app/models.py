@@ -5,7 +5,12 @@ import os
 # Create your models here.
 
 
-########### METER PASSES OCULTAS, E MOSTRAR MENSAGENS DE ERROS DEPOIS e sessions
+
+# fazer com q o email seja unico sem necessitar de criar um abstract user.
+User._meta.get_field('email')._unique = True
+User._meta.get_field('email').blank = False
+User._meta.get_field('email').null = False
+
 
 def post_pic_path(instance, filename):
     path = "post/"
