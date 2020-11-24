@@ -312,8 +312,32 @@
             </div>
           </div>
             <div style="text-align: center; color: black;">
+            {% if messages %}
+                    <div class="col-sm-12" style="text-align: center; padding-bottom: 50px">
+                       {% for message in messages %}
+                           {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<div class="alert alert-danger">Important:
+                           {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS  %} <div class="alert alert-success">
+                           {% else %} <div class="alert alert-warning">
+                           {% endif %}
+                           <h4>{{ message }}</h4>
+                           {% endfor %}
+                    </div>
+                    {% endif %}
                 <div class="row col-sm-12">
                 <div class="col-sm-8" style="padding-left:36%"><h1>{{ blog.name }}</h1></div>
+                <div class="col-sm-4" style="text-align:right;margin-right: 0px">
+                    {% if not permission %}
+                       <form action="/blog_follow" method="GET">
+                        <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                        {% if not subbed %}
+                            {% csrf_token %}
+                                <button id="follow-button" type="submit" name="Option" value="Follow">+ Follow</button>
+                        {% else %}
+                                <button id="following" type="submit" name="Option" value="Unfollow">Following</button>
+                        {% endif %}
+                        </form>
+                    {% endif %}
+                </div>
                 <div class="col-sm-12" style="padding-top: 40px">
                     {% if blog.blog_pic %}
                         <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/{{ blog.blog_pic }}" alt="Avatar">
@@ -331,29 +355,22 @@
                         </div>
                     {% endif %}
                 </div>
-                <div class="col-sm-4" style="text-align:right;margin-right: 0px">
-                    {% if not permission %}
-                       <form action="/blog_follow" method="GET">
-                        <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
-                        {% if not subbed %}
-                            {% csrf_token %}
-                                <button id="follow-button" type="submit" name="Option" value="Follow">+ Follow</button>
-                        {% else %}
-                                <button id="following" type="submit" name="Option" value="Unfollow">Following</button>
-                        {% endif %}
-                        </form>
-                    {% endif %}
-                </div>
+
                 </div>
               </div>
               <div style="text-align: center;"> {{ blog.description }}</div>
 
             {% if not blog.isPublic and subbed or blog.isPublic or permission %}
                   <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
-                    <a href="something" class="button3" data-toggle="modal" data-backdrop="false" data-target="#Post" style="width: 100%;">Make a New a Post <i
+                    <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
                         class="fa fa-plus-circle" aria-hidden="true"></i></a>
                   </div>
-                
+
+             {% if form_errors %}
+                <div class="row alert alert-danger">
+                    {{ form_errors }}
+                </div>
+                {% endif %}
               <section id="services" style="width: 100%;">
 
                      {% for post_det in posts_more_det %}
@@ -478,7 +495,7 @@
                                   </form>
                               </div>
                               <div class="col-sm-6" style="border-left: 1px solid black;height: 40px;">
-                                  <a href="" data-toggle="modal" data-backdrop="false"  data-target="#Post_Details{{ post_det.post.id }}"><button type="button" class="myButton" style="width: 100%; height: 40px;">
+                                  <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}"><button type="button" class="myButton" style="width: 100%; height: 40px;">
                                   <h6><i class="fa fa-comment"></i> Comment</h6>
                                   </button></a>
                               </div>

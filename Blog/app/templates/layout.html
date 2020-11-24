@@ -30,7 +30,6 @@
 
     <!-- Main Stylesheet File -->
     <link href={% static "css/style.css" %} rel="stylesheet">
-    <link href={% static "css/posts.css" %} rel="stylesheet">
 
     <!-- =======================================================
       Theme Name: Rapid
@@ -40,6 +39,24 @@
     ======================================================= -->
 
     <style>
+        .myButton {
+            background-color:#ffffff;
+            cursor:pointer;
+            color:black;
+            font-family:Verdana;
+            font-weight:bold;
+            text-decoration:none;
+            border:0px;
+        }
+        .myButton:hover {
+            background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+            background-color:#f6f6f6;
+        }
+        .myButton:active {
+            position:relative;
+            top:1px;
+        }
+
         #follow-button {
             color: #3399FF;
             font-family: "Helvetica";
@@ -128,7 +145,7 @@ Header
 
         <div class="logo float-left">
             <!-- Uncomment below if you prefer to use an image logo -->
-            <h1 class="text-light"><a href="{% url 'home' %}" class="scrollto"><span>UBIWHERE</span></a></h1>
+            <h1 class="text-light"><a href="{% url 'home' %}" class="scrollto"><span>BLOGWHERE</span></a></h1>
             <!-- <a href="#header" class="scrollto"><img src="img/logo.png" alt="" class="img-fluid"></a> -->
         </div>
 
