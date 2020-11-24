@@ -4,8 +4,46 @@
     {% load static %}
     {% if personal %}
         <script>
-            $('#nav_blog').addClass("active");
-        </script>
+        $('#nav_home').addClass("active");
+        function like_post(username, post_id, id_button, id_like_button, number) {
+             button_like = document.getElementById(id_button);
+             like_icon = document.getElementById(id_like_button);
+             number_text = document.getElementById(number);
+             var val_like = $(button_like).val();
+             number = $(number_text).html()
+
+             if (val_like =='like'){
+                $(like_icon).css("color","blue");
+                console.log($(button_like).val())
+                $(button_like).val('dislike');
+                console.log($(button_like).val());
+                $(number_text).html(parseInt(number) + 1);
+             } else {
+                 $(like_icon).css("color", "grey");
+                 $(button_like).val('like');
+                 $(number_text).html(parseInt(number) - 1);
+             }
+             var data = {};
+             data['username'] = username;
+             data['post_id'] = post_id;
+             data['like'] = val_like;
+             $.ajax({
+                 type: 'GET',
+                 url: 'post_like/',
+                 data: data,
+                 dataType: 'json',
+                 success: function(json) {
+                     alert(json);
+                 }
+             })
+         };
+
+
+
+
+
+        $('#nav_blog').addClass("active");
+    </script>
     {% endif %}
     <script>
         $(document).ready(function () {
@@ -357,34 +395,79 @@
                     </div>
 
                 </div>
-                </div>
-                <div style="text-align: center;"> {{ blog.description }}</div>
-
-                {% if not blog.isPublic and subbed or blog.isPublic or permission %}
-                    <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
-                        <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
-                                class="fa fa-plus-circle" aria-hidden="true"></i></a>
-                    </div>
-
-                    {% if form_errors %}
-                        <div class="row alert alert-danger">
-                            {{ form_errors }}
+                <div style="text-align: center; text-align: center" class="col-sm-12"><h5>{{ blog.description }}</h5></div>
+                <div class="col-sm-12" style="padding-top: 40px">
+                    {% if blog.blog_pic %}
+                        <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/{{ blog.blog_pic }}" alt="Avatar">
+                    {% else %}
+                        <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/default/default_blog.png" alt="Avatar">
+                    {% endif %}
+                    {% if permission %}
+                        <div class="col-sm-12" style="padding-top: 10px">
+                        <form method="POST" action="/blog_pic/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
+                        {{ blog_pic_form.blog_pic }}
+                        <button type="submit">Change Blog Image</button>
+                        </form>
                         </div>
                     {% endif %}
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12" id="search_post">
-                                <form action="" method="GET" class="form-inline d-flex justify-content-center md-form form-sm searches">
-                                    <!-- <input name="search_post" class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
-                                    -->
-                                    {{ search_post_form.search }}
-                                    {{ search_post_form.order_choice }}
-                                    {{ search_post_form.order_by }}
-                                    <input type="hidden" name="search_post" value="blog" style="display:none">
-                                    <button type="submit" class="btn bg-blue">
-                                        <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
-                                    </button>
+                </div>
+              </div>
+
+
+            {% if not blog.isPublic and subbed or blog.isPublic or permission %}
+                  <div class="col-sm-12 col-md-12 col-lg-12" id="postBtn" style="margin-top: 70px; margin-bottom: 70px;">
+                    <a href="something" class="button3" data-toggle="modal" data-target="#Post" style="width: 100%;">Make a New a Post <i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                  </div>
+
+             {% if form_errors %}
+                <div class="row alert alert-danger">
+                    {{ form_errors }}
+                </div>
+                {% endif %}
+              <section id="services" style="width: 100%;">
+
+                     {% for post_det in posts_more_det %}
+                       <div class="modal fade bd-example-modal-lg" id="Post_Details{{ post_det.post.id }}" tabindex="-1" role="dialog" aria-labelledby="Post_Details{{ post_det.post.id }}" aria-hidden="true" >
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="CommentLabel{{ post_det.post.id }}">Comments</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="/post_comment" method="GET">
+                                  {% csrf_token %}
+                                    {% for comment in post_det.comments %}
+                                      <div class="form-group">
+                                        <div class="row col-sm-12">
+                                        <div class="col-sm-3">
+                                        <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: left">{{ comment.client }}:</h5>
+                                        </div>
+                                          <div class="col-sm-9">
+                                            <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: right">({{ comment.date|date:"SHORT_DATETIME_FORMAT" }}):</h5>
+                                          </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <p>{{ comment.text }}</p>
+                                        </div>
+                                      </div>
+                                        <hr>
+                                {% endfor %}
+                                  <div class="form-group">
+                                    <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                                    <label for="message-text" class="col-form-label">Add a Comment:</label>
+                                    <input type="text" name="com_text" required style="width: 100%">
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <input type="submit" class="btn btn-primary" value="Comment" name="Comment">
+                                  </div>
                                 </form>
                             </div>
                         </div>
@@ -438,63 +521,51 @@
 
 
 
-                            <div class="row">
-                                <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
-                                     style="width: 100%">
-                                    <div class="box" style="padding-bottom: 0px">
-                                        <div style="height: 10px;" class="row">
-                                            <div style="text-align: left;" class="col-sm-6 row">
-                                                <span style="padding-right: 3px">Blog Posted:</span><a href="/blog/{{ post_det.post.blog.id }}"><h5> {{ post_det.post.blog }}</h5></a>
-                                            </div>
-                                            <div  class="col-sm-6" style="text-align: right">
-                                                <h5>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h5>
-                                            </div>
-                                        </div>
+                        <div class="row">
+                        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
+                          style="width: 100%">
+                          <div class="box" style="padding-bottom: 0px">
+                          <div style="height: 10px;" class="row">
+                              <div style="text-align: left;" class="col-sm-6 row">
+                              </div>
+                              <div  class="col-sm-6" style="text-align: right;">
+                                   <h6>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h6>
+                              </div>
+                          </div>
 
-                                        <a href="/blog/{{ post_det.personal }}">
-                                            {% if post_det.post.client.profile_pic %}
-                                                <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px" />
-                                            {% else %}
-                                                <img class="profile_img" style="width: 60px;height: 60px" src="../media/default/default_profile.jpg" />
-                                            {% endif %}
-                                            <p> {{ post_det.post.client }} </p>
-                                        </a>
-                                        <h4 class="title">{{ post_det.post.title }}</h4>
-                                        <p class="description">{{ post_det.post.description }}  </p>
+                          <a href="/blog/{{ post_det.personal }}">
+                          {% if post_det.post.client.profile_pic %}
+                            <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px" />
+                        {% else %}
+                            <img class="profile_img" style="width: 60px;height: 60px" src="../media/default/default_profile.jpg" />
+                            {% endif %}
+                            <p> {{ post_det.post.client }} </p>
+                            </a>
+                            <h4 class="title">{{ post_det.post.title }}</h4>
+                            <p class="description">{{ post_det.post.description }}  </p>
 
-                                        {% if post_det.post.image %}
-                                            <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
-                                        {% endif %}
-                                        <br><br>
-                                        <hr>
-                                        <div class="row col-sm-12" style="padding-top: -2px">
-                                            <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
-                                                <form action="/post_like" method="GET">
-                                                    {% csrf_token %}
-                                                    <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
-                                                    <button style="background: transparent; border: 0px" type="submit">
-                                                        {% if post_det.post.likes.count == 0 %}
-                                                            <input name="like" type="text" value="like" style="display: none" required>
-                                                            <i class="fa fa-thumbs-up" style="color:grey"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
-                                                        {% else %}
-                                                            {% if post_det.like %}
-                                                                <input name="like" type="text" value="dislike" style="display: none" required>
-
-                                                                <i class="fa fa-thumbs-up" style="color:blue"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
-                                                            {% else %}
-                                                                <input name="like" type="text" value="like" style="display: none" required>
-                                                                <i class="fa fa-thumbs-up" style="color:grey"></i> <span style="padding-left: 3px">{{ post_det.post.likes.count }}</span>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </button>
-                                                </form>
-
-                                            </div>
-
-                                            <div class="col-sm-6" style="text-align: right; padding-right: 30px; font-size: 20px;">
-                                                <span style="padding-right: 3px">{{ post_det.comments|length  }} Comments</span>
-                                            </div>
-                                        </div>
+                            {% if post_det.post.image %}
+                               <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
+                            {% endif %}
+                          <br><br>
+                        <hr>
+                            <div class="row col-sm-12" style="padding-top: -2px">
+                                <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
+                                    <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                                    <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                                                {% if post_det.post.likes.count == 0 %}
+                                                    <button id="like{{ post_det.post.id }}" value="like"  style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
+                                                {% else %}
+                                                    {% if post_det.like %}
+                                                        <button id="like{{ post_det.post.id }}" value="dislike" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:blue"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
+                                                    {% else %}
+                                                        <button id="like{{ post_det.post.id }}" value="like" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </button>
 
                                         <hr style="padding-bottom: 0px">
 
@@ -520,17 +591,24 @@
                                             </div>
                                         </div>
 
-                                    </div>
-                                </div>
+                                 <div class="col-sm-6" style="text-align: right; font-size: 20px;">
+                                   <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}">
+                                   <span>{{ post_det.comments|length  }} Comments</span></a>
+                                 </div>
                             </div>
                         {% endfor %}
 
-                    </section>
-                {% else %}
-                    <div class="alert alert-warning" style="padding-top: 63px;margin-top: 70px;text-align: center">
-                        <h4><strong>Warning!</strong><p>Must follow the Blog to access and post content</p></h4>.
-                    </div>
-                {% endif %}
+
+
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+              </section>
+            {% else %}
+                <div class="alert alert-warning" style="padding-top: 63px;margin-top: 70px;text-align: center">
+                    <h4><strong>Warning!</strong><p>Must follow the Blog to access and post content</p></h4>.
                 </div>
                 </div>
     </section>
