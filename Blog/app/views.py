@@ -226,6 +226,7 @@ def profile_page(request):
 def blog_page(request, num):
     if not request.user.is_authenticated:
         return redirect('/login')
+
     blog = Blog.objects.get(id=num)
     client = Client.objects.get(user=request.user.id)
     personal = False
@@ -239,6 +240,29 @@ def blog_page(request, num):
     posts = Post.objects.filter(blog=blog.id)
     if client in blog.subs.all():
         subbed = True
+
+    if "search_post" in request.GET:
+
+        search = request.GET.get("search")
+        choice = request.GET.get("order_choice")
+        order = request.GET.get("order_by")
+        # searchs for posts by name or by client name
+        posts = (Post.objects.filter(title__contains=search, blog=blog.id) \
+                 | Post.objects.filter(client__user__username__contains=search, blog=blog.id))
+
+        if order == "asc":
+            order = ""
+        elif order == "desc":
+            order = "-"
+
+        if choice == "recent":
+            posts = posts.order_by(order + "date")
+        elif choice == "likes":
+            posts = posts.order_by(order + "likes", "-date")
+        elif choice == "comments":
+            posts = posts.annotate(count=Count("comment")).order_by(order + "count")
+
+
 
     comments = Comment.objects.all()
     post_com = {}
@@ -278,7 +302,8 @@ def blog_page(request, num):
         "blog_edit": EditBlog(blog_name=blog.name, blog_description=blog.description),
         "blog_invites": EditBlogInvites(blog_id=blog.id),
         "blog_post": PostCreationForm(),
-        "blog_pic_form": EditBlogPic()
+        "blog_pic_form": EditBlogPic(),
+        "search_post_form":FilterPostForm()
     })
 
 
@@ -546,4 +571,3 @@ def blog_pic(request):
     else:
         messages.error(request, form.errors)
         return redirect('/blog/' + blog_id)
-
