@@ -196,16 +196,17 @@ def profile_page(request,num):
     user = Client.objects.get(user__id=num)
     owner = request.user.id == num
 
-
     if request.method == "GET":
         return render(request, "profile_page.html", {"client":user, "form_edit": EditProfileForm(instance=user),"owner":owner})
     elif request.method == "POST":
 
         form = EditProfileForm(data=request.POST, files=request.FILES, instance=user)
         if form.is_valid():
+            print("valid")
             client = form.save(commit=False)
             client.save()
-            return redirect("profile")
+            return redirect("/profile/"+str(num))
+        print("not valid")
         return render(request, "profile_page.html", {"client": user, "form_edit": form, "form_errors": form.errors})
 
 def my_profile(request):

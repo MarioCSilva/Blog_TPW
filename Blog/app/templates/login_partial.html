@@ -1,6 +1,10 @@
 {% if user.is_authenticated %}
     <li id="nav_home"><a href="{% url 'home' %}">Home</a></li>
-    <li id="nav_profile"><a href="{% url 'profile' %}" id="nav_bar_profile">Profile</a></li>
+    <li>
+     <form id="myProfileForm" action="/my_profile" method="get" class="form-inline my-2 my-lg-0">
+    {% csrf_token %}
+        <li id="nav_profile"><a href="javascript:document.getElementById('myProfileForm').submit()">Profile</a></li>
+    </form>
     <li>
     <form id="myBlogForm" action="/my_blog" method="get" class="form-inline my-2 my-lg-0">
     {% csrf_token %}

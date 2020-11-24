@@ -34,55 +34,57 @@
             }
         }
         .show_error{
-            color:red;
+            color: #ff0000;
             font-family: "Fira Code";
         }
     </style>
     <section style="margin-top:150px">
-
-        <div class="container" style="padding:15px;background-color: #abdde5">
+        <div class="container">
             <div class="row">
-                <div class="col-lg-5 col-sm-6 col-md-5">
-                    <div class="form">
-                        <h4>Register</h4>
-                        <p>Join the club.</p>
+                <div class="col-lg-5">
+                    <div class="card card-fluid">
+                        <div class="card-header"><strong>Register</strong></div>
+                        <div class="card-body">
+                            <h4 class="card-title">Join the club.</h4>
 
-                        <form action="." method="POST">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                {{ form_register.email }}
-                            </div>
-                            {% if form_erros.email %}
-                                <div class="form-group show_error">
-                                    {{ form_errors.email }}
+                            <form action="." method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {{ form_register.email }}
                                 </div>
-                            {% endif %}
-                            <div class="form-group">
-                                {{ form_register.username }}
-                            </div>
-                            {%  if form_errors.username %}
-                                <div class="form-group show_error">
-                                {{ form_errors.username }}
+                                {% if form_erros.email %}
+                                    <div class="form-group show_error">
+                                        {{ form_errors.email }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    {{ form_register.username }}
                                 </div>
-                            {% endif %}
-                            <div class="form-group">
-                                {{ form_register.password1 }}
-                            </div>
-                            {%  if form_errors.password1 %}
-                                <div class="form-group show_error">
-                                {{ form_errors.password1 }}
+                                {%  if form_errors.username %}
+                                    <div class="form-group show_error">
+                                        {{ form_errors.username }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    {{ form_register.password1 }}
                                 </div>
-                            {% endif %}
-                            <div class="form-group">
-                                {{ form_register.password2 }}
-                            </div>
-                            {%  if form_errors.password2 %}
-                                <div class="form-group show_error">
-                                {{ form_errors.password2 }}
+                                {%  if form_errors.password1 %}
+                                    <div class="form-group show_error">
+                                        {{ form_errors.password1 }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    {{ form_register.password2 }}
                                 </div>
-                            {% endif %}
-                            <input type="submit" value="Register" name="register" >
-                        </form>
+                                {%  if form_errors.password2 %}
+                                    <div class="form-group show_error">
+                                        {{ form_errors.password2 }}
+                                    </div>
+                                {% endif %}
+                                <input type="submit" value="Register" name="register" >
+                            </form>
+
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-1 col-sm-6 col-md-1">
@@ -111,6 +113,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        </div>
         </div>
 
     </section>
