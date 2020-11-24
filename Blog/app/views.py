@@ -161,7 +161,7 @@ def entry_page(request):
                 blog.topic.add(topic.id)
                 blog.save()
                 login(request, user)
-                return redirect('profile')
+                return redirect('my_profile')
             else:
                 print(form.errors)
                 return render(request, "entry_page.html",
@@ -189,39 +189,29 @@ def entry_page(request):
         return render(request, "entry_page.html", {"form_login": LoginForm(), "form_register": RegisterForm()})
 
 
-def profile_page(request):
+def profile_page(request,num):
     if not request.user.is_authenticated or request.method not in ["GET", "POST"]:
         return redirect('/login')
-    user = Client.objects.get(user=request.user.id)
+
+    user = Client.objects.get(user__id=num)
+    owner = request.user.id == num
+
 
     if request.method == "GET":
-        return render(request, "profile_page.html", {"client": user, "form_edit": EditProfileForm(instance=user)})
+        return render(request, "profile_page.html", {"client":user, "form_edit": EditProfileForm(instance=user),"owner":owner})
     elif request.method == "POST":
 
         form = EditProfileForm(data=request.POST, files=request.FILES, instance=user)
         if form.is_valid():
             client = form.save(commit=False)
-            '''
-            name = form.cleaned_data["name"]
-            if name:
-                client.name = name
-            birthdate = form.cleaned_data["birthdate"]
-            if birthdate:
-                client.birthdate = birthdate
-            profile_pic = form.cleaned_data["profile_pic"]
-            if profile_pic:
-                client.profile_pic = profile_pic
-            description = form.cleaned_data["description"]
-            if description:
-                client.description = description
-            sex = form.cleaned_data["sex"]
-            if sex:
-                client.sex = sex
-            '''
             client.save()
             return redirect("profile")
         return render(request, "profile_page.html", {"client": user, "form_edit": form, "form_errors": form.errors})
 
+def my_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    return redirect("/profile/" + str(request.user.id))
 
 def blog_page(request, num):
     if not request.user.is_authenticated:
