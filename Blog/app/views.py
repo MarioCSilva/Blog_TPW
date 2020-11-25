@@ -39,10 +39,10 @@ def main_page(request):
             if form.is_valid():
                 name = form.cleaned_data["name"]
                 topic = form.cleaned_data["topic"]
-                print(topic)
+                description = form.cleaned_data["description"]
                 is_public = True if form.cleaned_data.get('isPublic') == "1" else False
                 client = Client.objects.get(user=request.user)
-                blog = Blog(name=name, isPublic=is_public)
+                blog = Blog(name=name, isPublic=is_public, description=description)
                 blog.save()
                 blog.owner.set([client])
                 blog.subs.set([client])
