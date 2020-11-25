@@ -351,8 +351,8 @@
                     <div class="col-sm-12" style="text-align: center; padding-bottom: 50px">
                        {% for message in messages %}
                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<div class="alert alert-danger">Important:
-                           {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS  %} <div class="alert alert-success">
-                           {% else %} <div class="alert alert-warning">
+                           {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS  %} <div class="alert alert-primary">
+                           {% else %} <div class="alert alert-light">
                            {% endif %}
                        <h4>{{ message }}</h4></div>
                            {% endfor %}
@@ -526,7 +526,7 @@
 
               </section>
             {% else %}
-                <div class="alert alert-warning" style="padding-top: 63px;margin-top: 70px;text-align: center">
+                <div class="alert alert-light" style="padding-top: 63px;margin-top: 70px;text-align: center">
                     <h4><strong>Warning!</strong><p>Must follow the Blog to access and post content</p></h4>.
                 </div>
             {% endif %}
