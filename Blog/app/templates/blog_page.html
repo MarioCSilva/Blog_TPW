@@ -415,7 +415,7 @@
                     {{ form_errors }}
                 </div>
                 {% endif %}
-              <section id="services" style="width: 100%;">
+              <section id="services"  style="width: 100%;">
 
                      {% for post_det in posts_more_det %}
                        <div class="modal fade bd-example-modal-lg" id="Post_Details{{ post_det.post.id }}" tabindex="-1" role="dialog" aria-labelledby="Post_Details{{ post_det.post.id }}" aria-hidden="true" >
@@ -466,7 +466,7 @@
                         <div class="row">
                         <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
                           style="width: 100%">
-                          <div class="box" style="padding-bottom: 0px">
+                          <div class="box" style="padding-bottom: 0px;border:1px solid gray;background-color:transparent">
                           <div style="height: 10px;" class="row">
                               <div style="text-align: left;" class="col-sm-6 row">
                               </div>
@@ -484,7 +484,7 @@
                             <p> {{ post_det.post.client }} </p>
                             </a>
                             <h4 class="title">{{ post_det.post.title }}</h4>
-                            <p class="description">{{ post_det.post.description }}  </p>
+                            <p class="description">{{ post_det.post.text }}  </p>
 
                             {% if post_det.post.image %}
                                <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
@@ -501,7 +501,7 @@
                                                 {% else %}
                                                     {% if post_det.like %}
                                                         <button id="like{{ post_det.post.id }}" value="dislike" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:blue"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:#007bff"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
                                                     {% else %}
                                                         <button id="like{{ post_det.post.id }}" value="like" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
                                                         <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
