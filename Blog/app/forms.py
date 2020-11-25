@@ -117,7 +117,7 @@ class FilterPostForm(forms.Form):
 class FilterBlogForm(forms.Form):
     search_blog = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...', "class":"form-control rounded-pill", 'style': 'width: 100%'}))
     order_choice_blog = forms.ChoiceField(required=False,choices=[("","Order by..."),("subs", "Subs"), ("posts", "Nº of Posts")])
-    data = tuple([(x.id,x.name) for x in Topic.objects.all() if x.name!="Personal"])
+    data = tuple([(x.id,x.name) for x in Topic.objects.all()])
     topic_choice_blog = forms.TypedMultipleChoiceField(required=False, choices=data)
     order_by_blog = forms.ChoiceField(choices=[("desc","Descending"),("asc","Ascending")])
 
