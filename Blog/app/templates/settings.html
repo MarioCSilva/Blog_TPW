@@ -15,12 +15,11 @@
             {% endif %}
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="card text-center card-fluid">
+                    <div class="card text-center card-fluid" style="color:white">
                         <form name="delete" id="deleteForm" action="." method="POST">
                             {% csrf_token %}
                             <h6 class="card-header"><strong>Settings</strong> </h6>
-                            <nav class="nav nav-tabs flex-column" >
-                                <a class="nav-link">Security</a>
+                            <nav class="nav nav-tabs flex-column">
                                 <a name="delete" href="javascript:document.getElementById('deleteForm').submit()" class="nav-link alert-danger">Delete Account</a>
                                 <input type="hidden" class="display:none" name="delete" value="delete" />
                             </nav>
@@ -32,21 +31,22 @@
 
                     <div id="security_div" class="card card-fluid">
 
-                        <h6 class="card-header">Account</h6>
+                        <h6 class="card-header" style="color:white"><strong>Account</strong></h6>
                         <div class="card-body">
                             <form method="POST" action=".">
                                 {% csrf_token %}
                                 <div class="row mb-3">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12" style="color:white">
                                         <label for="id_username">Username</label>
                                         {{ form_security.username }}
                                     </div>
-                                </div>
-                                {% if form_security_errors.username %}
+                                    {% if form_security_errors.username %}
                                     {{ form_security_errors.username }}
                                 {% endif %}
+                                </div>
+
                                 <div class="row mb-3">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12" style="color:white">
                                         <label for="id_email">Email</label>
                                         {{ form_security.email }}
                                     </div>
@@ -55,7 +55,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12" style="color:white">
                                         <label for="id_password1">New Password</label>
                                         {{ form_security.password1 }}
                                     </div>
@@ -64,7 +64,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12" style="color:white">
                                         <label for="id_password2">Confirm Password</label>
                                         {{ form_security.password2 }}
                                     </div>
@@ -73,8 +73,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-12">
-                                        <input type="submit" class="btn btn-success" name="security" value="Update Account">
+                                    <div class="col-lg-12" >
+                                        <input type="submit" class="btn rounded-pill btn-block btn-dark" name="security" value="Update Account">
                                     </div>
                                 </div>
                             </form>

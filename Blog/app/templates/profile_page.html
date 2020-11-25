@@ -13,9 +13,9 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 {% if client.profile_pic %}
-                                    <img id="profile_pic" class="profile_img" src="../media/{{ client.profile_pic }}" />
+                                    <img id="profile_pic" style="border:1px solid white;border-radius: 50%" class="profile_img" src="../media/{{ client.profile_pic }}" />
                                 {% else %}
-                                    <img class="profile_img" style="width: 100%;height: 250px" src="../media/default/default_profile.jpg" />
+                                    <img class="profile_img" style="width: 100%;height: 250px;border:1px solid white;border-radius: 50%" src="../media/default/default_profile.jpg" />
                                 {% endif %}
                             </div>
                         </div>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="col-lg-9">
-                        <div class="card card-fluid">
+                        <div class="card card-fluid" style="background-color: rgb(21, 32, 43);border:1px solid gray">
                             <div class="card-body">
                                 {% if form_errors %}
                                     <div class="row alert alert-danger">
@@ -56,7 +56,7 @@
                                         </div>
                                     </div>
                                     <div class="row sub_head">
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-4">
                                             <div class="display_profile" id="display_sex">
                                                 <i class="fa fa-venus-mars"></i>
                                                 {{ client.sex }}
@@ -65,7 +65,7 @@
                                                 <i class="fa fa-venus-mars"></i>{{ form_edit.sex }}
                                             </div>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-5">
                                             <div class="display_profile" id="display_birthdate" ><i class="fa fa-birthday-cake"></i> {{ client.birthdate }}</div>
 
                                             <div class="edit_input" style="display: none">
@@ -76,7 +76,7 @@
 
                                     </div>
                                 </div>
-                                <hr>
+                                <hr style="background-color: white">
 
                                 <div id="profile_body" class="row">
                                     <div class="col-lg-12">
