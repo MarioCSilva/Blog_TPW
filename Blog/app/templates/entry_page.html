@@ -52,7 +52,7 @@
                                 <div class="form-group">
                                     {{ form_register.email }}
                                 </div>
-                                {% if form_erros.email %}
+                                {% if form_errors.email %}
                                     <div class="form-group show_error">
                                         {{ form_errors.email }}
                                     </div>
@@ -81,7 +81,7 @@
                                         {{ form_errors.password2 }}
                                     </div>
                                 {% endif %}
-                                <input type="submit" value="Register" name="register" >
+                                <input type="submit"  class="btn rounded-pill btn-block btn-dark" value="Register" name="register" >
                             </form>
 
                         </div>
@@ -108,7 +108,7 @@
                                     <p>Username and password do not match.</p>
                                 </div>
                             {% endif %}
-                            <input type="submit" name="login" value="Login" >
+                            <input class="btn rounded-pill btn-block btn-primary  " type="submit" name="login" value="Login" >
                         </form>
                     </div>
                 </div>

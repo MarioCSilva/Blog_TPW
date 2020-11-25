@@ -5,18 +5,26 @@
   License: https://bootstrapmade.com/license/
 */
 
+
+.card-fluid{
+  background-color:rgba(29,161,242,1.00);
+}
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
 
 body {
   background: #fff;
-  color: #444;
+  color: white;
   font-family: "Open Sans", sans-serif;
+}
+.active{
+  color:white;
 }
 
 a {
-  color: #1bb1dc;
+  color: rgba(29,161,242,1.00);
   transition: 0.5s;
 }
 
@@ -165,6 +173,7 @@ h6 {
   right: 0;
   transition: all 0.5s;
   z-index: 997;
+  color:white;
 }
 
 #header.header-scrolled,
@@ -172,6 +181,7 @@ h6 {
   height: 70px;
   padding: 15px 0;
   background-color: #fff;
+  color:#413e66;
   box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.3);
 }
 
@@ -188,11 +198,11 @@ h6 {
   font-weight: 400;
   letter-spacing: 3px;
   text-transform: uppercase;
+  color:white;
 }
 
 #header .logo h1 a,
 #header .logo h1 a:hover {
-  color: #413e66;
   text-decoration: none;
 }
 

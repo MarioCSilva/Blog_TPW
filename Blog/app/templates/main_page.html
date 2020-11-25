@@ -252,9 +252,12 @@
 
 
                     <div class="row">
-                        <div class="col-lg-12 filter-post wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s"
-                             style="width: 100%; display: none">
-                            <div class="box" style="padding-bottom: 0px">
+                        <div class="col-lg-4">
+
+                        </div>
+                        <div class="col-lg-8 filter-post wow bounceInUp"  data-wow-delay="0.2s" data-wow-duration="1.4s"
+                             style="width: 100%; display: none;">
+                            <div class="box" style="padding-bottom: 0px;border:1px solid white;background-color:rgba(0,123,255,0.2)">
                                 <div style="height: 10px;" class="row">
                                     <div style="text-align: left;" class="col-sm-6 row">
                                      <span style="padding-right: 3px"></span><a href="/blog/{{ post_det.post.blog.id }}"><h6><i class="fa fa-share"></i> {{ post_det.post.blog }}</h6></a>
@@ -266,9 +269,9 @@
 
                                <a href="/profile/{{ post_det.post.client.user.username }}" >
                                     {% if post_det.post.client.profile_pic %}
-                                        <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px" />
+                                        <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px;border:2px solid white;border-radius: 50%" />
                                     {% else %}
-                                        <img class="profile_img" style="width: 60px;height: 60px" src="../media/default/default_profile.jpg" />
+                                        <img  class="profile_img" style="width: 60px;height: 60px;border:2px solid white;border-radius: 50%" src="../media/default/default_profile.jpg" />
                                     {% endif %}
                                     <p> {{ post_det.post.client }} </p>
                                 </a>
