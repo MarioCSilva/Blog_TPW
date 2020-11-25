@@ -107,23 +107,18 @@ class EditBlogInvites(forms.Form):
 class EditBlogPic(forms.Form):
     blog_pic = forms.ImageField(allow_empty_file=True, required=True)
 
+
 class FilterPostForm(forms.Form):
     search_post = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
     order_choice_post = forms.ChoiceField(choices=[("recent","Recent"),("likes","Likes"),("comments","Comments")])
     order_by_post  = forms.ChoiceField(choices=[("desc","Descending"),("asc","Ascending")])
 
-class FilterPostForm(forms.Form):
-    search = forms.CharField(max_length=50, required=False,
-                             widget=forms.TextInput(attrs={'placeholder': 'Search...', "class": "form-control"}))
-    order_choice = forms.ChoiceField(choices=[("recent", "Recent"), ("likes", "Likes"), ("comments", "Comments")])
-    order_by = forms.ChoiceField(choices=[("desc", "Descending"), ("asc", "Ascending")])
-
 
 class FilterBlogForm(forms.Form):
-    search_blog = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
-    order_choice_blog = forms.ChoiceField(required=False,choices=[("",""),("subs", "Subs"), ("posts", "Nº of Posts")])
+    search_blog = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control", 'size':'60%'}))
+    order_choice_blog = forms.ChoiceField(required=False,choices=[("","Order by..."),("subs", "Subs"), ("posts", "Nº of Posts")])
     data = tuple([(x.id,x.name) for x in Topic.objects.all() if x.name!="Personal"])
-    topic_choice_blog = forms.MultipleChoiceField(required=False,choices=data)
+    topic_choice_blog = forms.TypedMultipleChoiceField(required=False, choices=data)
     order_by_blog = forms.ChoiceField(choices=[("desc","Descending"),("asc","Ascending")])
 
 

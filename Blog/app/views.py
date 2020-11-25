@@ -69,7 +69,7 @@ def main_page(request):
         # orders posts with more subs first
         blogs = Blog.objects.all().order_by(Length("subs").desc())
         print(request.GET)
-        if "search_post" in request.GET:
+        if "search_post_type" in request.GET:
             search = request.GET.get("search_post")
             choice = request.GET.get("order_choice_post")
             order = request.GET.get("order_by_post")
@@ -89,16 +89,17 @@ def main_page(request):
             elif choice == "comments":
                 posts = posts.annotate(count=Count("comment")).order_by(order + "count")
 
-        if "search_blog" in request.GET:
+
+        if "search_blog_type" in request.GET:
             search = request.GET.get("search_blog")
-            topics = request.GET.get("topic_choice_blog")
+            topics = request.GET.getlist("topic_choice_blog")
             choice = request.GET.get("order_choice_blog")
             order = request.GET.get("order_by_blog")
 
             # searches for pages with that name or owner name
-            blogs = (Blog.objects.filter(name__contains=search))  # | Blog.objects.filter(owner__user__name__in=search))
+            blogs = (Blog.objects.filter(name__contains=search).distinct())  # | Blog.objects.filter(owner__user__name__in=search))
             if topics:
-                blogs = blogs & (Blog.objects.filter(topic__name__in=topics))
+                blogs = blogs & (Blog.objects.filter(topic__id__in=topics).distinct())
 
             if order == "asc":
                 order = ""
@@ -287,7 +288,6 @@ def blog_page(request, num):
         blog_personal = Blog.objects.get(owner__in=[client], topic=topic.id)
         posts_detail["personal"] = blog_personal.id
         posts_more_det.append(posts_detail)
-
     return render(request, "blog_page.html", {
         "blog": blog,
         "permission": permission,

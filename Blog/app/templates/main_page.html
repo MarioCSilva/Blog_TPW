@@ -61,13 +61,24 @@
                         <form action="." method="GET" class="form-inline d-flex justify-content-center md-form form-sm searches">
                             <!-- <input name="search_post" class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
                             -->
-                            {{ search_post_form.search }}
-                            {{ search_post_form.order_choice }}
-                            {{ search_post_form.order_by }}
-                            <input type="hidden" name="search_post" value="blog" style="display:none">
+                            <div class="row col-sm-12">
+                            <div class="col-sm-4">
+                            {{ search_post_form.search_post }}
+                            </div>
+                             <div class="col-sm-3">
+
+                            {{ search_post_form.order_choice_post }}
+                            </div>
+                            <div class="col-sm-3">
+                            {{ search_post_form.order_by_post }}
+                            </div>
+                            <div class="col-sm-2">
+                            <input type="hidden" name="search_post_type" value="blog" style="display:none">
                             <button type="submit" class="btn btn-primary"">
                                 <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
                             </button>
+                                </div>
+                                </div>
                         </form>
                     </div>
 
@@ -80,15 +91,30 @@
                         <form class="form-inline d-flex justify-content-center md-form form-sm searches">
                             <!--<input class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
                             -->
-                            {{ search_blog_form.search }}
-                            {{ search_blog_form.order_choice }}
-                            {{ search_blog_form.order_by }}
-                            {{ search_blog_form.topic_choice }}
-                            <input type="hidden" name="search_blog" value="blog" style="display:none">
-                            <input type="hidden" name="search_query" value="blog" style="display:none">
-                            <button type="submit" class="btn btn-primary">
+                            <div class="row" style="margin-left: -100px">
+                            <div class="col-sm-4">
+                            {{ search_blog_form.order_choice_blog }}
+                            </div>
+                            <div class="col-sm-4" style="padding-top:-321px">
+                            {{ search_blog_form.order_by_blog }}
+                            </div>
+                            <div class="col-sm-4">
+                            {{ search_blog_form.topic_choice_blog }}
+                            </div></div>
+                            <div class="row">
+                                <div class="col-sm-9">
+                            {{ search_blog_form.search_blog }}
+                                </div>
+                            <div class="col-sm-3" style="text-align: right">
+                                <button type="submit" class="btn btn-primary">
                             <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
                             </button>
+                            </div>
+                            </div>
+
+                            <input type="hidden" name="search_blog_type" value="blog" style="display:none">
+                            <input type="hidden" name="search_query" value="blog" style="display:none">
+
                         </form>
                     </div>
                 </div>
