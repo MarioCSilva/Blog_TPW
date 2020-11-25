@@ -12,7 +12,7 @@
              number = $(number_text).html()
 
              if (val_like =='like'){
-                $(like_icon).css("color","blue");
+                $(like_icon).css("color","#007bff");
                 $(button_like).val('dislike');
                 $(number_text).html(parseInt(number) + 1);
              } else {
@@ -490,21 +490,21 @@
                                <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
                             {% endif %}
                           <br><br>
-                        <hr>
-                            <div class="row col-sm-12" style="padding-top: -2px">
+                        <hr style="background-color:white">
+                            <div class="row col-sm-12 mb-3" style="padding-top: -2px">
                                 <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
                                     <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
                                     <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
                                                 {% if post_det.post.likes.count == 0 %}
                                                     <button id="like{{ post_det.post.id }}" value="like"  style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
+                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px;color:white" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
                                                 {% else %}
                                                     {% if post_det.like %}
                                                         <button id="like{{ post_det.post.id }}" value="dislike" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:#007bff"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:#007bff"></i> <span style="padding-left: 3px;color:white" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
                                                     {% else %}
                                                         <button id="like{{ post_det.post.id }}" value="like" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
+                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px;color:white" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
                                                     {% endif %}
                                                 {% endif %}
                                             </button>
