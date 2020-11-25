@@ -85,7 +85,7 @@ def main_page(request):
             if choice == "recent":
                 posts = posts.order_by(order + "date")
             elif choice == "likes":
-                posts = posts.order_by(order + "likes", "-date")
+                posts = posts.annotate(count=Count("likes")).order_by(order + "count")
             elif choice == "comments":
                 posts = posts.annotate(count=Count("comment")).order_by(order + "count")
 
