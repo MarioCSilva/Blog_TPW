@@ -47,7 +47,7 @@ class BlogCreationForm(forms.Form):
 
 class EditProfileForm(forms.ModelForm):
     name = forms.CharField(max_length=70, required=False)
-    description = forms.CharField(widget=forms.Textarea, max_length=300, required=False)
+    description = forms.CharField(widget=forms.Textarea(attrs={'style': 'color: white', 'style': 'background-color: transparent'}), max_length=300, required=False)
     profile_pic = forms.ImageField(allow_empty_file=True, required=False)
     birthdate = forms.DateField(required=False, widget=forms.SelectDateWidget(years=range(1920, 2020)))
     sex = forms.ChoiceField(choices=[("Male", "Male"), ("Female", "Female"), ("Other", "Other")], required=False)
