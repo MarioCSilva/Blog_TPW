@@ -330,17 +330,17 @@
                 </div>
                 <div class="row">
                     {% for blog in blogs %}
-                        <div class="col-md-6 filter-page col-lg-4 wow bounceInUp" data-wow-duration="1.4s" style="display:none;">
-                            <div class="box" style="width: 100%; display: table;color:black">
+                        <div class="col-md-6 filter-page col-lg-4 wow bounceInUp" data-wow-duration="1.4s" style="display:none;color:white">
+                            <div class="box" style="width: 100%; display: table;color:white;border:1px solid gray;background-color:transparent;">
                                 <div style="text-align: center; vertical-align: middle;width:290px;height: 254px;">
-                                    <h4 class="title" style="padding-top: 30px"><a href="blog/{{ blog.id }}">{{ blog.name }}</a></h4>
+                                    <h4 class="title" style="padding-top: 30px;"><a href="blog/{{ blog.id }}" style="color:white">{{ blog.name }}</a></h4>
                                     {% if blog.blog_pic %}
-                                        <div class="icon" style="background-image: url('../media/{{ blog.blog_pic }}');background-blend-mode: lighten;background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.2);"></div>
+                                        <div class="icon" style="background-image: url('../media/{{ blog.blog_pic }}');"></div>
                                     {% else %}
-                                        <div class="icon" style="background-image: url('../media/default/default_blog.png');background-blend-mode: lighten;background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.2);"></div>
+                                        <div class="icon" style="background-image: url('../media/default/default_blog.png');border-radius:50%;background-color: white; background-size: cover; background-repeat: no-repeat;;"></div>
                                     {% endif %}
                                     <p>{{ blog.description }}</p>
-                                    <p class="description" style="margin-top: 80px;">Subs: {{ blog.subs.count }}</p>
+                                    <p class="mt-2">Subs: {{ blog.subs.count }}  Posts: {{ blog.count_post }}</p>
                                 </div>
                             </div>
                         </div>

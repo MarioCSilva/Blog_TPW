@@ -136,6 +136,8 @@ def main_page(request):
             print("pls")
         else:
             search_query = "post"
+
+        blogs = blogs.annotate(count_post=Count("post"))
         return render(request, "main_page.html",
                       {"form_post": PostCreationForm(), "form_blog": BlogCreationForm(),
                        "blogs": blogs,
