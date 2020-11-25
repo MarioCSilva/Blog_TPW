@@ -109,7 +109,7 @@ class EditBlogPic(forms.Form):
 
 
 class FilterPostForm(forms.Form):
-    search_post = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"form-control"}))
+    search_post = forms.CharField(max_length=50,required=False, widget=forms.TextInput(attrs={'placeholder':'Search...',"class":"rounded-pill"}))
     order_choice_post = forms.ChoiceField(choices=[("recent","Recent"),("likes","Likes"),("comments","Comments")])
     order_by_post  = forms.ChoiceField(choices=[("desc","Descending"),("asc","Ascending")])
 

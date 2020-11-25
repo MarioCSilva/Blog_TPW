@@ -3,37 +3,37 @@
     <script>
         $('#nav_home').addClass("active");
         function like_post(username, post_id, id_button, id_like_button, number) {
-             button_like = document.getElementById(id_button);
-             like_icon = document.getElementById(id_like_button);
-             number_text = document.getElementById(number);
-             var val_like = $(button_like).val();
-             number = $(number_text).html()
+            button_like = document.getElementById(id_button);
+            like_icon = document.getElementById(id_like_button);
+            number_text = document.getElementById(number);
+            var val_like = $(button_like).val();
+            number = $(number_text).html()
 
-             if (val_like =='like'){
+            if (val_like =='like'){
                 $(like_icon).css("color","blue");
                 console.log($(button_like).val())
                 $(button_like).val('dislike');
                 console.log($(button_like).val());
                 $(number_text).html(parseInt(number) + 1);
-             } else {
-                 $(like_icon).css("color", "grey");
-                 $(button_like).val('like');
-                 $(number_text).html(parseInt(number) - 1);
-             }
-             var data = {};
-             data['username'] = username;
-             data['post_id'] = post_id;
-             data['like'] = val_like;
-             $.ajax({
-                 type: 'GET',
-                 url: 'post_like/',
-                 data: data,
-                 dataType: 'json',
-                 success: function(json) {
-                     alert(json);
-                 }
-             })
-         };
+            } else {
+                $(like_icon).css("color", "grey");
+                $(button_like).val('like');
+                $(number_text).html(parseInt(number) - 1);
+            }
+            var data = {};
+            data['username'] = username;
+            data['post_id'] = post_id;
+            data['like'] = val_like;
+            $.ajax({
+                type: 'GET',
+                url: 'post_like/',
+                data: data,
+                dataType: 'json',
+                success: function(json) {
+                    alert(json);
+                }
+            })
+        };
 
     </script>
     <section id="portfolio" class="section-bg">
@@ -53,34 +53,7 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-4 col-md-4 col-lg-4" id="postBtn" style="display: none">
-                        <a href="something" class="button3" data-toggle="modal" data-target="#Post">Create a Post <i
-                                class="fa fa-plus-circle" aria-hidden="true"></i></a>
-                    </div>
-                    <div class="col-sm-8 col-md-8 col-lg-8" id="search_post" style="display: none; font-size: 13px">
-                        <form action="." method="GET" class="form-inline d-flex justify-content-center md-form form-sm searches">
-                            <!-- <input name="search_post" class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
-                            -->
-                            <div class="row col-sm-12">
-                            <div class="col-sm-4">
-                            {{ search_post_form.search_post }}
-                            </div>
-                             <div class="col-sm-3">
 
-                            {{ search_post_form.order_choice_post }}
-                            </div>
-                            <div class="col-sm-3">
-                            {{ search_post_form.order_by_post }}
-                            </div>
-                            <div class="col-sm-2">
-                            <input type="hidden" name="search_post_type" value="blog" style="display:none">
-                            <button type="submit" class="btn btn-primary"">
-                                <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
-                            </button>
-                                </div>
-                                </div>
-                        </form>
-                    </div>
 
 
                     <div class="col-sm-3 col-md-3 col-lg-3" id="blogBtn" style="display: none;">
@@ -92,24 +65,24 @@
                             <!--<input class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
                             -->
                             <div class="row" style="margin-left: -100px">
-                            <div class="col-sm-4">
-                            {{ search_blog_form.order_choice_blog }}
-                            </div>
-                            <div class="col-sm-4" style="padding-top:-321px">
-                            {{ search_blog_form.order_by_blog }}
-                            </div>
-                            <div class="col-sm-4">
-                            {{ search_blog_form.topic_choice_blog }}
-                            </div></div>
+                                <div class="col-sm-4">
+                                    {{ search_blog_form.order_choice_blog }}
+                                </div>
+                                <div class="col-sm-4" style="padding-top:-321px">
+                                    {{ search_blog_form.order_by_blog }}
+                                </div>
+                                <div class="col-sm-4">
+                                    {{ search_blog_form.topic_choice_blog }}
+                                </div></div>
                             <div class="row">
                                 <div class="col-sm-9">
-                            {{ search_blog_form.search_blog }}
+                                    {{ search_blog_form.search_blog }}
                                 </div>
-                            <div class="col-sm-3" style="text-align: right">
-                                <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
-                            </button>
-                            </div>
+                                <div class="col-sm-3" style="text-align: right">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
+                                    </button>
+                                </div>
                             </div>
 
                             <input type="hidden" name="search_blog_type" value="blog" style="display:none">
@@ -145,6 +118,7 @@
                                     <label for="message-text" class="col-form-label">Upload Image:</label>
                                     {{ form_post.image }}
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <input type="submit" class="btn btn-primary" name="Create Post" value="Create Post">
@@ -205,119 +179,160 @@
 
             <section id="services" class="section-bg" style="width: 100%;">
 
-                {% for post_det in posts_more_det %}
-                    <div class="modal fade bd-example-modal-lg" id="Post_Details{{ post_det.post.id }}" tabindex="-1" role="dialog" aria-labelledby="Post_Details{{ post_det.post.id }}" aria-hidden="true" >
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="CommentLabel{{ post_det.post.id }}">Comments</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4" id="postBtn" style="display: none">
+                        <a href="something" class="button3 " data-toggle="modal" data-target="#Post">Create a Post <i
+                                class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8" id="search_post" style="display: none; font-size: 13px">
+                        <form action="." method="GET" class="form-inline d-flex justify-content-center md-form form-sm searches">
+                            <!-- <input name="search_post" class="form-control form-control-lg mr-3 w-75" type="text" placeholder="Search" aria-label="Search">
+                            -->
+                            <div class="row">
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        {{ search_post_form.search_post }}
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="search_post_type" value="blog" style="display:none">
+                                        <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-search" aria-hidden="true" style="text-align: right;"></i>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <form action="/post_comment" method="GET">
-                                        {% csrf_token %}
-                                        {% for comment in post_det.comments %}
+                                </div>
+                                <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    {{ search_post_form.order_choice_post }}
+                                </div>
+                                <div class="col-sm-6">
+                                    {{ search_post_form.order_by_post }}
+                                </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+
+
+                    </div>
+                <div class="col-lg-8">
+                    {% for post_det in posts_more_det %}
+                        <div class="modal fade bd-example-modal-lg" id="Post_Details{{ post_det.post.id }}" tabindex="-1" role="dialog" aria-labelledby="Post_Details{{ post_det.post.id }}" aria-hidden="true" >
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="CommentLabel{{ post_det.post.id }}">Comments</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/post_comment" method="GET">
+                                            {% csrf_token %}
+                                            {% for comment in post_det.comments %}
+                                                <div class="form-group">
+                                                    <div class="row col-sm-12">
+                                                        <div class="col-sm-3">
+                                                            <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: left">{{ comment.client }}:</h5>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: right">({{ comment.date|date:"SHORT_DATETIME_FORMAT" }}):</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <p>{{ comment.text }}</p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            {% endfor %}
                                             <div class="form-group">
-                                                <div class="row col-sm-12">
-                                                    <div class="col-sm-3">
-                                                        <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: left">{{ comment.client }}:</h5>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <h5 for="recipient-name" class="col-form-label" style="font-weight: bold;text-align: right">({{ comment.date|date:"SHORT_DATETIME_FORMAT" }}):</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <p>{{ comment.text }}</p>
-                                                </div>
+                                                <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
+                                                <label for="message-text" class="col-form-label">Add a Comment:</label>
+                                                <input type="text" name="com_text" required style="width: 100%">
                                             </div>
-                                            <hr>
-                                        {% endfor %}
-                                        <div class="form-group">
-                                            <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
-                                            <label for="message-text" class="col-form-label">Add a Comment:</label>
-                                            <input type="text" name="com_text" required style="width: 100%">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Comment" name="Comment">
-                                        </div>
-                                    </form>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <input type="submit" class="btn btn-primary" value="Comment" name="Comment">
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
 
 
-                    <div class="row">
-                        <div class="col-lg-4">
+                        <div class="row">
 
-                        </div>
-                        <div class="col-lg-8 filter-post wow bounceInUp"  data-wow-delay="0.2s" data-wow-duration="1.4s"
-                             style="width: 100%; display: none;">
-                            <div class="box" style="padding-bottom: 0px;border:1px solid white;background-color:rgba(0,123,255,0.2)">
-                                <div style="height: 10px;" class="row">
-                                    <div style="text-align: left;" class="col-sm-6 row">
-                                     <span style="padding-right: 3px"></span><a href="/blog/{{ post_det.post.blog.id }}"><h6><i class="fa fa-share"></i> {{ post_det.post.blog }}</h6></a>
+                            <div class="col-lg-12 filter-post wow bounceInUp"  data-wow-delay="0.2s" data-wow-duration="1.4s"
+                                 style="width: 100%; display: none;">
+                                <div class="box" style="padding-bottom: 0px;border:1px solid gray;background-color:transparent">
+                                    <div style="height: 10px;" class="row">
+                                        <div style="text-align: left;" class="col-sm-6 row">
+                                            <span style="padding-right: 3px"></span><a href="/blog/{{ post_det.post.blog.id }}"><h6><i class="fa fa-share"></i> {{ post_det.post.blog }}</h6></a>
+                                        </div>
+                                        <div  class="col-sm-6" style="text-align: right">
+                                            <h6>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h6>
+                                        </div>
                                     </div>
-                                    <div  class="col-sm-6" style="text-align: right">
-                                        <h6>{{ post_det.post.date|date:"SHORT_DATETIME_FORMAT" }}</h6>
-                                    </div>
-                                </div>
 
-                               <a href="/profile/{{ post_det.post.client.user.username }}" >
-                                    {% if post_det.post.client.profile_pic %}
-                                        <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px;border:2px solid white;border-radius: 50%" />
-                                    {% else %}
-                                        <img  class="profile_img" style="width: 60px;height: 60px;border:2px solid white;border-radius: 50%" src="../media/default/default_profile.jpg" />
+                                    <a href="/profile/{{ post_det.post.client.user.username }}" >
+                                        {% if post_det.post.client.profile_pic %}
+                                            <img id="profile_pic" class="profile_img" src="../media/{{ post_det.post.client.profile_pic }}" style="width: 60px;height: 60px;border:2px solid white;border-radius: 50%" />
+                                        {% else %}
+                                            <img  class="profile_img" style="width: 60px;height: 60px;border:2px solid white;border-radius: 50%" src="../media/default/default_profile.jpg" />
+                                        {% endif %}
+                                        <p> {{ post_det.post.client }} </p>
+                                    </a>
+                                    <h5 class="title">{{ post_det.post.title }}</h5>
+                                    <div class="description">{{ post_det.post.text }}  </div>
+
+                                    {% if post_det.post.image %}
+                                        <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
                                     {% endif %}
-                                    <p> {{ post_det.post.client }} </p>
-                                </a>
-                                <h4 class="title">{{ post_det.post.title }}</h4>
-                                <p class="description">{{ post_det.post.description }}  </p>
-
-                                {% if post_det.post.image %}
-                                    <img style="max-width: 800px;max-height: 350px" id="myImg" class="profile_img" src="../media/{{ post_det.post.image }}" />
-                                {% endif %}
-                                <br><br>
-                                <hr>
-                                <div class="row col-sm-12" style="padding-top: -2px">
-                                    <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
+                                    <br><br>
+                                    <hr style="background-color:grey">
+                                    <div class="row col-sm-12 mb-3" style="padding-top: -2px;">
+                                        <div class="col-sm-6" style="text-align: left; padding-left: 30px; font-size: 20px;">
                                             <input name="post_id" type="text" value="{{ post_det.post.id }}" style="display: none" required>
-                                                {% if post_det.post.likes.count == 0 %}
-                                                    <button id="like{{ post_det.post.id }}" value="like"  style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
+                                            {% if post_det.post.likes.count == 0 %}
+                                                <button id="like{{ post_det.post.id }}" value="like"  style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px;color:white" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
+                                            {% else %}
+                                                {% if post_det.like %}
+                                                    <button id="like{{ post_det.post.id }}" value="dislike" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:blue"></i> <span style="padding-left: 3px;color:white" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
                                                 {% else %}
-                                                    {% if post_det.like %}
-                                                        <button id="like{{ post_det.post.id }}" value="dislike" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="dislike" style="color:blue"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}<span/>
-                                                    {% else %}
-                                                        <button id="like{{ post_det.post.id }}" value="like" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
-                                                        <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
-                                                    {% endif %}
+                                                    <button id="like{{ post_det.post.id }}" value="like" style="background: transparent; border: 0px" onclick="like_post('{{ user.username }}', '{{ post_det.post.id }}', 'like{{ post_det.post.id }}', 'like_icon{{ post_det.post.id }}','number{{ post_det.post.id }}')">
+                                                    <i class="fa fa-thumbs-up" id="like_icon{{ post_det.post.id }}" value="like" style="color:grey"></i> <span style="padding-left: 3px;color: white" id="number{{ post_det.post.id }}">{{ post_det.post.likes.count }}</span>
                                                 {% endif %}
+                                            {% endif %}
                                             </button>
+                                        </div>
+
+                                        <div class="col-sm-6" style="text-align: right; font-size: 20px;">
+                                            <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}">
+                                                <span>{{ post_det.comments|length  }} Comments</span></a>
+                                        </div>
                                     </div>
 
-                                    <div class="col-sm-6" style="text-align: right; font-size: 20px;">
-                                       <a href="" data-toggle="modal" data-target="#Post_Details{{ post_det.post.id }}">
-                                       <span>{{ post_det.comments|length  }} Comments</span></a>
-                                     </div>
+
+
                                 </div>
-
-
-
                             </div>
                         </div>
+                    {% endfor %}
                     </div>
-                {% endfor %}
-
+                </div>
                 <div class="row">
                     {% for blog in blogs %}
                         <div class="col-md-6 filter-page col-lg-4 wow bounceInUp" data-wow-duration="1.4s" style="display:none;">
-                            <div class="box" style="width: 100%; display: table;">
+                            <div class="box" style="width: 100%; display: table;color:black">
                                 <div style="text-align: center; vertical-align: middle;width:290px;height: 254px;">
                                     <h4 class="title" style="padding-top: 30px"><a href="blog/{{ blog.id }}">{{ blog.name }}</a></h4>
                                     {% if blog.blog_pic %}

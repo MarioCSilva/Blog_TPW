@@ -380,11 +380,11 @@
                         </form>
                     {% endif %}
                 </div>
-                <div class="col-sm-12" style="padding-top: 40px">
+                <div class="col-sm-12" style="padding-top: 40px;color:white">
                     {% if blog.blog_pic %}
-                        <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/{{ blog.blog_pic }}" alt="Avatar">
+                        <img style=" height: 150px;width: 150px;border-radius: 50%;border:1px solid white" src="../media/{{ blog.blog_pic }}" alt="Avatar">
                     {% else %}
-                        <img style=" height: 150px;width: 150px;border-radius: 50%;" src="../media/default/default_blog.png" alt="Avatar">
+                        <img style=" height: 150px;width: 150px;border-radius: 50%;background-color:white;border:1px solid white" src="../media/default/default_blog.png" alt="Avatar">
                     {% endif %}
                     {% if permission %}
                         <div class="col-sm-12" style="padding-top: 10px">
@@ -397,7 +397,7 @@
                         </div>
                     {% endif %}
                 </div>
-                <div style="text-align: center; text-align: center" class="col-sm-12"><h5 style="padding-top: 30px">{{ blog.description }}</h5></div>
+                <div style="text-align: center; text-align: center" class="col-sm-12"><h2 style="padding-top: 30px;color:white">{{ blog.description }}</h2></div>
 
 
                 </div>
