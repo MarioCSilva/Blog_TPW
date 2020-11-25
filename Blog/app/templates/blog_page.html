@@ -323,7 +323,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="/blog_post" method="GET">
+                  <form action="/blog_post/" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input name="blog_id" type="text" value="{{ blog.id }}" style="display: none" required>
                     <div class="form-group">

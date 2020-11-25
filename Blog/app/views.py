@@ -63,7 +63,7 @@ def main_page(request):
             post_com[comment.post.id] = com_list
 
         client = Client.objects.get(user=request.user)
-        post_blogs = Blog.objects.filter(isPublic=True) | Blog.objects.filter(subs__in=[client])
+        post_blogs = Blog.objects.filter(subs__in=[client])
         # recent ones first
         posts = Post.objects.filter(blog__in=post_blogs).order_by("-date")
         # orders posts with more subs first
@@ -465,9 +465,9 @@ def blog_invites(request):
 def blog_post(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    blog_id = request.GET.get('blog_id')
+    blog_id = request.POST.get('blog_id')
     blog = Blog.objects.get(id=blog_id)
-    form = PostCreationForm(data=request.GET)
+    form = PostCreationForm(data=request.POST, files=request.FILES)
     if form.is_valid():
         title = form.cleaned_data.get('title')
         text = form.cleaned_data.get('text')

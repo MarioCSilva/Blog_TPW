@@ -21,7 +21,7 @@ def post_pic_path(instance, filename):
 
 def profile_pic_path(instance, filename):
     path = "profile/"
-    return os.path.join(path+instance.user.username+"."+filename.split(".")[-1])
+    return os.path.join(path+str(instance.user.id)+"."+filename.split(".")[-1])
 
 
 def blog_pic_path(instance, filename):
@@ -67,7 +67,7 @@ class Blog(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=70)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True,upload_to=post_pic_path, height_field=None, width_field=None, max_length=None)
     text = models.CharField(max_length=500)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
@@ -80,7 +80,7 @@ class Post(models.Model):
 class Comment(models.Model):
     text = models.CharField(max_length=500)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self):
