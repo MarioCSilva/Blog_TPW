@@ -1,5 +1,5 @@
 # BLOGWHERE
-[Blogwhere](https://brunobastos.pythonanywhere.com)
+[https://brunobastos.pythonanywhere.com](https://brunobastos.pythonanywhere.com)
 
 ## Trabalho de Tecnologias de Programação Web
 
